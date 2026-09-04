@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dibujo Mecánico 1 — BAPEC (Catálogo de práctica)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F7F3EA;
+    --paper-raised: #FFFFFF;
+    --navy-deep: #042354;
+    --navy-mid: #123A6B;
+    --navy-soft: #E8ECF2;
+    --gold: #B08D2B;
+    --gold-soft: #F3E9CE;
+    --teal: #16826E;
+    --teal-soft: #DCEEE9;
+    --ink: #1E2430;
+    --slate: #5B6472;
+    --slate-soft: #E4E1D8;
+    --line: #D8D0C0;
+    --confirm: #1F7A4D;
+    --confirm-soft: #E1F0E6;
+    --verify: #8A4B12;
+    --verify-soft: #F6E9D8;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 40px 28px 60px;
+  }
+
+  .masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    border-bottom: 3px solid var(--navy-deep);
+    padding-bottom: 18px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .masthead-left .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--slate);
+  }
+
+  .masthead-left h1 {
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 600;
+    font-size: 34px;
+    color: var(--navy-deep);
+    margin: 4px 0 2px;
+    letter-spacing: -0.01em;
+  }
+
+  .masthead-left .subtitle {
+    font-size: 15px;
+    color: var(--navy-mid);
+    font-weight: 500;
+  }
+
+  .masthead-right {
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--slate);
+    line-height: 1.7;
+    padding-top: 6px;
+  }
+
+  .masthead-right strong { color: var(--navy-deep); }
+
+  .info-card {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-left: 5px solid var(--navy-deep);
+    border-radius: 6px;
+    padding: 20px 26px;
+    margin-bottom: 22px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px 24px;
+  }
+
+  .info-item .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 3px;
+  }
+
+  .info-item .value {
+    font-size: 15.5px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .confirm-banner {
+    background: var(--confirm-soft);
+    border: 1px solid var(--confirm);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 13.5px;
+    color: #14402A;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .confirm-banner .tag {
+    flex-shrink: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--confirm);
+    color: #fff;
+    padding: 3px 9px;
+    border-radius: 3px;
+  }
+
+  .verify-banner {
+    background: var(--verify-soft);
+    border: 1px solid var(--verify);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 30px;
+    font-size: 13.5px;
+    color: #4A2C08;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .verify-banner .tag {
+    flex-shrink: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--verify);
+    color: #fff;
+    padding: 3px 9px;
+    border-radius: 3px;
+  }
+
+  .section-title {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--navy-deep);
+    margin: 38px 0 4px;
+  }
+  .section-caption {
+    font-size: 13.5px;
+    color: var(--slate);
+    margin-bottom: 16px;
+  }
+
+  .nivel-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 22px 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--line);
+    flex-wrap: wrap;
+  }
+  .nivel-header .nivel-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+  .nivel-header .nivel-desc {
+    font-size: 13.5px;
+    color: var(--slate);
+  }
+  .nivel-a .nivel-tag { background: var(--slate); }
+  .nivel-b .nivel-tag { background: var(--navy-mid); }
+  .nivel-c .nivel-tag { background: var(--teal); }
+  .nivel-d .nivel-tag { background: var(--navy-deep); }
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper-raised);
+    margin-bottom: 6px;
+  }
+
+  table.catalog { width: 100%; border-collapse: collapse; min-width: 760px; }
+
+  table.catalog thead th {
+    background: var(--navy-deep);
+    color: #FFFFFF;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 500;
+  }
+
+  table.catalog td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+    font-size: 13.8px;
+  }
+  table.catalog tr:last-child td { border-bottom: none; }
+  table.catalog tr:hover td { background: var(--navy-soft); }
+
+  .pieza-name { font-weight: 600; color: var(--ink); }
+  .pieza-material {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--slate);
+    margin-top: 2px;
+  }
+
+  .tema-badge {
+    display: inline-block;
+    font-size: 12.5px;
+    color: var(--navy-mid);
+  }
+
+  .semana-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--navy-deep);
+    font-weight: 600;
+  }
+  .pb-tag {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--gold);
+    margin-top: 3px;
+  }
+
+  .links-cell { white-space: nowrap; }
+  .link-pill {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 3px 9px;
+    border-radius: 3px;
+    margin: 2px 3px 2px 0;
+    border: 1px solid;
+  }
+  .link-pill.enunciado { color: var(--navy-deep); border-color: var(--navy-deep); background: var(--navy-soft); }
+  .link-pill.dwg { color: var(--teal); border-color: var(--teal); background: var(--teal-soft); }
+  .link-pill.video { color: var(--gold); border-color: var(--gold); background: var(--gold-soft); }
+  .link-pill:hover { filter: brightness(0.92); }
+
+  .verified-mark {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--verify);
+    border: 1px solid var(--verify);
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+  .fixed-mark {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #8A2B2B;
+    border: 1px solid #8A2B2B;
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+
+  .row-note td {
+    background: var(--slate-soft);
+    color: var(--slate);
+    font-style: italic;
+    font-size: 12.5px;
+  }
+
+  .row-counter {
+    display: inline-flex; align-items: center; gap: 5px; margin-top: 6px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600;
+    color: var(--navy-deep); background: var(--navy-soft); padding: 3px 10px; border-radius: 11px;
+  }
+  .row-counter.complete { background: var(--confirm-soft); color: var(--confirm); }
+  .row-counter:empty { display: none; }
+
+  .solve-pill {
+    display: inline-block; margin-left: 6px; margin-top: 3px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600;
+    padding: 3px 10px; border-radius: 12px; cursor: pointer; user-select: none;
+    border: 1.5px solid var(--slate); color: var(--slate); background: transparent;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .solve-pill:hover { border-color: var(--navy-mid); color: var(--navy-mid); }
+  .solve-pill.solved { border-color: var(--confirm); color: #fff; background: var(--confirm); }
+  .solve-pill:focus-visible { outline: 2px solid var(--navy-mid); outline-offset: 2px; }
+  tr.is-solved td:first-child { border-left: 3px solid var(--confirm); }
+
+  .conf-badge {
+    display: inline-block; margin-left: 6px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; font-weight: 600; letter-spacing: 0.03em; color: #fff;
+    background: var(--gold); padding: 1px 6px; border-radius: 3px; vertical-align: middle;
+  }
+
+  .nivel-pill {
+    display: inline-block; margin-left: 6px; margin-top: 3px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.03em; text-transform: uppercase; color: #fff;
+    padding: 2px 7px; border-radius: 3px; vertical-align: middle;
+  }
+  .nivel-pill.nivel-a { background: var(--slate); }
+  .nivel-pill.nivel-b { background: var(--navy-mid); }
+  .nivel-pill.nivel-c { background: var(--teal); }
+  .nivel-pill.nivel-d { background: var(--navy-deep); }
+  .nivel-pill.nivel-e { background: var(--gold); color: var(--ink); }
+  .nivel-pill.nivel-f { background: #8A2B2B; }
+
+  ul.bullets { margin: 0; padding-left: 18px; }
+  ul.bullets li { margin-bottom: 4px; }
+
+  .legend-section {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 24px;
+  }
+  .legend-box, .notes-box {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px 24px;
+  }
+  .legend-box h3, .notes-box h3 {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 15.5px;
+    color: var(--navy-deep);
+    margin: 0 0 12px;
+  }
+  .legend-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; font-size: 13px; }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+  .notes-box ol { margin: 0; padding-left: 18px; font-size: 13px; color: var(--ink); }
+  .notes-box li { margin-bottom: 9px; }
+
+  .theory-table td:first-child { font-weight: 600; width: 60%; }
+
+  .footer-credit {
+    margin-top: 30px; text-align: center; font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px; color: var(--slate); letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 720px) {
+    .info-card { grid-template-columns: 1fr 1fr; }
+    .legend-section { grid-template-columns: 1fr; }
+    .masthead { flex-direction: column; }
+    .masthead-right { text-align: left; }
+  }
+
+  .sync-bar{display:flex;align-items:center;gap:12px;background:var(--paper-raised);border:1px solid var(--line);border-radius:6px;padding:10px 16px;margin-bottom:22px;flex-wrap:wrap}
+  .sync-dot{width:9px;height:9px;border-radius:50%;background:var(--slate);flex-shrink:0}
+  .sync-dot.ok{background:var(--confirm)}
+  .sync-dot.err{background:#8A2B2B}
+  .sync-text{font-size:12.5px;color:var(--slate);flex:1}
+  .sync-text strong{color:var(--ink)}
+  .sync-btn{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:5px;cursor:pointer;border:1.5px solid var(--navy-deep);color:var(--navy-deep);background:transparent}
+  .sync-btn:hover{background:var(--navy-soft)}
+</style>
+<script src="https://accounts.google.com/gsi/client"></script>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="masthead">
+    <div class="masthead-left">
+      <div class="eyebrow">Pontificia Universidad Católica del Perú &nbsp;·&nbsp; Facultad de Ciencias e Ingeniería</div>
+      <h1>Dibujo Mecánico 1</h1>
+      <div class="subtitle">BAPEC — Catálogo de práctica &nbsp;·&nbsp; 4 de 4 fuentes cubiertas (Actividades 2026-2 en curso)</div>
+    </div>
+    <div class="masthead-right">
+      Clave: <strong>1MEC02</strong><br>
+      Especialidad: <strong>Ingeniería Mecánica</strong><br>
+      Semestre: <strong>2026-2</strong> &nbsp;·&nbsp; Semanas 1–14
+    </div>
+  </header>
+
+  <div class="sync-bar">
+    <span class="sync-dot" id="syncDot"></span>
+    <span class="sync-text" id="syncText">No conectado — conéctate para cargar tu progreso real y para que quede vinculado con tu horario.</span>
+    <button type="button" class="sync-btn" id="syncBtn">Conectar con Google Drive</button>
+  </div>
+
+  <section class="info-card" style="grid-template-columns:repeat(6,1fr)">
+    <div class="info-item"><div class="label">Piezas/PCs con enlaces</div><div class="value">28 + 13 sem. + 11 PC</div></div>
+    <div class="info-item"><div class="label">Recursos teóricos</div><div class="value">4 videos</div></div>
+    <div class="info-item"><div class="label">PC1 2020-2</div><div class="value">excluida</div></div>
+    <div class="info-item"><div class="label">Enlaces YouTube</div><div class="value">47</div></div>
+    <div class="info-item"><div class="label">Fuentes del curso</div><div class="value">4 de 4 cubiertas</div></div>
+    <div class="info-item"><div class="label">Resueltos</div><div class="value" id="resumen-resueltos">0 / 56 (0%)</div></div>
+  </section>
+
+  <div class="confirm-banner">
+    <span class="tag">Por qué este formato</span>
+    <span>Este curso no tiene banco de preguntas de examen con desarrollo — el material real de práctica del profesor son piezas con enlaces (dwg + video explicativo paso a paso), no texto. Por eso este BAPEC es un <strong>catálogo de ejercicios</strong> organizado por nivel de complejidad, en vez de preguntas sintetizadas por tipo/ciclo como en ING225, MAT241 y MEC257. Cada fila enlaza directamente al recurso original en Drive/YouTube.</span>
+  </div>
+
+  <div class="verify-banner">
+    <span class="tag">Nivel de verificación</span>
+    <span>Los enlaces marcados <span class="verified-mark">VERIF.</span> se abrieron uno por uno confirmando nombre real del archivo y tipo (mimeType). Los marcados <span class="fixed-mark">CORREGIDO</span> tenían un enlace malformado en el .docx original y se reemplazaron con la URL correcta confirmada por el usuario. El resto se toma tal cual del .docx del profesor "Material para practicar" (actualizado 26 ago 2026), sin abrir cada archivo individualmente. La columna Semana es <strong>inferida</strong> cruzando el nivel/tipo de contenido de cada pieza con la Programación Semanal 2026-2 ya validada — el profesor no asigna piezas específicas a semanas específicas, así que esto no debe leerse como una asignación confirmada pieza por pieza.</span>
+  </div>
+
+  <h2 class="section-title">Sección 1 — Dibujo de una pieza</h2>
+  <p class="section-caption">14 piezas organizadas en 4 niveles de complejidad acumulada — el propio profesor las ordena así. Todas las piezas de nivel A–C traen solo <em>archivo dwg</em> (el dwg en blanco es el enunciado; no hay PDF de enunciado separado en estos niveles). Las piezas de nivel D añaden un enunciado en PDF con tolerancias y rugosidad.</p>
+
+  <div class="nivel-a">
+    <div class="nivel-header">
+      <span class="nivel-tag">NIVEL A</span>
+      
+      <div class="row-counter" data-row-counter="s1a"></div>
+    </div>
+    <div class="table-scroll">
+      <table class="catalog">
+        <thead><tr><th style="width:26%">Pieza</th><th style="width:20%">Temas</th><th style="width:14%">Semana</th><th>Enlaces</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="pieza-name">Base inclinada</span></td>
+            <td><span class="tema-badge">Vistas y secciones</span></td>
+            <td><span class="semana-tag">Sem. 1–3</span><span class="pb-tag">Pb1 · sem. 4</span></td>
+            <td class="links-cell">
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/1HA9tKsiyclEOVlbQ1g85Rc_r-AMjNwnk/view" target="_blank">dwg</a><span class="verified-mark">VERIF.</span>
+              <a class="link-pill video" href="https://youtu.be/rboQIIAOA9E" target="_blank">video</a>
+            <button type="button" class="solve-pill" data-qid="s1a-1">Marcar como resuelto</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="nivel-b">
+    <div class="nivel-header">
+      <span class="nivel-tag">NIVEL B</span>
+      
+      <div class="row-counter" data-row-counter="s1b"></div>
+    </div>
+    <div class="table-scroll">
+      <table class="catalog">
+        <thead><tr><th style="width:26%">Pieza</th><th style="width:20%">Temas</th><th style="width:14%">Semana</th><th>Enlaces</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="pieza-name">Soporte para eje</span></td>
+            <td><span class="tema-badge">Vistas, secciones y dimensionamiento (video único)</span></td>
+            <td><span class="semana-tag">Sem. 6</span><span class="pb-tag">Pb2 · sem. 7</span></td>
+            <td class="links-cell">
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/1-9uQkZVDS0aazO7a-Hpn82YdTv4Mcgs0/view" target="_blank">dwg</a><span class="verified-mark">VERIF.</span>
+              <a class="link-pill video" href="https://youtu.be/3DNuC5MJBSc" target="_blank">video</a>
+            <button type="button" class="solve-pill" data-qid="s1b-1">Marcar como resuelto</button></td>
+          </tr>
+          <tr>
+            <td><span class="pieza-name">Soporte conector</span></td>
+            <td><span class="tema-badge">Vistas y secciones + dimensionamiento (videos separados)</span></td>
+            <td><span class="semana-tag">Sem. 6</span><span class="pb-tag">Pb2 · sem. 7</span></td>
+            <td class="links-cell">
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/1RU2CeY_rhdnmYDsZs7l_BRiV8z2TXfIf/view" target="_blank">dwg</a>
+              <a class="link-pill video" href="https://youtu.be/Xh9TLyRHxbs" target="_blank">video: vistas</a>
+              <a class="link-pill video" href="https://youtu.be/08y2BNHt7K4" target="_blank">video: dimens.</a>
+            <button type="button" class="solve-pill" data-qid="s1b-2">Marcar como resuelto</button></td>
+          </tr>
+          <tr>
+            <td><span class="pieza-name">Carcasa soporte</span></td>
+            <td><span class="tema-badge">Vistas y secciones + dimensionamiento (videos separados)</span></td>
+            <td><span class="semana-tag">Sem. 6</span><span class="pb-tag">Pb2 · sem. 7</span></td>
+            <td class="links-cell">
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/1sm-lo_3ojOAcPvc7GYiixK7aVhbv_wPN/view" target="_blank">dwg</a>
+              <a class="link-pill video" href="https://youtu.be/DNZpTsRS0Lk" target="_blank">video: vistas</a>
+              <a class="link-pill video" href="https://youtu.be/ukKuR1K4Y7U" target="_blank">video: dimens.</a>
+            <button type="button" class="solve-pill" data-qid="s1b-3">Marcar como resuelto</button></td>
+          </tr>
+          <tr>
+            <td><span class="pieza-name">Carcasa</span></td>
+            <td><span class="tema-badge">Vistas, secciones y dimensionamiento (video único)</span></td>
+            <td><span class="semana-tag">Sem. 6</span><span class="pb-tag">Pb2 · sem. 7</span></td>
+            <td class="links-cell">
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/1BN46LvZ91vNBcLsooMVQJOgFEevEy9z5/view" target="_blank">dwg</a>
+              <a class="link-pill video" href="https://youtu.be/MPD6FudOqgg" target="_blank">video</a>
+            <button type="button" class="solve-pill" data-qid="s1b-4">Marcar como resuelto</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="nivel-c">
+    <div class="nivel-header">
+      <span class="nivel-tag">NIVEL C</span>
+      
+      <div class="row-counter" data-row-counter="s1c"></div>
+    </div>
+    <div class="table-scroll">
+      <table class="catalog">
+        <thead><tr><th style="width:26%">Pieza</th><th style="width:20%">Temas</th><th style="width:14%">Semana</th><th>Enlaces</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="pieza-name">Conector articulado</span></td>
+            <td><span class="tema-badge">Vistas, secciones, dimensionamiento y tolerancias (sin rugosidad aún)</span></td>
+            <td><span class="semana-tag">Sem. 6–8</span><span class="pb-tag">transición Pb2→Pb3</span></td>
+            <td class="links-cell">
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/1K2_N5f3Luh1r8DyrH6ubyQB8voyQzqJi/view" target="_blank">dwg</a><span class="verified-mark">VERIF.</span>
+              <a class="link-pill video" href="https://youtu.be/agiyb0rO-TA" target="_blank">video</a>
+            <button type="button" class="solve-pill" data-qid="s1c-1">Marcar como resuelto</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="nivel-d">
+    <div class="nivel-header">
+      <span class="nivel-tag">NIVEL D</span>
+      
+      <div class="row-counter" data-row-counter="s1d"></div>
+    </div>
+    <div class="table-scroll">
+      <table class="catalog">
+        <thead><tr><th style="width:24%">Pieza</th><th style="width:20%">Temas</th><th style="width:12%">Semana</th><th>Enlaces</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="pieza-name">Torre soporte</span></td>
+            <td><span class="tema-badge">Vistas y secciones · dimensionamiento · tolerancias · rugosidad (4 videos separados)</span></td>
+            <td><span class="semana-tag">Sem. 8</span><span class="pb-tag">Pb3 · sem. 10</span></td>
+            <td class="links-cell">
+              <a class="link-pill enunciado" href="https://drive.google.com/file/d/1KLvGI6z6-abpvzK7Wx1TItvJlQeZOOZV/view" target="_blank">enunciado</a>
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/1DTHEHcbu-U2mTRkNT2IOgYa_JFrBt77z/view" target="_blank">dwg</a>
+              <a class="link-pill video" href="https://youtu.be/KXOHiCzZfJU" target="_blank">v. vistas</a>
+              <a class="link-pill video" href="https://youtu.be/rUd8LWzCAzM" target="_blank">v. dimens.</a>
+              <a class="link-pill video" href="https://youtu.be/kptyoIZEGZ0" target="_blank">v. toler.</a>
+              <a class="link-pill video" href="https://youtu.be/c-PqAJEakms" target="_blank">v. rugos.</a>
+            <button type="button" class="solve-pill" data-qid="s1d-1">Marcar como resuelto</button></td>
+          </tr>
+          <tr>
+            <td><span class="pieza-name">Carcasa 0</span></td>
+            <td><span class="tema-badge">Vistas/secc./dimens. en 2 partes + tolerancias y rugosidad juntas (3 videos)</span></td>
+            <td><span class="semana-tag">Sem. 8</span><span class="pb-tag">Pb3 · sem. 10</span></td>
+            <td class="links-cell">
+              <a class="link-pill enunciado" href="https://drive.google.com/file/d/1EHWupHrOT8ERQV6TGCSCozyPM2pHmXrQ/view" target="_blank">enunciado</a>
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/11ziVZ-GsR5JwdrxSHUjZrhsadYddo2XM/view" target="_blank">dwg</a>
+              <a class="link-pill video" href="https://youtu.be/3urrFZT7yNQ" target="_blank">v. parte 1</a>
+              <a class="link-pill video" href="https://youtu.be/pjHC6H3MMyw" target="_blank">v. parte 2</a>
+              <a class="link-pill video" href="https://youtu.be/IYkrYzZKu4A" target="_blank">v. toler.+rugos.</a>
+            <button type="button" class="solve-pill" data-qid="s1d-2">Marcar como resuelto</button></td>
+          </tr>
+          <tr>
+            <td><span class="pieza-name">Bloque de amartillado</span></td>
+            <td><span class="tema-badge">Todo en un solo video</span></td>
+            <td><span class="semana-tag">Sem. 8</span><span class="pb-tag">Pb3 · sem. 10</span></td>
+            <td class="links-cell">
+              <a class="link-pill enunciado" href="https://drive.google.com/file/d/1MoE02piIa5ya2yZWnY7Y-tOuWvgHbxIV/view" target="_blank">enunciado</a>
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/1_7zsWR92tT4cVwJCRuN319rXe2GUhhLN/view" target="_blank">dwg</a>
+              <a class="link-pill video" href="https://youtu.be/ooOBydNrCs8" target="_blank">video</a>
+            <button type="button" class="solve-pill" data-qid="s1d-3">Marcar como resuelto</button></td>
+          </tr>
+          <tr>
+            <td><span class="pieza-name">Soporte superior</span></td>
+            <td><span class="tema-badge">Todo en un solo video</span></td>
+            <td><span class="semana-tag">Sem. 8</span><span class="pb-tag">Pb3 · sem. 10</span></td>
+            <td class="links-cell">
+              <a class="link-pill enunciado" href="https://drive.google.com/file/d/1UzgcY-Nv036MeWcliknAU3sohSjVyrWu/view" target="_blank">enunciado</a>
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/16ba-NfNewTEvyOEWdvuwjP33ChR5lORm/view" target="_blank">dwg</a>
+              <a class="link-pill video" href="https://youtu.be/wsv2GlagkFU" target="_blank">video</a>
+            <button type="button" class="solve-pill" data-qid="s1d-4">Marcar como resuelto</button></td>
+          </tr>
+          <tr>
+            <td><span class="pieza-name">Conector</span>
+              <span class="pieza-material">EN-GJL-200 · fuente: PD 07.1, 2021-2</span></td>
+            <td><span class="tema-badge">Todo en un solo video</span></td>
+            <td><span class="semana-tag">Sem. 8</span><span class="pb-tag">Pb3 · sem. 10</span></td>
+            <td class="links-cell">
+              <a class="link-pill enunciado" href="https://drive.google.com/file/d/1zqRajz-8bYTgPpBhB0YKN7VvBNXaAwZu/view" target="_blank">enunciado</a><span class="verified-mark">VERIF.</span>
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/1AT7TKhj5-BmtWHV-8S9eyrlo3CYsJnbU/view" target="_blank">dwg</a>
+              <a class="link-pill video" href="https://youtu.be/3rYOUcKosVo" target="_blank">video</a>
+            <button type="button" class="solve-pill" data-qid="s1d-5">Marcar como resuelto</button></td>
+          </tr>
+          <tr>
+            <td><span class="pieza-name">Base múltiple</span></td>
+            <td><span class="tema-badge">Todo en un solo video</span></td>
+            <td><span class="semana-tag">Sem. 8</span><span class="pb-tag">Pb3 · sem. 10</span></td>
+            <td class="links-cell">
+              <a class="link-pill enunciado" href="https://drive.google.com/file/d/1I3THzHscLQBi2xuRJeCTggFmRTwk4WDE/view" target="_blank">enunciado</a>
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/1t8niLFFNHXSTAWsZmgJpRRNV1cZfelY9/view" target="_blank">dwg</a>
+              <a class="link-pill video" href="https://youtu.be/12kmXEI3QLc" target="_blank">video</a>
+            <button type="button" class="solve-pill" data-qid="s1d-6">Marcar como resuelto</button></td>
+          </tr>
+          <tr>
+            <td><span class="pieza-name">Base de bomba</span></td>
+            <td><span class="tema-badge">Vistas/secc./dimens. + tolerancias + rugosidad (3 videos)</span></td>
+            <td><span class="semana-tag">Sem. 8</span><span class="pb-tag">Pb3 · sem. 10</span></td>
+            <td class="links-cell">
+              <a class="link-pill enunciado" href="https://drive.google.com/file/d/1CC9JinGtTtKHxxiIibv_IVmWwgHDn6Tx/view" target="_blank">enunciado</a>
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/1W-VcS6MwhQdaiMvn5jvsvX9UmeOH7Xrn/view" target="_blank">dwg</a>
+              <a class="link-pill video" href="https://youtu.be/VzCzJPlr3Bo" target="_blank">v. vistas+dim.</a>
+              <a class="link-pill video" href="https://youtu.be/T_Ht-1JGqpc" target="_blank">v. toler.</a>
+              <a class="link-pill video" href="https://youtu.be/hDUB076vewM" target="_blank">v. rugos.</a>
+            <button type="button" class="solve-pill" data-qid="s1d-7">Marcar como resuelto</button></td>
+          </tr>
+          <tr>
+            <td><span class="pieza-name">Base guía</span></td>
+            <td><span class="tema-badge">Vistas · dimensionamiento · tolerancias · rugosidad (4 videos separados)</span></td>
+            <td><span class="semana-tag">Sem. 8</span><span class="pb-tag">Pb3 · sem. 10</span></td>
+            <td class="links-cell">
+              <a class="link-pill enunciado" href="https://drive.google.com/file/d/1x-3MY29M0xZm-wYzCZvIbOqjfurq2pyt/view" target="_blank">enunciado</a>
+              <a class="link-pill dwg" href="https://drive.google.com/file/d/1XSZV1EC2dn1QrmcE5NxOFp9UT_GsS6sf/view" target="_blank">dwg</a>
+              <a class="link-pill video" href="https://youtu.be/A9oJSQlk6o8" target="_blank">v. vistas</a>
+              <a class="link-pill video" href="https://youtu.be/JmJwfn7j_-w" target="_blank">v. dimens.</a>
+              <a class="link-pill video" href="https://youtu.be/1i1qNU1IlvI" target="_blank">v. toler.</a>
+              <a class="link-pill video" href="https://youtu.be/C2zZp0cFlro" target="_blank">v. rugos.</a>
+            <button type="button" class="solve-pill" data-qid="s1d-8">Marcar como resuelto</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="section-title">Sección 2 — Dimensionamiento de ejes y placas</h2>
+  <p class="section-caption">6 piezas de foco único (solo dimensionamiento), sin la progresión de niveles de la Sección 1. Corresponde directo a PC02.2 de la Programación Semanal ("dimensionamiento de un eje y una placa").</p>
+  <div class="row-counter" data-row-counter="s2"></div>
+
+  <div class="table-scroll">
+    <table class="catalog">
+      <thead><tr><th style="width:26%">Pieza</th><th style="width:20%">Temas</th><th style="width:14%">Semana</th><th>Enlaces</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="pieza-name">Eje 1</span></td>
+          <td><span class="tema-badge">Dimensionamiento</span></td>
+          <td><span class="semana-tag">Sem. 6–7</span><span class="pb-tag">Pb2.2 · sem. 7</span><span class="nivel-pill nivel-b">Nivel B</span></td>
+          <td class="links-cell">
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1DnWwPi2a2eaknVaAUvDQVSkx1ApMOOwo/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/nuc1MKqbnRg" target="_blank">video</a>
+          <button type="button" class="solve-pill" data-qid="s2-1">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">Eje 2</span></td>
+          <td><span class="tema-badge">Dimensionamiento</span></td>
+          <td><span class="semana-tag">Sem. 6–7</span><span class="pb-tag">Pb2.2 · sem. 7</span><span class="nivel-pill nivel-b">Nivel B</span></td>
+          <td class="links-cell">
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1jWURR7Yshx1DZwRKqzmFql8bqDO84NtU/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/fi9qSj_uNwU" target="_blank">video</a>
+          <button type="button" class="solve-pill" data-qid="s2-2">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">Eje 05.01</span>
+            <span class="pieza-material">árbol de transmisión</span></td>
+          <td><span class="tema-badge">Dimensionamiento</span></td>
+          <td><span class="semana-tag">Sem. 6–7</span><span class="pb-tag">Pb2.2 · sem. 7</span><span class="nivel-pill nivel-b">Nivel B</span></td>
+          <td class="links-cell">
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1aM1r5Sw6eOTbDhTy-u42xDK7zY5G9Lek/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/nKad0pI7SlU" target="_blank">video</a>
+          <button type="button" class="solve-pill" data-qid="s2-3">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">Placa 1</span></td>
+          <td><span class="tema-badge">Dimensionamiento</span></td>
+          <td><span class="semana-tag">Sem. 6–7</span><span class="pb-tag">Pb2.2 · sem. 7</span><span class="nivel-pill nivel-b">Nivel B</span></td>
+          <td class="links-cell">
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1qvbG5tmFwqQiVhwq-jVymkvJqMPz3h65/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/wKnkG2U3GKg" target="_blank">video</a>
+          <button type="button" class="solve-pill" data-qid="s2-4">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">Placa 2</span></td>
+          <td><span class="tema-badge">Dimensionamiento</span></td>
+          <td><span class="semana-tag">Sem. 6–7</span><span class="pb-tag">Pb2.2 · sem. 7</span><span class="nivel-pill nivel-b">Nivel B</span></td>
+          <td class="links-cell">
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1JkjudiyGZNEEenXr0ey1gCGRZeN-Z8Jy/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/HBn6TDAER3k" target="_blank">video</a>
+          <button type="button" class="solve-pill" data-qid="s2-5">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">Placa 05.01-3</span></td>
+          <td><span class="tema-badge">Dimensionamiento</span></td>
+          <td><span class="semana-tag">Sem. 6–7</span><span class="pb-tag">Pb2.2 · sem. 7</span><span class="nivel-pill nivel-b">Nivel B</span></td>
+          <td class="links-cell">
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1evh9MJAgh2EkMF0H6G2h7lYS9VeJ-1Jp/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/x1L7kmzJvkU" target="_blank">video</a>
+          <button type="button" class="solve-pill" data-qid="s2-6">Marcar como resuelto</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="section-title">Sección 3 — Dibujo de ensamblaje</h2>
+  <p class="section-caption">8 ensamblajes, con hasta 5 tipos de recursos por pieza: vistas ortogonales (+isométrica en la mayoría), vista explosionada, video de animación (todas menos Rueda loca), archivo dwg, y video(s) de desarrollo paso a paso. "Vistas" y "explosionada" son documentos de referencia (reutilizo el color de "enunciado"); "animación" reutiliza el color de video, junto con "desarrollo".</p>
+  <div class="row-counter" data-row-counter="s3"></div>
+
+  <div class="table-scroll">
+    <table class="catalog">
+      <thead><tr><th style="width:20%">Pieza</th><th style="width:12%">Semana</th><th>Enlaces</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="pieza-name">Útil de fijación</span></td>
+          <td><span class="semana-tag">Sem. 11–14</span><span class="pb-tag">Pb4 · sem. 14</span><span class="nivel-pill nivel-e">Nivel E</span></td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1S0GEw-LJT_6TUlgwfdrWwyDhdhVAv8II/view" target="_blank">vistas</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1oqO-X5N76BQ3qqhHvJeiNY8Xdkwj8xNx/view" target="_blank">explosionada</a>
+            <a class="link-pill video" href="https://drive.google.com/file/d/1t9_TvbC65kNirh0CuqAKyrEvh0GtaqQf/view" target="_blank">animación</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1TnCK9PECpNYsEohTlP7oWOtFZSpL2V3S/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/qPUXGR1mpOs" target="_blank">desarrollo</a><span class="fixed-mark">CORREGIDO</span>
+          <button type="button" class="solve-pill" data-qid="s3-1">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">Rueda loca</span>
+            <span class="pieza-material">sin video de animación</span></td>
+          <td><span class="semana-tag">Sem. 11–14</span><span class="pb-tag">Pb4 · sem. 14</span><span class="nivel-pill nivel-e">Nivel E</span></td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1QO06xRaDBaTl3bRZWhNYo4LrABTcb1iP/view" target="_blank">vistas</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/13lwnn47sDm9Igd8jmB5qbAC-EKKwAeQO/view" target="_blank">explosionada</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/17IUsG-ITWA75Yj9bhKz6sW2l_5xi1WUg/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/eleQqPYsN_Y" target="_blank">desarrollo</a>
+          <button type="button" class="solve-pill" data-qid="s3-2">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">Contrapunta de torno</span></td>
+          <td><span class="semana-tag">Sem. 11–14</span><span class="pb-tag">Pb4 · sem. 14</span><span class="nivel-pill nivel-e">Nivel E</span></td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1SnMC8TPp44bDOGCyo47ZBxECYKLSri3f/view" target="_blank">vistas</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1ebeoGk4sqB8OXt9-V9IcSChViKE4xPd-/view" target="_blank">explosionada</a>
+            <a class="link-pill video" href="https://drive.google.com/file/d/1exTvLoyomWhw_rWx6mmF54zxeb-Ufsnr/view" target="_blank">animación</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1Y364ORmwihfN61XjClhfm_ki_eR6m0r1/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/WgAzavxvx78" target="_blank">desarrollo</a>
+          <button type="button" class="solve-pill" data-qid="s3-3">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">Válvula de alivio</span></td>
+          <td><span class="semana-tag">Sem. 11–14</span><span class="pb-tag">Pb4 · sem. 14</span><span class="nivel-pill nivel-e">Nivel E</span></td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1ofNryPkYT-Qgrgke5UDBuyjYYyNZMXZ8/view" target="_blank">vistas</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1rCut8hfX4i2_5PYdm4BtSC80jOdD0PKx/view" target="_blank">explosionada</a>
+            <a class="link-pill video" href="https://drive.google.com/file/d/1N5wwEC84yXM-PjVwqkysUaqvXm72SfiO/view" target="_blank">animación</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1_HD0rJAG5LPvrbpFO99OTGmjEENc_RL_/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/rOmgJ-DumYQ" target="_blank">desarrollo</a>
+          <button type="button" class="solve-pill" data-qid="s3-4">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">Freno</span>
+            <span class="pieza-material">vistas ortogonales, sin isométrica</span></td>
+          <td><span class="semana-tag">Sem. 11–14</span><span class="pb-tag">Pb4 · sem. 14</span><span class="nivel-pill nivel-e">Nivel E</span></td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/12erzuBJma65rR5Q-LgnSsNyFtOaLe3Cn/view" target="_blank">vistas</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1pF_7T-Z800zF0C1oC4EoU6fvvUhpPRpe/view" target="_blank">explosionada</a>
+            <a class="link-pill video" href="https://drive.google.com/file/d/1J422RWV7dJh-5hmElzuHXIH7pmJvfjD2/view" target="_blank">animación</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1JxTXwQJ7n9bmAsmqadeVlU1Ao4vKM5jk/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/ZZ4lWPlpsKc" target="_blank">desarrollo</a>
+          <button type="button" class="solve-pill" data-qid="s3-5">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">Portaherramienta de limadora</span>
+            <span class="pieza-material">vistas ortogonales, sin isométrica</span></td>
+          <td><span class="semana-tag">Sem. 11–14</span><span class="pb-tag">Pb4 · sem. 14</span><span class="nivel-pill nivel-e">Nivel E</span></td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1doEDa3D9RNkxYIHMRf0n12OhDw_kpPvr/view" target="_blank">vistas</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1x4kC_79sM0fycQPQIRMX_s36srHlH7Pk/view" target="_blank">explosionada</a>
+            <a class="link-pill video" href="https://drive.google.com/file/d/1K8vxGPqetmejoXc8e6E6LxKPWjF99Sj7/view" target="_blank">animación</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1wwNZuMlGH7UgpLclfabJOqlcnASThqUP/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/3ISPs7Frl8M" target="_blank">desarrollo 1</a>
+            <a class="link-pill video" href="https://youtu.be/4E85zRv4_nk" target="_blank">desarrollo 2</a>
+            <a class="link-pill video" href="https://youtu.be/LqHjwwg8jZY" target="_blank">desarrollo 3</a>
+            <a class="link-pill video" href="https://youtu.be/ZxTIgp87-BM" target="_blank">desarrollo 4</a>
+          <button type="button" class="solve-pill" data-qid="s3-6">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">Carro portaherramienta</span></td>
+          <td><span class="semana-tag">Sem. 11–14</span><span class="pb-tag">Pb4 · sem. 14</span><span class="nivel-pill nivel-e">Nivel E</span></td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1LKY6RZbbEg6zPxAB5_385ga7rcnvbtdj/view" target="_blank">vistas</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1UNODmrIjR6z1NhbiAXrkqy5F8-ikaClr/view" target="_blank">explosionada</a>
+            <a class="link-pill video" href="https://drive.google.com/file/d/1qkeT5eSw_We27NfBtJv9pRQ8hhpfannQ/view" target="_blank">animación</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1Poj7vvlvWFDAnWfoZdmqSZCkw7MSK4b5/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/AW4zlR76-7Y" target="_blank">desarrollo</a>
+          <button type="button" class="solve-pill" data-qid="s3-7">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">Cilindro de doble efecto</span></td>
+          <td><span class="semana-tag">Sem. 11–14</span><span class="pb-tag">Pb4 · sem. 14</span><span class="nivel-pill nivel-e">Nivel E</span></td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1fQMKIQV5oP4wWQMNpUxAmdM3SJTDGC7H/view" target="_blank">vistas</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/15BSJT-ROwpGVq0uVgIRz1__7H64hdlip/view" target="_blank">explosionada</a>
+            <a class="link-pill video" href="https://drive.google.com/file/d/1NJNvBVUcIHRBtxQklN1Sjud-Mh18MdsE/view" target="_blank">animación</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/19uVivaZPhZMUzbWR0y7_5xYc8U6ZOp-U/view" target="_blank">dwg</a>
+            <a class="link-pill video" href="https://youtu.be/g4ZVbrJYMwY" target="_blank">desarrollo</a>
+          <button type="button" class="solve-pill" data-qid="s3-8">Marcar como resuelto</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="section-title">Sección 4 — Ajustes, y uniones roscadas y elementos de máquinas</h2>
+  <p class="section-caption">Sin piezas ni archivos dwg — es teoría y ejemplos resueltos en video. El video del Cap. 10 no es puramente teórico: incluye un ejemplo de unión roscada entre planchas con selección de perno/tuerca y dimensionamiento según tablas normalizadas.</p>
+  <div class="row-counter" data-row-counter="s4"></div>
+
+  <div class="table-scroll">
+    <table class="catalog theory-table">
+      <thead><tr><th>Contenido</th><th style="width:16%">Semana</th><th>Enlace</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Capítulo 7.2: Ajustes (teoría)</td>
+          <td><span class="semana-tag">Sem. 11</span><span class="pb-tag">Pb5 · sem. 15</span><span class="nivel-pill nivel-f">Nivel F</span></td>
+          <td class="links-cell"><a class="link-pill video" href="https://youtu.be/lvREANTiO8g" target="_blank">video</a><button type="button" class="solve-pill" data-qid="s4-1">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td>Capítulo 7.2: Ajustes (ejemplos 1)</td>
+          <td><span class="semana-tag">Sem. 12</span><span class="pb-tag">Pb5 · sem. 15</span><span class="nivel-pill nivel-f">Nivel F</span></td>
+          <td class="links-cell"><a class="link-pill video" href="https://youtu.be/1xiPIcXH0Fw" target="_blank">video</a><button type="button" class="solve-pill" data-qid="s4-2">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td>Capítulo 7.2: Ajustes (ejemplos 2)</td>
+          <td><span class="semana-tag">Sem. 12</span><span class="pb-tag">Pb5 · sem. 15</span><span class="nivel-pill nivel-f">Nivel F</span></td>
+          <td class="links-cell"><a class="link-pill video" href="https://youtu.be/ZBeZzESePes" target="_blank">video</a><button type="button" class="solve-pill" data-qid="s4-3">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td>Capítulo 10: Uniones roscadas y elementos de máquinas
+            <span class="pieza-material">incluye ejemplo de unión roscada entre planchas</span></td>
+          <td><span class="semana-tag">Sem. 13</span><span class="pb-tag">Pb5 · sem. 15</span><span class="nivel-pill nivel-f">Nivel F</span></td>
+          <td class="links-cell"><a class="link-pill video" href="https://youtu.be/VtjFzDAXy-M" target="_blank">video</a><button type="button" class="solve-pill" data-qid="s4-4">Marcar como resuelto</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="section-title">Sección 5 — Actividades</h2>
+  <p class="section-caption">Fuente distinta a "Material para practicar": son las actividades semanales que sube el profesor a Paideia, ligadas a cada Laboratorio dirigido. El usuario determinó que las actividades se repiten entre ciclos — confirmado para la Semana 1 (Actividad 1.1 fue "Soporte inclinado" tanto en 2026-1 como en 2026-2) y asumido igual para el resto. Por eso ya no se separa "referencia" de "ciclo en curso": es un solo catálogo, con base en el contenido real de 2026-1. La Programación Semanal 2026-2 actualizada (28 ago 2026) ahora nombra estas mismas piezas semana a semana de forma independiente — todas las 13 coinciden con esta tabla, un segundo respaldo además de la confirmación puntual de la Semana 1.</p>
+  <div class="row-counter" data-row-counter="s5"></div>
+
+  <div class="table-scroll">
+    <table class="catalog">
+      <thead><tr><th style="width:8%">Sem.</th><th style="width:16%">Actividad(es)</th><th style="width:18%">Pieza</th><th>Contenido y enlace principal</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="semana-tag">1</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>1.1</td><td><span class="pieza-name">Soporte inclinado</span></td>
+          <td>Sin dwg (mano alzada → AutoCAD desde cero) · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1Nr9PkajIfkCPiVbYDpEDlNStuDnQvnfb/view" target="_blank">enunciado</a><span class="conf-badge">CONFIRMADO EN 2026-2</span><button type="button" class="solve-pill" data-qid="s5-1">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">2</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>2.1, 2.2</td><td><span class="pieza-name">Soporte inclinado (repetida), Soporte deslizante</span></td>
+          <td>Sin dwg (excepción confirmada) · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1TYen-QJrhrRMsYBinCinuCJRdFd9D48E/view" target="_blank">enunciado 2.2</a><button type="button" class="solve-pill" data-qid="s5-2">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">3</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>3.1 / 3.2 / 3.3</td><td><span class="pieza-name">Soporte fundido / Guía / Placa extremo</span></td>
+          <td>Solo 3.1 con dwg; 3.2 y 3.3 sin dwg (excepción confirmada) · <a class="link-pill dwg" href="https://drive.google.com/file/d/1OhUPgsC5IMmK-X4imwVI04m2iVlHVLkO/view" target="_blank">dwg 3.1</a><button type="button" class="solve-pill" data-qid="s5-3">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">4</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>PD4_INVENTOR</td><td><span class="pieza-name">Soporte fundido (reusa sem. 3)</span></td>
+          <td>Introducción a Inventor, no AutoCAD · <a class="link-pill dwg" href="https://drive.google.com/file/d/1PnAaeLxPjN1jbZq3BNiPDmEEJmPxksGT/view" target="_blank">dwg</a><button type="button" class="solve-pill" data-qid="s5-4">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">5</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>5.1</td><td><span class="pieza-name">Base fundida</span></td>
+          <td>Previa a mano alzada + dwg blanco/avance · <a class="link-pill dwg" href="https://drive.google.com/file/d/1W9i88gIBKZQw0ajK4JGx0PzBoOAAW3bK/view" target="_blank">dwg</a><button type="button" class="solve-pill" data-qid="s5-5">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">6</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>6.1</td><td><span class="pieza-name">Base circular</span></td>
+          <td>Previa + principal, dwg en blanco y versión con vistas y secciones resueltas · <a class="link-pill dwg" href="https://drive.google.com/file/d/1t9u3mYx62nXs8oMg49eWFncgzpQpy_31/view" target="_blank">dwg</a><button type="button" class="solve-pill" data-qid="s5-6">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">7</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>PD7</td><td><span class="pieza-name">Base fundida (reusa sem. 5)</span></td>
+          <td>Refuerzo de Inventor, archivo .ipt nativo · <a class="link-pill dwg" href="https://drive.google.com/file/d/1RdLFLii3LdA-4pPNYkrmO-tYCkv-SIB7/view" target="_blank">.ipt</a><button type="button" class="solve-pill" data-qid="s5-7">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">8</span><span class="nivel-pill nivel-d">Nivel D</span></td><td>8.1</td><td><span class="pieza-name">Base de bomba</span></td>
+          <td>Dwg en blanco + <strong>solución completa modelo</strong> (único caso así en las 13 semanas) · <a class="link-pill dwg" href="https://drive.google.com/file/d/12WlLzthz2_K2EcIkB1rnXdvBlnqzueRz/view" target="_blank">dwg</a> <a class="link-pill enunciado" href="https://drive.google.com/file/d/1X0vdB1wqNN8O7C39TH_A3ecFObXLZzz3/view" target="_blank">solución completa</a><button type="button" class="solve-pill" data-qid="s5-8">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">10</span><span class="nivel-pill nivel-d">Nivel D</span></td><td>9.1</td><td><span class="pieza-name">Cuerpo de Válvula</span></td>
+          <td>Archivos Inventor nativos (.ipt+.idw), transición a despiece · <a class="link-pill dwg" href="https://drive.google.com/file/d/1t7-IVJwPtmkmeGwEKrs48-3qWVPL2NdZ/view" target="_blank">.ipt</a><button type="button" class="solve-pill" data-qid="s5-9">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">11</span><span class="nivel-pill nivel-e">Nivel E</span></td><td>10.1</td><td><span class="pieza-name">Bomba de combustible (15 piezas)</span></td>
+          <td>Ensamble real con ajustes incrustados (H7/h6, H7/j6, H7/p6), explosionado, video .wmv · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1cNWTU0pvu7du6BbKB79kqZytlIi19JZ4/view" target="_blank">enunciado</a> <a class="link-pill enunciado" href="https://drive.google.com/file/d/1IOlIbOjirbnYlMZagv-UcUZrPbYXnlH4/view" target="_blank">BOM</a><button type="button" class="solve-pill" data-qid="s5-10">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">12</span><span class="nivel-pill nivel-e">Nivel E</span></td><td>12.1</td><td><span class="pieza-name">Unión de leva</span></td>
+          <td>Ensamble con ajustes, animación, explosionado · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1zPponsQvJcUar8H3iRzAK6AopNeK3Tq9/view" target="_blank">enunciado</a> <a class="link-pill enunciado" href="https://drive.google.com/file/d/1N409tQT6SjPgXafs8MA8iONA7SJBa8Td/view" target="_blank">lista de piezas</a><button type="button" class="solve-pill" data-qid="s5-11">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">13</span><span class="nivel-pill nivel-e">Nivel E</span></td><td>13</td><td><span class="pieza-name">Inyector ("EX3-2026-1")</span></td>
+          <td>3 videos de subensamble, BOM · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1gH2KB1uMZh3pdo0QcuvKvbwIm6j_bFfZ/view" target="_blank">enunciado</a> <a class="link-pill enunciado" href="https://drive.google.com/file/d/1Nv6v3vP31Suzyf-uUUkJyAvBNUahAX96/view" target="_blank">BOM</a><button type="button" class="solve-pill" data-qid="s5-12">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">14</span><span class="nivel-pill nivel-e">Nivel E</span></td><td>14</td><td><span class="pieza-name">Tornillo de prensa (PD9, de 2024-2)</span></td>
+          <td>Explosionado + paquete .zip · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1Zq5-ZHVdPAYRna4X-I1u_9tQiMbOA4Xr/view" target="_blank">explosionado</a><button type="button" class="solve-pill" data-qid="s5-13">Marcar como resuelto</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="section-title">Sección 6 — PCs pasadas (profesor)</h2>
+  <p class="section-caption">Prácticas Calificadas reales de 2025-1 y 2025-2, dadas por el propio profesor (no la Facultad). Sin PC5 — el profesor no la incluyó en esta carpeta. A diferencia de "Material para practicar", acá no hay video explicativo, solo la pieza (dwg y/o PDF) tal como se entregó en la evaluación real.</p>
+  <div class="row-counter" data-row-counter="s6"></div>
+
+  <div class="table-scroll">
+    <table class="catalog">
+      <thead><tr><th style="width:10%">PC</th><th style="width:10%">Ciclo</th><th style="width:30%">Pieza(s)</th><th>Enlaces</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="pieza-name">PC1</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>2025-1</td>
+          <td>Accesorio de desviación · Soporte múltiple (mano alzada) · Carcasa soporte (AutoCAD)</td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/14md9PW2DqwzpDtY6nB3L-xb7FFXrfe1y/view" target="_blank">Accesorio</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/14dvI-xSrBFCOYDL3SZETJ4SYD7sORuJ1/view" target="_blank">Soporte múlt.</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1B5qd-ngPU7emNFO3BAoI2nWIoREI3N7w/view" target="_blank">Carcasa dwg</a>
+          <button type="button" class="solve-pill" data-qid="s6-1">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">PC1</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>2025-2</td>
+          <td>Soporte Inclinado · Soporte pivote (mano alzada) · Tapa de soporte · Cuerpo de soporte (AutoCAD)</td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1rffxtjMsge3YZck83mSDIJm6wDlqbTQh/view" target="_blank">S. Inclinado</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/18pTj6gf_KQFCEgStcEVsZisRAuKu5cNU/view" target="_blank">S. pivote</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/18IA97ER3-HoB4OBnBNWemwS4alGL7xnz/view" target="_blank">Tapa dwg</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1KuHaOR4PV-SDuQjeuH5tWzAFP1yp89D0/view" target="_blank">Cuerpo dwg</a>
+          <button type="button" class="solve-pill" data-qid="s6-2">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">PC2</span><span class="nivel-pill nivel-b">Nivel B</span></td><td>2025-1</td>
+          <td>Soporte múltiple (dimensionamiento)</td>
+          <td class="links-cell"><a class="link-pill dwg" href="https://drive.google.com/file/d/1Pz34ZXs03_XkvlR_P_8YevbzV7EFmsk1/view" target="_blank">dwg</a><button type="button" class="solve-pill" data-qid="s6-3">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">PC2</span><span class="nivel-pill nivel-b">Nivel B</span></td><td>2025-2</td>
+          <td>Base circular (dimensionamiento) — misma pieza que Actividad 6.1 de Paideia</td>
+          <td class="links-cell"><a class="link-pill dwg" href="https://drive.google.com/file/d/1NDdhkgK2bj6K6byYxv4u25PzByQ52GPq/view" target="_blank">dwg</a><button type="button" class="solve-pill" data-qid="s6-4">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">PC3</span><span class="nivel-pill nivel-d">Nivel D</span></td><td>2025-1</td>
+          <td>Tapa de caja de engranajes (tolerancias y rugosidad)</td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/19UeYPfPVXGbfq4qN1Olus6FdeeL-j5Mg/view" target="_blank">enunciado</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1N9py_hWrtg4qyTQF6aQJoaSnXVavFfwC/view" target="_blank">dwg</a>
+          <button type="button" class="solve-pill" data-qid="s6-5">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">PC3</span><span class="nivel-pill nivel-d">Nivel D</span></td><td>2025-2</td>
+          <td>Soporte inclinado (tolerancias y rugosidad)</td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1o3jP40sflykJeFqa9Y_G4VKSTY2-kdig/view" target="_blank">enunciado</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1kQei-fuI7X4e4mVIw9cZSgHesRAfX4k-/view" target="_blank">dwg</a>
+          <button type="button" class="solve-pill" data-qid="s6-6">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">PC4</span><span class="nivel-pill nivel-e">Nivel E</span></td><td>2025-2</td>
+          <td>Válvula de retención de alimentación (ensamble, 24 piezas)</td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1PSrPqy_0ru0Qea2nSZJJvrxm3nPQVBJk/view" target="_blank">vistas</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1wVUcPudTw8EqQdjxQvH_Ll8DPXTLEyRo/view" target="_blank">explosionada</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1rxGy3E7H6fTxFM50GB8wQip_1IWLsGxL/view" target="_blank">dwg</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1eSTTHQ97lSh-rylYYYHekcD0hGkCuPxH/view" target="_blank">lista piezas</a>
+            <a class="link-pill video" href="https://drive.google.com/file/d/1dl4FlQR_04K_CeGP4T8YgomHJ0I3Tu36/view" target="_blank">video</a>
+          <button type="button" class="solve-pill" data-qid="s6-7">Marcar como resuelto</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="section-title">Sección 7 — Evaluaciones pasadas (Planchas, Facultad)</h2>
+  <p class="section-caption">Del ciclo virtual de pandemia (2020-2), banco de la Facultad — no del profesor actual. <strong>PC1 2020-2 excluida</strong> (la pieza "Tapa inferior" de su solución no tiene enunciado ni dwg propio disponible, según lo confirmado con el usuario). Cada PC trae enunciado (E) real y al menos una solución de estudiante ya calificada, con anotaciones de corrección del profesor — no son soluciones modelo limpias.</p>
+  <div class="row-counter" data-row-counter="s7"></div>
+
+  <div class="table-scroll">
+    <table class="catalog">
+      <thead><tr><th style="width:8%">PC</th><th style="width:28%">Contenido</th><th>Enlaces</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="pieza-name">PC2</span><span class="nivel-pill nivel-b">Nivel B</span></td>
+          <td>Árbol de transmisión + Empaquetadura (acotado) · Pedestal (vistas/secciones + acotado)</td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1kD5jythU1d9BCQwHc4PmaB5q61A40HjD/view" target="_blank">enunciado</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1ztx-LqxcHir0NddFP4877EJacOQJoajJ/view" target="_blank">solución anotada</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1gUUt3tQBdD_94yLGmuHv7Hyhnia2ijEx/view" target="_blank">dwg (.zip)</a>
+          <button type="button" class="solve-pill" data-qid="s7-1">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">PC3</span><span class="nivel-pill nivel-d">Nivel D</span>
+            <span class="pieza-material">el enunciado interno se autodenomina "PC4.2" — inconsistencia del archivo original de 2020-2, no de esta carpetación</span></td>
+          <td>Tolerancias ISO calculadas + pieza con tolerancias y acabados</td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1cWCzecWpUHuieoHACIY6Hc768IvLXhYv/view" target="_blank">enunciado</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1QWfI-5hZrZz_VXvmiAs-ZGJGGbYTpgNz/view" target="_blank">solución anotada</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/14s0x_-Xe31HfVebB11SObaYNfriOEo__/view" target="_blank">dwg</a>
+          <button type="button" class="solve-pill" data-qid="s7-2">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">PC4</span><span class="nivel-pill nivel-e">Nivel E</span>
+            <span class="pieza-material">el enunciado interno se autodenomina "PC5.1" — misma inconsistencia</span></td>
+          <td>Prensa para tubos (ensamble) — ajustes (H8/h9, H7/h6) + plano de ensamble con lista de piezas</td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/1mTy5N9nqmQUp1Kf2JqKo-rFAcX-wM-YH/view" target="_blank">enunciado</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/18Yzc2pxR4byVu6pUqXY9q4bI1Ydc1z8u/view" target="_blank">solución anotada</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1kOGup_E4I4BOdE_7J0v2sbgUVkanIWdU/view" target="_blank">dwg</a>
+          <button type="button" class="solve-pill" data-qid="s7-3">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="pieza-name">PC5</span><span class="nivel-pill nivel-e">Nivel E</span></td>
+          <td>Prensa de esmeril (ensamble) — unión roscada (perno ISO 4014) + plano de ensamble con lista de piezas. Es la referencia directa del Pb5 actual.</td>
+          <td class="links-cell">
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/13OfpP27CYdwowfaSx2LJo5pw99XVH7p4/view" target="_blank">enunciado</a>
+            <a class="link-pill enunciado" href="https://drive.google.com/file/d/16lRAkX28H7ICqnPZLiQrC4mVKj5_LCkp/view" target="_blank">solución anotada</a>
+            <a class="link-pill dwg" href="https://drive.google.com/file/d/1XedGJcF0vWWo0mI90QbmADVrc75EC2fi/view" target="_blank">dwg</a>
+          <button type="button" class="solve-pill" data-qid="s7-4">Marcar como resuelto</button></td>
+        </tr>
+        <tr class="row-note"><td colspan="3">PC1 2020-2 — excluida (ver nota de auditoría de la Sección 7 más abajo)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <section class="legend-section">
+    <div class="legend-box">
+      <h3>Leyenda</h3>
+      <div class="legend-row"><span class="legend-swatch" style="background:var(--navy-soft)"></span>enlace de referencia: enunciado / vistas / explosionada (PDF o imagen)</div>
+      <div class="legend-row"><span class="legend-swatch" style="background:var(--teal-soft)"></span>enlace: archivo dwg</div>
+      <div class="legend-row"><span class="legend-swatch" style="background:var(--gold-soft)"></span>enlace: video (animación o desarrollo)</div>
+      <div class="legend-row"><span class="legend-swatch" style="background:var(--verify)"></span><span class="verified-mark" style="margin:0">VERIF.</span>&nbsp;= archivo abierto y confirmado individualmente</div>
+      <div class="legend-row"><span class="legend-swatch" style="background:#8A2B2B"></span><span class="fixed-mark" style="margin:0">CORREGIDO</span>&nbsp;= enlace malformado en el .docx original, reemplazado</div>
+      <div class="legend-row" style="margin-top:10px"><span class="nivel-pill nivel-a">Nivel A</span> vistas y secciones</div>
+      <div class="legend-row"><span class="nivel-pill nivel-b">Nivel B</span> + dimensionamiento</div>
+      <div class="legend-row"><span class="nivel-pill nivel-c">Nivel C</span> + tolerancias</div>
+      <div class="legend-row"><span class="nivel-pill nivel-d">Nivel D</span> + rugosidad (pieza completa)</div>
+      <div class="legend-row"><span class="nivel-pill nivel-e">Nivel E</span> ensamblaje</div>
+      <div class="legend-row"><span class="nivel-pill nivel-f">Nivel F</span> teoría de cierre (ajustes, uniones roscadas)</div>
+    </div>
+    <div class="notes-box">
+      <h3>Notas de auditoría</h3>
+      <ol>
+        <li>El archivo "1. Dibujo de una pieza" tenía originalmente 18 piezas; el profesor lo redujo intencionalmente a 14 (eliminó Base, Conector nivel A, Guía doble y Biela de tres puntos — confirmado con el usuario el 26 ago 2026).</li>
+        <li>Para los niveles A–C, el enlace "archivo dwg" reemplaza lo que el .docx original etiquetaba erróneamente como "enunciado" — se verificó que el archivo real detrás del enlace siempre fue un .dwg (ej. "Base inclinada.dwg", "Conector articulado.dwg"), no un PDF. La etiqueta del documento estaba desactualizada, no el archivo.</li>
+        <li>El video de desarrollo de "Útil de fijación" (Sección 3) venía malformado en el .docx original (<code>[ps://youtu.be/qPUXGR1mpOshtt](https://youtu.be/qPUXGR1mpOs)</code>) — el usuario confirmó que la URL correcta es <code>https://youtu.be/qPUXGR1mpOs</code>, ya reflejada aquí.</li>
+        <li>En Sección 3, "vistas" y "explosionada" no son un PDF con tolerancias como el "enunciado" de la Sección 1 nivel D — son solo una imagen/PDF de referencia visual del ensamblaje. Se reutiliza el mismo color por ser ambos documentos estáticos de referencia, no por ser el mismo tipo de contenido.</li>
+        <li>La columna Semana/Pb es una inferencia por nivel de complejidad y tipo de contenido cruzada con la Programación Semanal 2026-2, no una confirmación del profesor pieza por pieza.</li>
+        <li>Pendiente para una futura pasada de auditoría: abrir y verificar individualmente los enlaces que no llevan la marca VERIF. (la mayoría de los enlaces de este documento).</li>
+        <li>Sección 5 (Actividades) dejó de separar "referencia 2026-1" de "ciclo en curso 2026-2": el usuario determinó que las actividades se repiten entre ciclos, confirmado para la Semana 1 (misma pieza, "Soporte inclinado", en ambos). Las 13 filas usan el contenido real de 2026-1 como el contenido esperado —y probable— de 2026-2.</li>
+        <li>La tabla de Actividades usa enlaces del Drive personal del usuario (no del profesor) y muestra solo el recurso principal por semana, no cada archivo individual — a diferencia de las Secciones 1–4, es la mejor aproximación disponible al contenido real de 2026-2, no una transcripción de un enunciado oficial de este ciclo semana por semana.</li>
+        <li>PC1 2020-2 (Sección 7) queda fuera del catálogo: su solución incluye la pieza "Tapa inferior" sin enunciado ni archivo dwg propio disponible — no se puede verificar contra qué se dibujó, así que no se cataloga (confirmado con el usuario).</li>
+        <li>Dos archivos de la Sección 7 (PC3 y PC4 2020-2) tienen una inconsistencia en su propio texto interno: el enunciado de la carpeta "PC3" pide guardar el archivo como "PC4.2", y el de "PC4" como "PC5.1". Es un desfase del documento original de 2020-2 (ciclo de pandemia), no un error de esta catalogación — se documenta tal cual, sin corregirlo, porque no hay forma de saber cuál numeración es la "correcta" sin más contexto del profesor.</li>
+        <li>Los archivos "dwg" de la Sección 7 llevan a una carpeta o .zip comprimido (así los subió la Facultad), no a un archivo .dwg individual como en el resto del documento — no se abrió el contenido interno de esos comprimidos.</li>
+        <li><strong>Nivel extendido a las 56 filas del documento (no solo Sección 1)</strong>: se agregaron Nivel E (ensamblaje) y Nivel F (teoría de cierre), inexistentes antes. Sección 2 es Nivel B uniforme (dimensionamiento puro, sin progresión interna). Sección 3 y las piezas de ensamble de Secciones 5-7 son Nivel E uniforme — no hay evidencia para distinguir dificultad entre los 8 ensamblajes de Sección 3, así que se dejaron sin sub-ranking en vez de inventar uno. Sección 4 es Nivel F uniforme. Sección 5 se asignó según la descripción literal de cada actividad en la Programación Semanal 2026-2 (no por suposición): Semanas 1-7 son Nivel A (vistas y secciones, incluidas las dos activades de Inventor que reusan piezas ya Nivel A), Semanas 8 y 10 son Nivel D, Semanas 11-14 son Nivel E. Secciones 6-7 se asignaron por la correspondencia temática ya documentada con cada Pb (PC1↔Pb1↔A, PC2↔Pb2↔B, PC3↔Pb3↔D, PC4/PC5↔Pb4/Pb5↔E).</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="footer-credit">BAPEC 1MEC02 — Las 4 fuentes del curso cubiertas: Material para practicar (completa) · Actividades (2026-1 y 2026-2 unificadas, se asumen repetidas salvo semana 1 confirmada) · PCs pasadas del profesor (completa) · Evaluaciones pasadas — Planchas (PC2-5, PC1 excluida) · Pendiente: Ppee_1MEC02</div>
+
+</div>
+<script>
+(function() {
+  // 1) Crea tu Client ID en console.cloud.google.com (mismo que en el horario) y pégalo abajo
+  const GOOGLE_CLIENT_ID = '176230481298-pbv52qu67pp82sfjce23ccumabn6ub7o.apps.googleusercontent.com';
+  const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
+  const PROGRESS_FILE_NAME = 'bapec_progreso.json';
+  const PROGRESS_PARENT_FOLDER_ID = '1Wm0X0zD-oVpOCIvHjCB32iAO-7WGpZyX'; // carpeta raíz de tu proyecto en Drive
+  const CURSO = '1MEC02';
+
+  let progreso = {};
+  let gAccessToken = null;
+  let gProgressFileId = null;
+  let driveConnected = false;
+
+  function allQids() {
+    return Array.prototype.map.call(document.querySelectorAll('.solve-pill'), function(b) { return b.getAttribute('data-qid'); });
+  }
+
+  function groupPrefix(qid) { return qid.substring(0, qid.lastIndexOf('-')); }
+
+  function counterText(qids) {
+    const total = qids.length;
+    const resueltos = qids.filter(function(q) { return !!progreso[q]; }).length;
+    const pct = total ? Math.round((resueltos / total) * 100) : 0;
+    return { text: resueltos + '/' + total + ' (' + pct + '%)', complete: total > 0 && resueltos === total };
+  }
+
+  function updateDynamicUI() {
+    document.querySelectorAll('.solve-pill').forEach(function(btn) {
+      const qid = btn.getAttribute('data-qid');
+      const solved = !!progreso[qid];
+      btn.classList.toggle('solved', solved);
+      btn.textContent = solved ? '✓ Resuelto' : 'Marcar como resuelto';
+      const row = btn.closest('tr');
+      if (row) row.classList.toggle('is-solved', solved);
+    });
+
+    const allQ = allQids();
+    const byGroup = {};
+    allQ.forEach(function(q) {
+      const g = groupPrefix(q);
+      (byGroup[g] = byGroup[g] || []).push(q);
+    });
+    document.querySelectorAll('[data-row-counter]').forEach(function(el) {
+      const g = el.getAttribute('data-row-counter');
+      const qids = byGroup[g] || [];
+      if (!qids.length) { el.textContent = ''; return; }
+      const c = counterText(qids);
+      el.textContent = c.text;
+      el.classList.toggle('complete', c.complete);
+    });
+
+    const total = allQ.length;
+    const resueltos = allQ.filter(function(q) { return !!progreso[q]; }).length;
+    const pct = total ? Math.round((resueltos / total) * 100) : 0;
+    const el = document.getElementById('resumen-resueltos');
+    if (el) el.textContent = resueltos + ' / ' + total + ' (' + pct + '%)';
+  }
+
+  function setSyncStatus(state, text) {
+    const dot = document.getElementById('syncDot');
+    const txt = document.getElementById('syncText');
+    const btn = document.getElementById('syncBtn');
+    if (!dot) return;
+    dot.className = 'sync-dot' + (state === 'ok' ? ' ok' : state === 'err' ? ' err' : '');
+    txt.innerHTML = text;
+    btn.textContent = state === 'ok' ? 'Reconectar' : 'Conectar con Google Drive';
+  }
+
+  async function driveApiFetch(url, opts) {
+    opts = opts || {};
+    opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + gAccessToken });
+    const r = await fetch(url, opts);
+    if (!r.ok) { const t = await r.text(); throw new Error('Drive API ' + r.status + ': ' + t); }
+    return r;
+  }
+
+  async function getOrCreateProgressFile() {
+    const cached = localStorage.getItem('driveProgressFileId');
+    if (cached) { gProgressFileId = cached; return cached; }
+    const q = encodeURIComponent("name='" + PROGRESS_FILE_NAME + "' and '" + PROGRESS_PARENT_FOLDER_ID + "' in parents and trashed=false");
+    const listRes = await driveApiFetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=files(id,name)');
+    const listJson = await listRes.json();
+    if (listJson.files && listJson.files.length) {
+      gProgressFileId = listJson.files[0].id;
+    } else {
+      const metadata = { name: PROGRESS_FILE_NAME, parents: [PROGRESS_PARENT_FOLDER_ID], mimeType: 'application/json' };
+      const initial = JSON.stringify({ ING225: {}, MAT241: {}, MEC257: {}, '1MEC02': {} });
+      const boundary = 'bapecsyncboundary';
+      const body = '--' + boundary + '\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) + '\r\n' +
+        '--' + boundary + '\r\nContent-Type: application/json\r\n\r\n' + initial + '\r\n--' + boundary + '--';
+      const createRes = await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
+        method: 'POST', headers: { 'Content-Type': 'multipart/related; boundary=' + boundary }, body: body
+      });
+      const createJson = await createRes.json();
+      gProgressFileId = createJson.id;
+    }
+    localStorage.setItem('driveProgressFileId', gProgressFileId);
+    return gProgressFileId;
+  }
+
+  async function readAllProgress() {
+    const id = await getOrCreateProgressFile();
+    const r = await driveApiFetch('https://www.googleapis.com/drive/v3/files/' + id + '?alt=media');
+    const text = await r.text();
+    try { const parsed = JSON.parse(text); return Object.assign({ ING225: {}, MAT241: {}, MEC257: {}, '1MEC02': {} }, parsed); }
+    catch (e) { return { ING225: {}, MAT241: {}, MEC257: {}, '1MEC02': {} }; }
+  }
+
+  async function writeAllProgress(data) {
+    const id = await getOrCreateProgressFile();
+    await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files/' + id + '?uploadType=media', {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
+    });
+  }
+
+  function connectGoogleDrive() {
+    if (GOOGLE_CLIENT_ID.indexOf('PASTE_TU') === 0) {
+      setSyncStatus('err', 'Falta pegar tu <code>GOOGLE_CLIENT_ID</code> en el código (mismo que usaste en el horario).');
+      return;
+    }
+    setSyncStatus('', 'Abriendo ventana de Google…');
+    const tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: DRIVE_SCOPE,
+      callback: async function(resp) {
+        if (resp.error) { setSyncStatus('err', 'No se pudo conectar: ' + resp.error); return; }
+        gAccessToken = resp.access_token;
+        driveConnected = true;
+        setSyncStatus('', 'Cargando tu progreso real desde Drive…');
+        try {
+          const all = await readAllProgress();
+          progreso = all[CURSO] || {};
+          setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
+          updateDynamicUI();
+        } catch (e) { setSyncStatus('err', 'Conectado, pero falló la lectura: ' + e.message); }
+      }
+    });
+    tokenClient.requestAccessToken({ prompt: '' });
+  }
+
+  document.addEventListener('click', function(ev) {
+    const syncBtn = ev.target.closest('#syncBtn');
+    if (syncBtn) { connectGoogleDrive(); return; }
+
+    const btn = ev.target.closest('.solve-pill');
+    if (!btn) return;
+    if (!driveConnected) { setSyncStatus('err', 'Conéctate a Google Drive primero (botón de arriba) para que esto se guarde de verdad.'); return; }
+    const qid = btn.getAttribute('data-qid');
+    progreso[qid] = !progreso[qid];
+    updateDynamicUI();
+    (async function() {
+      try {
+        const all = await readAllProgress();
+        all[CURSO] = progreso;
+        await writeAllProgress(all);
+        setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
+      } catch (e) { setSyncStatus('err', 'Se marcó localmente pero no se pudo guardar en Drive: ' + e.message); }
+    })();
+  });
+
+  updateDynamicUI();
+})();
+</script>
+</body>
+</html>

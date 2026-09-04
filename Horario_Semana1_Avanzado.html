@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horario Semana 1 — avanzado, con BAPEC vinculado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client"></script>
+<style>
+:root{
+  --paper:#F7F3EA; --paper-raised:#FFFFFF;
+  --navy-deep:#042354; --navy-mid:#123A6B; --navy-soft:#E8ECF2;
+  --gold:#B08D2B; --gold-soft:#F3E9CE;
+  --teal:#16826E; --teal-soft:#DCEEE9;
+  --plum:#6B3F7A; --plum-soft:#EDE3F0;
+  --ink:#1E2430; --slate:#5B6472; --slate-soft:#E4E1D8; --line:#D8D0C0;
+  --confirm:#1F7A4D; --confirm-soft:#E1F0E6;
+  --commute:#8A8478; --commute-soft:#EDEAE2;
+  --warn:#8A4B12; --warn-soft:#F6E9D8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.sheet{max-width:1340px;margin:0 auto;padding:32px 22px 60px}
+.masthead{border-bottom:3px solid var(--navy-deep);padding-bottom:16px;margin-bottom:18px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate)}
+h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:29px;color:var(--navy-deep);margin:4px 0 4px;letter-spacing:-.01em}
+.subtitle{font-size:14px;color:var(--navy-mid);font-weight:500}
+.name-note{font-size:12px;color:var(--slate);margin-top:6px;font-style:italic}
+
+.tabbar{display:flex;gap:4px;margin-bottom:18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-weight:600;color:var(--slate);background:none;border:none;border-bottom:3px solid transparent;padding:10px 16px;cursor:pointer}
+.tab:hover{color:var(--navy-mid)}
+.tab.active{color:var(--navy-deep);border-bottom-color:var(--navy-deep)}
+.view{display:none}
+.view.active{display:block}
+
+.iphs-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.iphs-card{background:var(--paper-raised);border:1px solid var(--line);border-top:3px solid var(--c);border-radius:6px;padding:11px 13px}
+.iphs-card .n{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;color:var(--navy-deep)}
+.iphs-card .l{font-size:10.5px;color:var(--slate);margin-top:1px}
+.iphs-card .pct{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--teal);margin-top:5px}
+.iphs-card .bar{height:5px;background:var(--slate-soft);border-radius:3px;margin-top:6px;overflow:hidden}
+.iphs-card .bar i{display:block;height:100%;background:var(--c)}
+
+.note{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:3px;padding:12px 16px;font-size:12.5px;line-height:1.6;margin:0 0 14px}
+.note h4{margin:0 0 6px;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--navy-deep);font-family:'IBM Plex Mono',monospace}
+.note.link h4{color:var(--teal)}
+.note.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.note.warn h4{color:var(--warn)}
+.badge-linked{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--confirm);padding:2px 7px;border-radius:3px;margin-left:6px;vertical-align:middle}
+.badge-local{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--slate);border:1px solid var(--slate);padding:1px 6px;border-radius:3px;margin-left:6px;vertical-align:middle}
+
+.sync-bar{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 16px;margin-bottom:14px;flex-wrap:wrap}
+.sync-dot{width:9px;height:9px;border-radius:50%;background:var(--slate);flex-shrink:0}
+.sync-dot.ok{background:var(--confirm)}
+.sync-dot.err{background:#8A2B2B}
+.sync-text{font-size:12.5px;color:var(--slate);flex:1}
+.sync-text strong{color:var(--ink)}
+.sync-btn{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:5px;cursor:pointer;border:1.5px solid var(--navy-deep);color:var(--navy-deep);background:transparent}
+.sync-btn:hover{background:var(--navy-soft)}
+.sync-btn:disabled{opacity:.5;cursor:default}
+.setup-needed{font-size:11.5px;color:var(--warn);margin-top:4px}
+
+.cal-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper-raised)}
+.cal-grid{display:grid;grid-template-columns:52px repeat(7,minmax(132px,1fr));position:relative}
+.cal-corner{grid-row:1;grid-column:1;background:var(--navy-deep);border-top-left-radius:8px}
+.cal-daylabel{grid-row:1;background:var(--navy-deep);color:#fff;text-align:center;padding:9px 4px;font-family:'IBM Plex Mono',monospace}
+.cal-daylabel .dn{font-size:12px;font-weight:600;letter-spacing:.03em}
+.cal-daylabel .dd{font-size:10px;opacity:.75;margin-top:1px}
+.cal-hour{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--slate);text-align:right;padding:0 6px 0 0;border-top:1px solid var(--line)}
+.cal-cell{border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.cal-block{position:relative;margin:1px 2px 0;border-radius:4px;padding:4px 7px;font-size:12px;overflow:hidden;cursor:pointer;border-left:3px solid var(--c);background:var(--bg);color:var(--fg)}
+.cal-block:hover{filter:brightness(0.96)}
+.cal-block .t{font-weight:600;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-block .h{font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.8}
+.cal-block .cnt{font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.85;margin-top:1px}
+.cal-block.complete{opacity:.55}
+.cal-block.complete .t{text-decoration:line-through}
+.cal-block.commute{opacity:.6;font-style:italic}
+.cal-block.libre{border-left-style:dashed;opacity:.8}
+.cal-block.libre .t{font-style:italic;font-weight:500}
+
+.detail-panel{margin-top:14px;background:var(--paper-raised);border:1px solid var(--line);border-left:5px solid var(--navy-deep);border-radius:6px;padding:16px 20px;display:none}
+.detail-panel.show{display:block}
+.detail-panel .dh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.detail-panel h4{font-family:'IBM Plex Serif',serif;font-size:17px;color:var(--navy-deep);margin:0 0 3px}
+.detail-panel .dtime{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--slate)}
+.detail-panel p{font-size:13.5px;margin:8px 0 0;color:var(--ink)}
+.meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.meta-grid div .ml{font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--slate)}
+.meta-grid div .mv{font-size:12.5px;font-weight:600;color:var(--ink);margin-top:2px}
+
+.qid-box{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.qid-box .qh{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.qid-box .qh .qcount{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--navy-deep)}
+.qid-pills{display:flex;flex-wrap:wrap;gap:6px}
+.qid-pill{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:5px 11px;border-radius:12px;cursor:pointer;user-select:none;border:1.5px solid var(--slate);color:var(--slate);background:transparent;transition:background .15s,color .15s,border-color .15s}
+.qid-pill:hover{border-color:var(--navy-mid);color:var(--navy-mid)}
+.qid-pill.solved{border-color:var(--confirm);color:#fff;background:var(--confirm)}
+.qid-pill.pending-slot{border-style:dashed}
+.link-note{font-size:11.5px;color:var(--slate);margin-top:8px;line-height:1.5}
+.link-note code{font-family:'IBM Plex Mono',monospace;background:var(--navy-soft);padding:1px 5px;border-radius:3px;font-size:10.5px}
+
+.day-block{margin-bottom:20px;border:1px solid var(--line);border-radius:8px;background:var(--paper-raised);overflow:hidden}
+.day-block-head{background:var(--navy-soft);padding:9px 16px;display:flex;justify-content:space-between;align-items:baseline}
+.day-block-head .dn{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:16px;color:var(--navy-deep)}
+.day-block-head .dd{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--navy-mid)}
+.list-row{padding:9px 16px;border-top:1px solid var(--line)}
+.list-row:hover{background:var(--navy-soft)}
+.list-row-top{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.list-row .lt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--navy-deep);font-weight:600;width:88px;flex-shrink:0;padding-top:1px}
+.list-row .lc{width:4px;border-radius:2px;flex-shrink:0;align-self:stretch}
+.list-row .lbody{flex:1}
+.list-row .ltitle{font-weight:600;font-size:13.5px}
+.list-row .ldetail{font-size:12px;color:var(--slate);margin-top:1px}
+.list-row.complete .ltitle{text-decoration:line-through;color:var(--slate)}
+.list-row .qid-box{margin-left:100px;margin-top:8px}
+
+.metric-section{background:var(--paper-raised);border:1px solid var(--line);border-radius:8px;padding:20px 24px;margin-bottom:18px}
+.metric-section h3{font-family:'IBM Plex Serif',serif;font-size:17px;color:var(--navy-deep);margin:0 0 4px}
+.metric-section .msub{font-size:12.5px;color:var(--slate);margin-bottom:16px}
+.hbar-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.hbar-label{width:96px;flex-shrink:0;font-size:12.5px;font-weight:600}
+.hbar-track{flex:1;height:22px;background:var(--slate-soft);border-radius:4px;overflow:hidden;position:relative}
+.hbar-fill{height:100%;display:flex;align-items:center;padding-left:8px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#fff;white-space:nowrap}
+.hbar-target-mark{position:absolute;top:0;bottom:0;width:2px;background:var(--ink)}
+.pending-block{margin-top:6px}
+.pending-block .pt{font-size:11px;color:var(--slate);margin-bottom:5px}
+
+.legend-row{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--slate);margin:14px 0}
+.legend-row .sw{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:5px;vertical-align:middle;border-left:3px solid}
+.footer-credit{margin-top:28px;padding-top:12px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--slate);text-align:center}
+@media (max-width:720px){.iphs-bar{grid-template-columns:repeat(2,1fr)}.meta-grid{grid-template-columns:repeat(2,1fr)}.list-row .qid-box{margin-left:0}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header class="masthead">
+  <div class="eyebrow">Horario integrado · Término 1 2026-2 · Ingeniería Mecánica PUCP</div>
+  <h1>Semana 1 — avanzado, con BAPEC vinculado</h1>
+  <div class="subtitle">Domingo 16 — Sábado 22 de agosto · ING225 · MAT241 · MEC257 · 1MEC02</div>
+  <div class="name-note">IPHS v5 (10 señales): ING225 42.5% · MAT241 30.5% · MEC257 26.9% · pesos 25/10/20/14/10/10/8/6/6/8 · 1MEC02 fuera del reparto, ritmo fijo aparte</div>
+</header>
+
+<div class="sync-bar">
+  <span class="sync-dot" id="syncDot"></span>
+  <span class="sync-text" id="syncText">No conectado — tus marcas se guardan en tu Google Drive, no en este navegador. Conéctate para cargar y guardar tu progreso real.</span>
+  <button class="sync-btn" id="syncBtn">Conectar con Google Drive</button>
+</div>
+
+<nav class="tabbar">
+  <button class="tab active" data-view="cal">Calendario</button>
+  <button class="tab" data-view="list">Lista</button>
+  <button class="tab" data-view="metrics">Métricas · BAPEC</button>
+</nav>
+
+<section class="iphs-bar" id="iphsBar"></section>
+
+<div class="note link">
+  <h4>Cómo funciona el contador vinculado — ahora vía tu Google Drive</h4>
+  Cada pastilla guarda su estado en un archivo <code>bapec_progreso.json</code> dentro de la carpeta raíz de tu proyecto en Drive, usando tu propia cuenta de Google (API de Drive, no <code>window.storage</code> de Artifacts — así funciona igual si abres este horario como artifact o como archivo descargado, siempre que lo sirvas por <code>http://localhost</code>, ver la nota de configuración). El bloque de <strong>1MEC02</strong> ya está <span class="badge-linked">vinculado de verdad</span>: actualicé también tu <code>BAPEC_1MEC02.html</code> para que lea y escriba ese mismo archivo de Drive, pieza <code>s5-1</code> ("Soporte inclinado") — descarga la versión nueva de ambos y marcar en uno se refleja en el otro al recargar. Los bloques de <strong>ING225 / MAT241 / MEC257</strong> ya guardan su progreso en ese mismo <code>bapec_progreso.json</code> <span class="badge-local">Drive, pendiente del otro lado</span> — el dato persiste de verdad, pero tus tres BAPEC grandes de esos cursos todavía no fueron actualizados para leer de ahí (son archivos de 500+ KB cada uno; los actualizo en cuanto confirmes que la conexión de abajo funciona).
+</div>
+
+<div class="note warn" id="setupNote">
+  <h4>Cómo abrir este archivo</h4>
+  Ya tiene tu Client ID de Google Cloud configurado. Solo debes abrirlo por <code>http://localhost:8000</code> (o el puerto que hayas puesto en "Authorized JavaScript origins"), no con doble clic directo — corre <code>python3 -m http.server 8000</code> en la carpeta donde tengas los archivos descargados, y ábrelo desde <code>http://localhost:8000/Horario_Semana1_Avanzado.html</code>.
+</div>
+
+<div class="note warn" id="gapNote">
+  <h4>Hallazgo de auditoría — bloques sin ubicar todavía</h4>
+  El horario que recuperé programa explícitamente <strong>10 de las 18</strong> preguntas de MAT241 (≈5.5h de las 8.5h objetivo) y <strong>8 de las 12</strong> de MEC257 (≈6.5h de las 7.5h objetivo) en bloques concretos de esta semana; ING225 sí llega a sus 25/25. Las preguntas restantes están cargadas en el contador (pestaña Métricas) como "sin bloque fijo esta semana" para que no se pierdan, pero decidir dónde meterlas —qué bloque de comida, inglés u ocio ceder, o si prefieres aceptar el faltante esta semana— es tuyo, no algo que deba decidir yo tocando tus horarios de higiene o comida.
+</div>
+
+<div class="view active" id="view-cal">
+  <div class="cal-wrap"><div class="cal-grid" id="calGrid"></div></div>
+  <div class="legend-row">
+    <span><i class="sw" style="background:var(--navy-soft);border-color:var(--navy-mid)"></i>ING225</span>
+    <span><i class="sw" style="background:var(--gold-soft);border-color:var(--gold)"></i>MAT241</span>
+    <span><i class="sw" style="background:var(--teal-soft);border-color:var(--teal)"></i>MEC257</span>
+    <span><i class="sw" style="background:var(--plum-soft);border-color:var(--plum)"></i>1MEC02</span>
+    <span><i class="sw" style="background:var(--commute-soft);border-color:var(--commute)"></i>Traslado</span>
+    <span><i class="sw" style="background:var(--slate-soft);border-color:var(--slate)"></i>Personal / comida</span>
+    <span><i class="sw" style="background:#FFFFFF;border-color:var(--line);border-style:dashed"></i>Libre — aún sin asignar</span>
+  </div>
+  <div class="detail-panel" id="detailPanel"></div>
+</div>
+
+<div class="view" id="view-list"></div>
+<div class="view" id="view-metrics"></div>
+
+<div class="footer-credit">Horario Semana 1 · IPHS v5 (10 señales, T-score) · contador de preguntas sincronizado vía Google Drive API · 1MEC02 vinculado de verdad a su BAPEC real</div>
+
+</div>
+
+<script>
+// ---------- Config de vinculación BAPEC vía Google Drive ----------
+// 1) Ve a console.cloud.google.com, crea un proyecto, activa "Google Drive API"
+// 2) Configura la pantalla de consentimiento OAuth (External, modo Testing, agrégate como test user)
+// 3) Crea credenciales -> OAuth client ID -> tipo "Web application"
+//    Authorized JavaScript origins: http://localhost:8000
+// 4) Pega el Client ID resultante abajo (NO es secreto, es seguro dejarlo en el código del navegador)
+const GOOGLE_CLIENT_ID = '176230481298-pbv52qu67pp82sfjce23ccumabn6ub7o.apps.googleusercontent.com';
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
+const PROGRESS_FILE_NAME = 'bapec_progreso.json';
+const PROGRESS_PARENT_FOLDER_ID = '1Wm0X0zD-oVpOCIvHjCB32iAO-7WGpZyX'; // carpeta raíz de tu proyecto en Drive
+const BAPEC_LINKED = { ING225:false, MAT241:false, MEC257:false, '1MEC02':true }; // true = su BAPEC real ya lee/escribe el mismo archivo de Drive
+const QID_TARGET = { ING225: 25, MAT241: 18, MEC257: 12, '1MEC02': 1 };
+const COURSE_HOURS = { ING225: 12.0, MAT241: 8.5, MEC257: 7.5 };
+const IPHS_PCT = { ING225: 42.5, MAT241: 30.5, MEC257: 26.9 };
+const TIEMPO_PONDERADO = { ING225: 29, MAT241: 28, MEC257: 39 };
+
+function genQids(curso, n) {
+  const out = [];
+  for (let i = 1; i <= n; i++) out.push(curso.toLowerCase().replace('1mec02','1mec02') + '-s1-' + i);
+  return out;
+}
+const QIDS = {};
+Object.keys(QID_TARGET).forEach(function(c) { QIDS[c] = genQids(c, QID_TARGET[c]); });
+QIDS['1MEC02'] = ['s5-1']; // clave real: la misma pieza "Soporte inclinado" del BAPEC_1MEC02.html
+
+// ---------- Días y bloques ----------
+const DAYS = [
+  {n:'Domingo', d:'16 ago', tag:'Sin BAPEC — nada enseñado aún'},
+  {n:'Lunes', d:'17 ago'},
+  {n:'Martes', d:'18 ago'},
+  {n:'Miércoles', d:'19 ago'},
+  {n:'Jueves', d:'20 ago', tag:'MAT241 aquí — día más largo'},
+  {n:'Viernes', d:'21 ago', tag:'Mañana libre de campus'},
+  {n:'Sábado', d:'22 ago', tag:'Compras tras el lab'}
+];
+const HSTART=6.5, HEND=23; // arranca 30 min antes de las 7 para que el desayuno adelantado del jueves (6:30-7:00) no quede fuera de rango
+const COURSE = {
+  ING225:{bg:'var(--navy-soft)',fg:'var(--navy-deep)',c:'var(--navy-mid)'},
+  MAT241:{bg:'var(--gold-soft)',fg:'#5c4712',c:'var(--gold)'},
+  MEC257:{bg:'var(--teal-soft)',fg:'#0d4a3e',c:'var(--teal)'},
+  '1MEC02':{bg:'var(--plum-soft)',fg:'#42264c',c:'var(--plum)'},
+  PERSONAL:{bg:'var(--slate-soft)',fg:'var(--slate)',c:'var(--slate)'},
+  COMIDA:{bg:'var(--gold-soft)',fg:'#5c4712',c:'var(--gold)'},
+  LIBRE:{bg:'#FFFFFF',fg:'var(--slate)',c:'var(--line)'},
+  COMMUTE:{bg:'var(--commute-soft)',fg:'#4a463d',c:'var(--commute)'}
+};
+
+let uid=0;
+const B=(o)=>({id:'b'+(uid++), ...o});
+const T=(day,s,e,label)=>B({day,s,e,type:'COMMUTE',title:label,detail:'45 min de viaje + 15 min en cambiarme'});
+// Bloque de estudio BAPEC: recibe curso, rango de qids [ini,fin) sobre QIDS[curso], y detalle/meta
+const BQ=(day,s,e,curso,titulo,qidStart,qidEnd,detail,meta)=>B({
+  day,s,e,type:curso,title:titulo,detail,meta,
+  bapec:{curso:curso, qids:QIDS[curso].slice(qidStart,qidEnd)}
+});
+
+const BLOCKS = [
+// DOMINGO 0 — nada enseñado aún, ningún BAPEC posible
+B({day:0,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
+B({day:0,s:8,e:8.5,type:'PERSONAL',title:'Lectura Ayn Rand'}),
+B({day:0,s:8.5,e:9.25,type:'PERSONAL',title:'Self-Authoring Suite'}),
+B({day:0,s:10.5,e:11,type:'COMIDA',title:'Snack AM'}),
+B({day:0,s:11,e:13,type:'PERSONAL',title:'Ocio'}),
+B({day:0,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
+B({day:0,s:15.5,e:16.5,type:'PERSONAL',title:'Batch cooking'}),
+B({day:0,s:16.5,e:18.5,type:'PERSONAL',title:'Rutina personal',detail:'2h, interdiario'}),
+B({day:0,s:18.5,e:19,type:'COMIDA',title:'Snack PM'}),
+B({day:0,s:20,e:21,type:'COMIDA',title:'Cena'}),
+B({day:0,s:21,e:22,type:'PERSONAL',title:'Ocio'}),
+
+// LUNES 1 — MEC257 clase + lab quincenal
+B({day:1,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
+T(1,9,10,'Traslado a PUCP'),
+B({day:1,s:10,e:12,type:'MEC257',title:'MEC257 — Clase',detail:'Cap. 1: Introducción a la Ing. de Materiales',fixed:true}),
+B({day:1,s:12,e:13,type:'COMIDA',title:'Almuerzo (en campus)'}),
+BQ(1,13,14,'MEC257','BAPEC MEC257',0,1,'1 pregunta — hueco antes del lab, contenido recién visto',
+  {tipo:'EX1',nivel:'Alto primero',ventana:'3 sem. hasta Examen 1',tiempo:'39 min/preg',razon:'IPHS asigna 26.9% a MEC257 (7.5h, 12 preg. esta semana) — se arranca en el primer hueco disponible'}),
+B({day:1,s:14,e:18,type:'MEC257',title:'MEC257 — Laboratorio',detail:'Quincenal',fixed:true}),
+T(1,18,19,'Traslado a casa'),
+B({day:1,s:19,e:19.5,type:'COMIDA',title:'Snack PM'}),
+BQ(1,19.5,22,'MEC257','BAPEC MEC257',1,4,'3 preguntas más — cierra 4 de las 12 de la semana',
+  {tipo:'EX1',nivel:'Alto → medio',ventana:'3 sem. hasta Examen 1',tiempo:'39 min/preg',razon:'Día de mayor exposición a MEC257 — máxima prioridad Ebbinghaus'}),
+B({day:1,s:22,e:23,type:'COMIDA',title:'Cena (tardía)'}),
+
+// MARTES 2 — ING225 Clase 1
+B({day:2,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
+T(2,9,10,'Traslado a PUCP'),
+B({day:2,s:10,e:12,type:'ING225',title:'ING225 — Clase 1',detail:'Concepto de esfuerzo, esfuerzo normal y cortante promedio',fixed:true}),
+T(2,12,13,'Traslado a casa'),
+B({day:2,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
+BQ(2,14,17,'ING225','BAPEC RM1 — Clase 1',0,6,'6 preguntas — bloque grande, contenido recién visto',
+  {tipo:'PC1 principalmente',nivel:'Alto → medio',ventana:'2 sem. hasta PC03',tiempo:'29 min/preg',razon:'IPHS da a ING225 el 42.5% (12h, 25 preg.) — la señal más alta de las tres, se le da el bloque más grande del día'}),
+B({day:2,s:17,e:17.5,type:'COMIDA',title:'Snack PM'}),
+BQ(2,17.5,18.5,'ING225','BAPEC RM1 — Clase 1',6,8,'2 preguntas más — cierra 8 de las 25 de la semana',
+  {tipo:'PC1 / 1E',nivel:'Medio',ventana:'2 sem. hasta PC03',tiempo:'29-33 min/preg',razon:'Continúa el mismo bloque, empujando hacia la meta semanal de 25'}),
+B({day:2,s:19,e:20,type:'COMIDA',title:'Cena'}),
+B({day:2,s:20,e:20.5,type:'PERSONAL',title:'Inglés autoestudio'}),
+B({day:2,s:20.5,e:21,type:'PERSONAL',title:'Rutina personal (parte 1)',detail:'Interdiario'}),
+
+// MIERCOLES 3 — ING225 Clase 2
+B({day:3,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
+T(3,9,10,'Traslado a PUCP'),
+B({day:3,s:10,e:12,type:'ING225',title:'ING225 — Clase 2',detail:'Uniones empernadas o remachadas',fixed:true}),
+T(3,12,13,'Traslado a casa'),
+B({day:3,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
+BQ(3,14,17.5,'ING225','BAPEC RM1 — Clase 2',8,16,'8 preguntas — cierra 16 de las 25 de la semana',
+  {tipo:'PC1 / 1E',nivel:'Alto → medio',ventana:'2 sem. hasta PC03',tiempo:'31-34 min/preg',razon:'Contenido de hoy, más urgente por Ebbinghaus — bloque grande porque ING225 sigue liderando el reparto IPHS'}),
+B({day:3,s:17.5,e:18,type:'COMIDA',title:'Snack PM'}),
+B({day:3,s:20,e:21,type:'COMIDA',title:'Cena'}),
+B({day:3,s:21,e:21.5,type:'PERSONAL',title:'Inglés autoestudio'}),
+
+// JUEVES 4 — día más largo, MAT241 aquí
+B({day:4,s:6.5,e:7,type:'COMIDA',title:'Desayuno (adelantado)'}),
+T(4,7,8,'Traslado a PUCP'),
+B({day:4,s:8,e:10,type:'MAT241',title:'MAT241 — Clase',detail:'Cap. 1: Introducción, preliminares matemáticos, algoritmos y convergencia',fixed:true}),
+B({day:4,s:10,e:12,type:'MEC257',title:'MEC257 — Clase',detail:'Cap. 2: Ensayo de materiales',fixed:true}),
+B({day:4,s:12,e:13,type:'COMIDA',title:'Almuerzo (en campus)'}),
+BQ(4,13,15,'MAT241','BAPEC MAT241',0,4,'4 preguntas — primer contacto fresco con MAT241 esta semana',
+  {tipo:'PC1',nivel:'Alto primero',ventana:'3 sem. hasta PC1',tiempo:'25 min/preg',razon:'IPHS da 30.5% a MAT241 (8.5h, 18 preg.) — segundo en prioridad, arranca apenas hay clase fresca'}),
+B({day:4,s:15,e:17,type:'1MEC02',title:'1MEC02 — Clase',detail:'Vistas: generalidades, proyección',fixed:true}),
+B({day:4,s:17,e:19,type:'MAT241',title:'MAT241 — Laboratorio',detail:'Introducción a MATLAB',fixed:true}),
+T(4,19,20,'Traslado a casa'),
+B({day:4,s:20,e:20.5,type:'COMIDA',title:'Cena (tardía)'}),
+BQ(4,20.5,22,'MEC257','BAPEC MEC257',4,6,'2 preguntas — cierra 6 de las 12 de la semana',
+  {tipo:'EX1',nivel:'Medio',ventana:'3 sem. hasta Examen 1',tiempo:'39 min/preg',razon:'Segunda exposición a MEC257 esta semana'}),
+
+// VIERNES 5 — mañana libre de campus
+B({day:5,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
+BQ(5,8,11.5,'MAT241','BAPEC MAT241',4,10,'6 preguntas — única mañana libre de campus, se aprovecha al máximo',
+  {tipo:'PC1 / PC2',nivel:'Medio-alto',ventana:'3 sem. hasta PC1',tiempo:'25-37 min/preg',razon:'Empuja MAT241 a 10 de las 18 preguntas de la semana'}),
+BQ(5,11.5,13,'MEC257','BAPEC MEC257',6,8,'2 preguntas — cierra 8 de las 12 de la semana',
+  {tipo:'EX1',nivel:'Medio',ventana:'3 sem. hasta Examen 1',tiempo:'39 min/preg',razon:'Cierre parcial antes de la tarde'}),
+B({day:5,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
+BQ(5,14,16,'ING225','BAPEC RM1',16,19,'3 preguntas — cierra 19 de las 25 de la semana',
+  {tipo:'PC1 / PC2 / 1ET',nivel:'Lo que falte',ventana:'2 sem. hasta PC03',tiempo:'5-31 min/preg',razon:'Última ventana libre antes de la práctica calificada de hoy'}),
+B({day:5,s:16,e:16.5,type:'COMIDA',title:'Snack PM'}),
+T(5,17,18,'Traslado a PUCP'),
+B({day:5,s:18,e:20,type:'ING225',title:'ING225 — Práctica calificada 01',detail:'Equilibrio y fuerzas internas (prerrequisito, no contenido nuevo de RM1)',fixed:true}),
+T(5,20,21,'Traslado a casa'),
+B({day:5,s:21,e:22,type:'COMIDA',title:'Cena'}),
+B({day:5,s:22,e:22.5,type:'PERSONAL',title:'Rutina personal',detail:'Interdiario'}),
+
+// SABADO 6 — 1MEC02 lab + compras + cierres
+B({day:6,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
+T(6,9,10,'Traslado a PUCP'),
+B({day:6,s:10,e:12,type:'1MEC02',title:'1MEC02 — Laboratorio',detail:'Soporte inclinado: vistas y secciones a mano alzada y AutoCAD',fixed:true}),
+B({day:6,s:12,e:13,type:'PERSONAL',title:'Compras semanales',detail:'Supermercado cerca de la universidad',fixed:true}),
+T(6,13,14,'Traslado a casa'),
+B({day:6,s:14,e:15,type:'COMIDA',title:'Almuerzo (tarde)'}),
+BQ(6,15,16.35,'1MEC02','BAPEC 1MEC02',0,1,'Soporte inclinado — vistas y secciones (mano alzada + AutoCAD)',
+  {tipo:'Nivel A (Sección 5, sem.1)',nivel:'A — fijo por Paideia',ventana:'Hoy, recién salido del lab',tiempo:'80 min real (Pb1)',razon:'1MEC02 no compite en IPHS — sigue su propio ritmo fijo para no agotar su banco de 56 ítems'}),
+B({day:6,s:16.5,e:18.5,type:'PERSONAL',title:'Rutina personal',detail:'2h, interdiario'}),
+B({day:6,s:18.5,e:19.5,type:'PERSONAL',title:'Cuidado personal (semanal)',detail:'+1h, bloque semanal adicional'}),
+B({day:6,s:19.5,e:20,type:'COMIDA',title:'Snack PM'}),
+BQ(6,20,22,'ING225','BAPEC RM1',19,25,'6 preguntas — cierra las 25 de la semana',
+  {tipo:'PC1 / PC2',nivel:'Lo que falte',ventana:'2 sem. hasta PC03',tiempo:'28-31 min/preg',razon:'Último bloque de la semana — completa la meta de 25 preguntas que IPHS asignó a ING225'}),
+B({day:6,s:22,e:23,type:'COMIDA',title:'Cena'})
+];
+
+// ---------- Huecos sin asignar: se muestran como bloque "Libre" en vez de espacio en blanco ----------
+// No cuentan para horas/preguntas de ningún curso (BLOCKS original queda intacto para esas cuentas).
+function computeFreeBlocks(){
+  const LIBRE_DETAIL = 'Todavía sin asignar — puedes usarlo para repasar videos de clases pasadas, retomar una pregunta pendiente, avanzar un informe, o simplemente descansar. Dime qué quieres poner aquí y lo actualizo.';
+  const free=[];
+  for(let day=0; day<7; day++){
+    const dayBlocks = BLOCKS.filter(function(b){return b.day===day;}).sort(function(a,b){return a.s-b.s;});
+    let cursor = HSTART;
+    dayBlocks.forEach(function(b){
+      if(b.s-cursor>=0.25) free.push(B({day:day,s:cursor,e:b.s,type:'LIBRE',title:'Libre',detail:LIBRE_DETAIL}));
+      cursor = Math.max(cursor,b.e);
+    });
+    if(HEND-cursor>=0.25) free.push(B({day:day,s:cursor,e:HEND,type:'LIBRE',title:'Libre',detail:LIBRE_DETAIL}));
+  }
+  return free;
+}
+const CAL_BLOCKS = BLOCKS.concat(computeFreeBlocks()); // solo para pintar Calendario/Lista — Métricas sigue usando BLOCKS
+
+// ---------- Progreso: una tabla qid->bool por curso, guardada en un JSON compartido en tu Drive ----------
+let progreso = { ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} };
+let driveConnected = false;
+let gTokenClient = null;
+let gAccessToken = null;
+let gProgressFileId = null;
+let syncBusy = false;
+
+function setSyncStatus(state, text) {
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncText');
+  const btn = document.getElementById('syncBtn');
+  if (!dot) return;
+  dot.className = 'sync-dot' + (state === 'ok' ? ' ok' : state === 'err' ? ' err' : '');
+  txt.innerHTML = text;
+  btn.textContent = state === 'ok' ? 'Reconectar' : 'Conectar con Google Drive';
+  btn.disabled = false;
+}
+
+async function driveApiFetch(url, opts) {
+  opts = opts || {};
+  opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + gAccessToken });
+  const r = await fetch(url, opts);
+  if (!r.ok) { const t = await r.text(); throw new Error('Drive API ' + r.status + ': ' + t); }
+  return r;
+}
+
+async function getOrCreateProgressFile() {
+  const cached = localStorage.getItem('driveProgressFileId');
+  if (cached) { gProgressFileId = cached; return cached; }
+  const q = encodeURIComponent("name='" + PROGRESS_FILE_NAME + "' and '" + PROGRESS_PARENT_FOLDER_ID + "' in parents and trashed=false");
+  const listRes = await driveApiFetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=files(id,name)');
+  const listJson = await listRes.json();
+  if (listJson.files && listJson.files.length) {
+    gProgressFileId = listJson.files[0].id;
+  } else {
+    const metadata = { name: PROGRESS_FILE_NAME, parents: [PROGRESS_PARENT_FOLDER_ID], mimeType: 'application/json' };
+    const initial = JSON.stringify({ ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} });
+    const boundary = 'bapecsyncboundary';
+    const body = '--' + boundary + '\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) + '\r\n' +
+      '--' + boundary + '\r\nContent-Type: application/json\r\n\r\n' + initial + '\r\n--' + boundary + '--';
+    const createRes = await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
+      method: 'POST', headers: { 'Content-Type': 'multipart/related; boundary=' + boundary }, body: body
+    });
+    const createJson = await createRes.json();
+    gProgressFileId = createJson.id;
+  }
+  localStorage.setItem('driveProgressFileId', gProgressFileId);
+  return gProgressFileId;
+}
+
+async function readProgressFromDrive() {
+  const id = await getOrCreateProgressFile();
+  const r = await driveApiFetch('https://www.googleapis.com/drive/v3/files/' + id + '?alt=media');
+  const text = await r.text();
+  try { const parsed = JSON.parse(text); return Object.assign({ ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} }, parsed); }
+  catch (e) { return { ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} }; }
+}
+
+async function writeProgressToDrive(data) {
+  const id = await getOrCreateProgressFile();
+  await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files/' + id + '?uploadType=media', {
+    method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
+  });
+}
+
+function connectGoogleDrive() {
+  if (GOOGLE_CLIENT_ID.indexOf('PASTE_TU') === 0) {
+    setSyncStatus('err', 'Falta pegar tu <code>GOOGLE_CLIENT_ID</code> en el código (ver nota de configuración arriba).');
+    return;
+  }
+  setSyncStatus('', 'Abriendo ventana de Google…');
+  gTokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: GOOGLE_CLIENT_ID,
+    scope: DRIVE_SCOPE,
+    callback: async function(resp) {
+      if (resp.error) { setSyncStatus('err', 'No se pudo conectar: ' + resp.error); return; }
+      gAccessToken = resp.access_token;
+      driveConnected = true;
+      setSyncStatus('', 'Cargando tu progreso real desde Drive…');
+      try {
+        progreso = await readProgressFromDrive();
+        setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
+        renderAll();
+      } catch (e) { setSyncStatus('err', 'Conectado, pero falló la lectura: ' + e.message); }
+    }
+  });
+  gTokenClient.requestAccessToken({ prompt: '' });
+}
+
+function isSolved(curso, qid) { return !!(progreso[curso] && progreso[curso][qid]); }
+async function toggleQid(curso, qid) {
+  if (!driveConnected) { setSyncStatus('err', 'Conéctate a Google Drive primero (botón de arriba) — si no, esta marca no se guarda.'); return; }
+  if (syncBusy) return;
+  syncBusy = true;
+  if (!progreso[curso]) progreso[curso] = {};
+  progreso[curso][qid] = !progreso[curso][qid];
+  renderAll();
+  try {
+    // vuelve a leer antes de escribir, por si otro archivo (BAPEC real, u otra pestaña) cambió algo mientras tanto
+    const latest = await readProgressFromDrive();
+    latest[curso] = progreso[curso];
+    progreso = latest;
+    await writeProgressToDrive(progreso);
+    setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
+  } catch (e) {
+    setSyncStatus('err', 'Se marcó localmente pero no se pudo guardar en Drive: ' + e.message);
+  }
+  syncBusy = false;
+  renderAll();
+}
+function courseSolvedCount(curso) {
+  const all = QIDS[curso];
+  return all.filter(function(q){ return isSolved(curso,q); }).length;
+}
+function blockSolvedCount(block) {
+  if (!block.bapec) return null;
+  const qids = block.bapec.qids;
+  const done = qids.filter(function(q){ return isSolved(block.bapec.curso,q); }).length;
+  return { done: done, total: qids.length };
+}
+
+function fmtH(dec){ const h=Math.floor(dec), m=Math.round((dec-h)*60); return h+':'+(m<10?'0':'')+m; }
+function hoursByCourse(){
+  const out={ING225:0,MAT241:0,MEC257:0,'1MEC02':0};
+  BLOCKS.forEach(function(b){ if(out[b.type]!==undefined) out[b.type]+=(b.e-b.s); });
+  return out;
+}
+
+function renderIphsBar(){
+  const hrs=hoursByCourse();
+  const el=document.getElementById('iphsBar');
+  el.innerHTML = ['ING225','MAT241','MEC257'].map(function(k){
+    const solved = courseSolvedCount(k), total = QID_TARGET[k];
+    const pct = total ? Math.round(solved/total*100) : 0;
+    return '<div class="iphs-card" style="--c:'+COURSE[k].c+'"><div class="n">'+hrs[k].toFixed(1)+'h</div><div class="l">'+k+' — programado</div>'+
+      '<div class="pct">IPHS '+IPHS_PCT[k]+'% · '+solved+'/'+total+' resueltas</div>'+
+      '<div class="bar"><i style="width:'+pct+'%"></i></div></div>';
+  }).join('') +
+  (function(){ const s=courseSolvedCount('1MEC02'); return '<div class="iphs-card" style="--c:'+COURSE['1MEC02'].c+'"><div class="n">1.35h</div><div class="l">1MEC02 — ritmo fijo</div><div class="pct">'+s+'/1 · fuera del reparto IPHS</div><div class="bar"><i style="width:'+(s*100)+'%"></i></div></div>'; })();
+}
+
+function renderQidPills(curso, qids) {
+  const linked = BAPEC_LINKED[curso];
+  const done = qids.filter(function(q){return isSolved(curso,q);}).length;
+  let html = '<div class="qid-box"><div class="qh"><span class="qcount">'+done+'/'+qids.length+' resueltas</span>'+
+    (linked ? '<span class="badge-linked">vinculado a tu BAPEC_'+curso+'.html real</span>' : '<span class="badge-local">en Drive, pendiente del otro lado</span>')+
+    '</div><div class="qid-pills">';
+  qids.forEach(function(q, i){
+    html += '<button type="button" class="qid-pill'+(isSolved(curso,q)?' solved':'')+'" data-curso="'+curso+'" data-qid="'+q+'">'+
+      (linked ? (isSolved(curso,q)?'✓ Soporte inclinado':'Soporte inclinado') : (isSolved(curso,q)?'✓ Preg. '+(i+1):'Preg. '+(i+1)))+
+      '</button>';
+  });
+  html += '</div>' + (linked ?
+    '<div class="link-note">Esta pastilla lee y escribe <code>bapec_progreso.json</code> en tu Drive — la misma clave <code>'+qids[0]+'</code> que ahora también lee y escribe tu BAPEC_'+curso+'.html real. Márcala aquí o allá: es el mismo dato, con una recarga de por medio.</div>' :
+    '<div class="link-note">Ya se guarda en <code>bapec_progreso.json</code> de tu Drive (persiste de verdad), pero tu BAPEC_'+curso+'.html real (500+ KB) todavía no fue actualizado para leer de ahí — pídemelo cuando confirmes que la conexión funciona.</div>'
+  ) + '</div>';
+  return html;
+}
+
+function renderCalendar(){
+  const grid=document.getElementById('calGrid');
+  const rows=Math.round((HEND-HSTART)*4);
+  grid.style.gridTemplateRows = '32px repeat('+rows+',19px)';
+  let html='<div class="cal-corner"></div>';
+  DAYS.forEach(function(d){ html+='<div class="cal-daylabel"><div class="dn">'+d.n+'</div><div class="dd">'+d.d+'</div></div>'; });
+  for(let h=Math.ceil(HSTART);h<HEND;h++){
+    html+='<div class="cal-hour" style="grid-row:'+(Math.round((h-HSTART)*4)+2)+' / span 4">'+h+':00</div>';
+    for(let day=0;day<7;day++){ html+='<div class="cal-cell" style="grid-row:'+(Math.round((h-HSTART)*4)+2)+' / span 4;grid-column:'+(day+2)+'"></div>'; }
+  }
+  grid.innerHTML=html;
+  CAL_BLOCKS.forEach(function(b){
+    const rowStart=Math.round((b.s-HSTART)*4)+2;
+    const rowEnd=Math.round((b.e-HSTART)*4)+2;
+    const div=document.createElement('div');
+    const sc = blockSolvedCount(b);
+    const complete = sc && sc.total>0 && sc.done===sc.total;
+    div.className='cal-block'+(complete?' complete':'')+(b.type==='COMMUTE'?' commute':'')+(b.type==='LIBRE'?' libre':'');
+    div.style.gridColumn=b.day+2;
+    div.style.gridRow=rowStart+' / '+rowEnd;
+    div.style.setProperty('--c',COURSE[b.type].c);
+    div.style.background=COURSE[b.type].bg;
+    div.style.color=COURSE[b.type].fg;
+    div.innerHTML='<div class="t">'+b.title+'</div><div class="h">'+fmtH(b.s)+'–'+fmtH(b.e)+'</div>'+(sc?'<div class="cnt">'+sc.done+'/'+sc.total+' resueltas</div>':'');
+    div.onclick=function(){ showDetail(b); };
+    grid.appendChild(div);
+  });
+}
+
+let currentDetailBlock = null; // bloque actualmente abierto en el panel — para poder refrescarlo tras marcar una pregunta
+
+function renderDetailContent(b){
+  const p=document.getElementById('detailPanel');
+  let metaHtml='';
+  if(b.meta){
+    metaHtml='<div class="meta-grid">'+Object.entries({'Tipo':b.meta.tipo,'Nivel':b.meta.nivel,'Ventana':b.meta.ventana,'Tiempo/preg':b.meta.tiempo}).map(function(e){return '<div><div class="ml">'+e[0]+'</div><div class="mv">'+e[1]+'</div></div>';}).join('')+'</div><p style="color:var(--slate);font-style:italic">'+b.meta.razon+'</p>';
+  }
+  p.innerHTML='<div class="dh"><div><h4>'+b.title+'</h4><div class="dtime">'+DAYS[b.day].n+' '+DAYS[b.day].d+' · '+fmtH(b.s)+'–'+fmtH(b.e)+'</div></div><button class="close-x" id="closeDetail" style="background:none;border:none;color:var(--slate);cursor:pointer;font-size:18px;padding:2px">&times;</button></div>'+
+    (b.detail?'<p>'+b.detail+'</p>':'')+metaHtml+
+    (b.bapec ? renderQidPills(b.bapec.curso, b.bapec.qids) : '');
+  document.getElementById('closeDetail').onclick=function(){ p.classList.remove('show'); currentDetailBlock=null; };
+  wirePillClicks(p);
+}
+
+function showDetail(b){
+  currentDetailBlock = b;
+  const p=document.getElementById('detailPanel');
+  renderDetailContent(b);
+  p.classList.add('show');
+}
+
+function wirePillClicks(container){
+  container.querySelectorAll('.qid-pill').forEach(function(btn){
+    btn.onclick=function(){ toggleQid(btn.getAttribute('data-curso'), btn.getAttribute('data-qid')); };
+  });
+}
+
+function renderList(){
+  const el=document.getElementById('view-list');
+  el.innerHTML = DAYS.map(function(d,day){
+    const blocks=CAL_BLOCKS.filter(function(b){return b.day===day;}).sort(function(a,b){return a.s-b.s;});
+    return '<div class="day-block"><div class="day-block-head"><span class="dn">'+d.n+'</span><span class="dd">'+d.d+(d.tag?' · '+d.tag:'')+'</span></div>'+
+      blocks.map(function(b){
+        const sc = blockSolvedCount(b);
+        const complete = sc && sc.total>0 && sc.done===sc.total;
+        return '<div class="list-row'+(complete?' complete':'')+'">'+
+          '<div class="list-row-top" data-id="'+b.id+'">'+
+          '<div class="lc" style="background:'+COURSE[b.type].c+'"></div>'+
+          '<div class="lt">'+fmtH(b.s)+'–'+fmtH(b.e)+'</div>'+
+          '<div class="lbody"><div class="ltitle">'+b.title+(sc?' — '+sc.done+'/'+sc.total:'')+'</div>'+(b.detail?'<div class="ldetail">'+b.detail+'</div>':'')+'</div>'+
+          '</div>'+
+          (b.bapec ? renderQidPills(b.bapec.curso, b.bapec.qids) : '') +
+          '</div>';
+      }).join('')+'</div>';
+  }).join('');
+  el.querySelectorAll('.list-row-top').forEach(function(row){
+    row.onclick=function(){ const id=row.getAttribute('data-id'); const b=CAL_BLOCKS.find(function(x){return x.id===id;}); setView('cal'); showDetail(b); };
+  });
+  wirePillClicks(el);
+}
+
+function renderMetrics(){
+  const hrs=hoursByCourse();
+  const el=document.getElementById('view-metrics');
+  let html = '<div class="metric-section"><h3>Preguntas BAPEC — objetivo vs. resueltas</h3><div class="msub">Objetivo = reparto IPHS v5 convertido a preguntas con el tiempo ponderado de cada curso.</div>';
+  ['ING225','MAT241','MEC257','1MEC02'].forEach(function(k){
+    const total = QID_TARGET[k];
+    const solved = courseSolvedCount(k);
+    const pct = total ? Math.round(solved/total*100) : 0;
+    html += '<div class="hbar-row"><div class="hbar-label">'+k+'</div><div class="hbar-track"><div class="hbar-fill" style="width:'+pct+'%;background:'+COURSE[k].c+'">'+solved+' / '+total+' ('+pct+'%)</div></div></div>';
+  });
+  html += '</div>';
+
+  html += '<div class="metric-section"><h3>Horas programadas vs. meta IPHS</h3><div class="msub">Meta = % de IPHS v5 aplicado a 28h de presupuesto semanal (3 cursos competidores). 1MEC02 no compite, va aparte.</div>';
+  ['ING225','MAT241','MEC257'].forEach(function(k){
+    const pct=Math.round(hrs[k]/COURSE_HOURS[k]*100);
+    html += '<div class="hbar-row"><div class="hbar-label">'+k+'</div><div class="hbar-track"><div class="hbar-fill" style="width:'+Math.min(pct,100)+'%;background:'+COURSE[k].c+'">'+hrs[k].toFixed(1)+'h / '+COURSE_HOURS[k]+'h ('+pct+'%)</div></div></div>';
+  });
+  html += '</div>';
+
+  html += '<div class="metric-section"><h3>Preguntas sin bloque fijo esta semana</h3><div class="msub">Cuentan para el objetivo del curso, pero el horario recuperado no les asignó un hueco concreto todavía (ver nota de auditoría arriba). Puedes marcarlas igual si las resuelves en un rato libre.</div>';
+  ['MAT241','MEC257'].forEach(function(curso){
+    const placed = {}; BLOCKS.forEach(function(b){ if(b.bapec && b.bapec.curso===curso) b.bapec.qids.forEach(function(q){placed[q]=true;}); });
+    const pending = QIDS[curso].filter(function(q){ return !placed[q]; });
+    if (!pending.length) return;
+    html += '<div class="pending-block"><div class="pt">'+curso+' — '+pending.length+' pendientes de ubicar</div>' + renderQidPills(curso, pending) + '</div>';
+  });
+  html += '</div>';
+
+  el.innerHTML = html;
+  wirePillClicks(el);
+}
+
+function renderAll(){ renderIphsBar(); renderCalendar(); renderList(); renderMetrics(); if (currentDetailBlock) renderDetailContent(currentDetailBlock); }
+function setView(v){
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.toggle('active',t.dataset.view===v); });
+  document.querySelectorAll('.view').forEach(function(el){ el.classList.remove('active'); });
+  document.getElementById('view-'+v).classList.add('active');
+}
+document.querySelectorAll('.tab').forEach(function(t){ t.onclick=function(){ setView(t.dataset.view); }; });
+
+document.getElementById('syncBtn').onclick = connectGoogleDrive;
+renderAll(); // primer pintado con progreso vacío; se repinta solo al conectar
+</script>
+</body>
+</html>
