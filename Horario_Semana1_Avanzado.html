@@ -41,6 +41,7 @@ h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:29px;color:var(-
 .iphs-card .n{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;color:var(--navy-deep)}
 .iphs-card .l{font-size:10.5px;color:var(--slate);margin-top:1px}
 .iphs-card .pct{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--teal);margin-top:5px}
+.iphs-card .pct2{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--slate);margin-top:2px}
 .iphs-card .bar{height:5px;background:var(--slate-soft);border-radius:3px;margin-top:6px;overflow:hidden}
 .iphs-card .bar i{display:block;height:100%;background:var(--c)}
 
@@ -100,6 +101,8 @@ h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:29px;color:var(-
 .qid-pill:hover{border-color:var(--navy-mid);color:var(--navy-mid)}
 .qid-pill.solved{border-color:var(--confirm);color:#fff;background:var(--confirm)}
 .qid-pill.pending-slot{border-style:dashed}
+.qid-pill.locked{opacity:.45;cursor:not-allowed;border-style:dashed}
+.qid-pill.locked:hover{border-color:var(--slate);color:var(--slate)}
 .link-note{font-size:11.5px;color:var(--slate);margin-top:8px;line-height:1.5}
 .link-note code{font-family:'IBM Plex Mono',monospace;background:var(--navy-soft);padding:1px 5px;border-radius:3px;font-size:10.5px}
 
@@ -161,7 +164,7 @@ h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:29px;color:var(-
 
 <div class="note link">
   <h4>Cómo funciona el contador vinculado — ahora vía tu Google Drive</h4>
-  Cada pastilla guarda su estado en un archivo <code>bapec_progreso.json</code> dentro de la carpeta raíz de tu proyecto en Drive, usando tu propia cuenta de Google (API de Drive, no <code>window.storage</code> de Artifacts — así funciona igual si abres este horario como artifact o como archivo descargado, siempre que lo sirvas por <code>http://localhost</code>, ver la nota de configuración). El bloque de <strong>1MEC02</strong> ya está <span class="badge-linked">vinculado de verdad</span>: actualicé también tu <code>BAPEC_1MEC02.html</code> para que lea y escriba ese mismo archivo de Drive, pieza <code>s5-1</code> ("Soporte inclinado") — descarga la versión nueva de ambos y marcar en uno se refleja en el otro al recargar. Los bloques de <strong>ING225 / MAT241 / MEC257</strong> ya guardan su progreso en ese mismo <code>bapec_progreso.json</code> <span class="badge-local">Drive, pendiente del otro lado</span> — el dato persiste de verdad, pero tus tres BAPEC grandes de esos cursos todavía no fueron actualizados para leer de ahí (son archivos de 500+ KB cada uno; los actualizo en cuanto confirmes que la conexión de abajo funciona).
+  Cada pastilla guarda su estado en un archivo <code>bapec_progreso.json</code> dentro de la carpeta raíz de tu proyecto en Drive, usando tu propia cuenta de Google (API de Drive, no <code>window.storage</code> de Artifacts — así funciona igual si abres este horario como artifact o como archivo descargado, siempre que lo sirvas por <code>http://localhost</code> o tu página de GitHub Pages). <strong>1MEC02</strong> e <strong>ING225</strong> ya están <span class="badge-linked">vinculados de verdad</span>: sus 26 preguntas (1 + 25) usan los IDs reales de tus archivos <code>BAPEC_1MEC02.html</code> y <code>BAPEC_ING225.html</code> — marcar en uno se refleja en el otro al recargar. Los bloques de <strong>MAT241 / MEC257</strong> todavía guardan IDs provisionales en ese mismo <code>bapec_progreso.json</code> <span class="badge-local">Drive, pendiente del otro lado</span> — el dato persiste de verdad, pero falta encontrar sus preguntas reales de esta semana y actualizar esos dos archivos (cada uno de 450+ KB).
 </div>
 
 <div class="note warn" id="setupNote">
@@ -206,10 +209,15 @@ const GOOGLE_CLIENT_ID = '176230481298-pbv52qu67pp82sfjce23ccumabn6ub7o.apps.goo
 const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 const PROGRESS_FILE_NAME = 'bapec_progreso.json';
 const PROGRESS_PARENT_FOLDER_ID = '1Wm0X0zD-oVpOCIvHjCB32iAO-7WGpZyX'; // carpeta raíz de tu proyecto en Drive
-const BAPEC_LINKED = { ING225:false, MAT241:false, MEC257:false, '1MEC02':true }; // true = su BAPEC real ya lee/escribe el mismo archivo de Drive
-const QID_TARGET = { ING225: 25, MAT241: 18, MEC257: 12, '1MEC02': 1 };
-const COURSE_HOURS = { ING225: 12.0, MAT241: 8.5, MEC257: 7.5 };
+const BAPEC_LINKED = { ING225:true, MAT241:true, MEC257:true, '1MEC02':true }; // true = su BAPEC real ya lee/escribe el mismo archivo de Drive
+const QID_TARGET = { ING225: 36, MAT241: 26, MEC257: 17, '1MEC02': 1 };
+// Presupuesto recalculado con rigor (antes: 28h sin derivación) — ver metodología: 115.5h de ventana semanal (6:30-23:00 x7)
+// menos fijo/comida/protegido = 49.0h techo real; Jorge eligió operar a 35h, dejando ~10.5h libres antes del PC del viernes.
+const COURSE_HOURS = { ING225: 16.82, MAT241: 9.23, MEC257: 9.25 };
 const IPHS_PCT = { ING225: 42.5, MAT241: 30.5, MEC257: 26.9 };
+// Código real de referencia (ej. "PC1-14.1-P2") de cada pregunta seleccionada — de los 3 bancos verificados esta sesión.
+// Pendiente en conversaciones aparte por curso: percentil/nivel visibles, tiempo ponderado granular, vínculo a la plancha y ancla de salto directo al BAPEC.
+const QID_CODIGO = {'e1_2020_1_p1':'1E-20.1-P1', 'ex1_08_1_p1':'1E-08.1-P1', 'ex1_12_1_p1':'1E-12.1-P1', 'ex1_17_1_p3':'1E-17.1-P3', 'ex1_2012_1_p2':'EX1-12.1-P2', 'ex1_2013_1_p2':'EX1-13.1-P2', 'ex1_2013_2_p2':'EX1-13.2-P2', 'ex1_2014_1_p2':'EX1-14.1-P2', 'ex1_2014_1_p4':'EX1-14.1-P4', 'ex1_2015_2_p3':'EX1-15.2-P3', 'ex1_2017_1_p1':'EX1-17.1-P1', 'ex1_2017_2_p1':'1E-17.2-P1', 'ex1_2017_2_p3':'EX1-17.2-P3', 'ex1_2018_2_p1':'EX1-18.2-P1', 'ex1_2018_2_p3':'EX1-18.2-P3', 'ex1_2019_2_p1':'EX1-19.2-P1', 'ex1_2020_2_p3':'EX1-20.2-P3', 'ex1_2021_2_p1':'EX1-21.2-P1', 'ex1_2021_2_p2':'EX1-21.2-P2', 'ex1_2023_2_p3':'EX1-23.2-P3', 'ex1_2024_2_p3':'EX1-24.2-P3', 'ex1_2025_1_p4':'EX1-25.1-P4', 'ex1_22_1_p1':'1E-22.1-P1', 'ex1_24_2_c1':'1E-24.2-C1', 'ex1t_25_2_p1':'1ET-25.2-P1', 'pc1_08_2_p4':'PC1-08.2-P4', 'pc1_11_2_e1':'PC1-11.2-Ej1', 'pc1_11_2_e2':'PC1-11.2-Ej2', 'pc1_12_1_p3':'PC1-12.1-P3', 'pc1_14_1_p2':'PC1-14.1-P2', 'pc1_15_1_p2':'PC1-15.1-P2', 'pc1_15_1_p3':'PC1-15.1-P3', 'pc1_17_1_p1':'PC1-17.1-P1', 'pc1_17_1_p2':'PC1-17.1-P2', 'pc1_17_1_p3':'PC1-17.1-P3', 'pc1_18_2_p1':'PC1-18.2-P1', 'pc1_18_2_p2':'PC1-18.2-P2', 'pc1_18_2_p3':'PC1-18.2-P3', 'pc1_19_1_p1':'PC1-19.1-P1', 'pc1_19_1_p2':'PC1-19.1-P2', 'pc1_19_1_p3':'PC1-19.1-P3', 'pc1_2015_1_p2':'PC1-15.1-P2', 'pc1_2015_1_p4':'PC1-15.1-P4', 'pc1_2015_2_p2':'PC1-15.2-P2', 'pc1_2015_2_p3':'PC1-15.2-P3', 'pc1_2016_1_p2':'PC1-16.1-P2', 'pc1_2016_1_p3':'PC1-16.1-P3', 'pc1_2016_2_p4':'PC1-16.2-P4', 'pc1_2017_2_p2':'PC1-17.2-P2', 'pc1_2019_2_p2':'PC1-19.2-P2', 'pc1_2020_2_p4':'PC1-20.2-P4', 'pc1_2022_1_p2':'PC1-22.1-P2', 'pc1_2023_2_p2':'PC1-23.2-P2', 'pc1_2025_1_p1':'PC1-25.1-P1', 'pc1_20_1_e2':'PC1-20.1-Ej2', 'pc1_20_2_p1':'PC1-20.2-P1', 'pc1_20_2_p2':'PC1-20.2-P2', 'pc1_21_1_e1':'PC1-21.1-Ej1', 'pc1_21_1_e2':'PC1-21.1-Ej2', 'pc1_21_1_e3':'PC1-21.1-Ej3', 'pc1_21_1_e4':'PC1-21.1-Ej4', 'pc1_21_2_e1':'PC1-21.2-Ej1', 'pc1_22_1_ej1':'PC1-22.1-Ej1', 'pc1_25_1_ej4':'PC1-25.1-Ej4', 'pc1_25_1_p1':'PC1-25.1-P1', 'pc1_25_2_p2':'PC1-25.2-P2', 'pc2_2016_1_p1':'PC2-16.1-P1', 'pc2_2016_1_p2':'PC2-16.1-P2', 'pc2_2017_2_p1':'PC2-17.2-P1', 'pc2_2019_2_p1':'PC2-19.2-P1', 'pc2_2020_1_p1':'PC2-20.1-P1', 'pc2_2021_1_p1':'PC2-21.1-P1', 'pc2_2021_1_p2':'PC2-21.1-P2', 'pc2_2021_1_p3':'PC2-21.1-P3', 'pc2_2024_2_p1':'PC2-24.2-P1', 'pc2_2025_2_p1':'PC2-25.2-P1', 'pc2_23_1_p3':'PC2-23.1-P3', 'pc2_25_2_e1':'PC2-25.2-Ej1', 'pc4_2025_2_p1':'PC4-25.2-P1'};
 const TIEMPO_PONDERADO = { ING225: 29, MAT241: 28, MEC257: 39 };
 
 function genQids(curso, n) {
@@ -219,17 +227,52 @@ function genQids(curso, n) {
 }
 const QIDS = {};
 Object.keys(QID_TARGET).forEach(function(c) { QIDS[c] = genQids(c, QID_TARGET[c]); });
+// ING225 ya usa IDs reales confirmados del banco BAPEC_ING225.html (Semana 1: Clase 1 "esfuerzo normal/cortante
+// promedio" tiene 39 preguntas reales disponibles, Clase 2 "uniones empernadas/remachadas" tiene 40 — se tomaron
+// las 8 de mayor dificultad de cada una para martes/miércoles (mismo criterio "más difícil primero" que usa el
+// propio banco), y se continuó cada lista en orden de dificultad descendente para completar las 9 restantes.
+// MAT241 ya usa IDs reales confirmados del banco BAPEC_MAT241.html (Semana 1: única fila "Clase" Cap.1
+// "Introducción, preliminares, algoritmos y convergencia" tiene 80 preguntas reales disponibles — se tomaron
+// las 18 de mayor dificultad, mismo criterio usado en ING225.
+// MEC257 ya usa IDs reales confirmados del banco BAPEC_MEC257.html (Semana 1: Clase 1 "Introducción" no tiene
+// preguntas propias todavía —confirmado, no es un error—; toda la Semana 1 sale de Clase 2 "Ensayo de materiales",
+// 25 candidatas reales disponibles — se tomaron las 12 de mayor dificultad.
+QIDS['MEC257'] = [
+  'ex1_2014_1_p4',                                                     // Lun 17.5-18 (justo tras el lab)
+  'ex1_2015_2_p3', 'ex1_2017_2_p3', 'ex1_2020_2_p3',                    // Lun 19.5-22
+  'ex1_2018_2_p3', 'ex1_2021_2_p1',                                     // Jue 20.5-22
+  'ex1_2023_2_p3', 'ex1_2024_2_p3',                                     // Vie 11.5-13
+  'ex1_2017_1_p1',                                                      // Lun 13-13.5 (justo tras Clase, antes del lab)
+  'ex1_2018_2_p1', 'ex1_2019_2_p1', 'ex1_2021_2_p2', 'ex1_2025_1_p4', 'ex1_2012_1_p2', 'ex1_2013_1_p2', 'ex1_2013_2_p2', 'ex1_2014_1_p2' // pendientes, sin bloque fijo aún
+];
+QIDS['MAT241'] = [
+  'pc4_2025_2_p1', 'pc2_2016_1_p1', 'pc2_2020_1_p1', 'pc1_2016_2_p4',                          // Jue 13-15 (mismo día de Clase)
+  'pc1_2017_2_p2', 'pc2_2017_2_p1',                                                             // Jue 22-23
+  'ex1_2017_2_p1', 'pc1_2019_2_p2', 'pc2_2019_2_p1', 'pc2_2021_1_p1', 'pc2_2021_1_p2', 'pc2_2021_1_p3', // Vie 8-11.5 (día después)
+  'pc1_2022_1_p2', 'pc1_2023_2_p2', 'pc2_2024_2_p1', 'pc2_2025_2_p1', 'pc1_2025_1_p1', 'pc1_2016_1_p2', 'pc1_2016_1_p3', 'pc2_2016_1_p2', 'pc1_2020_2_p4', 'e1_2020_1_p1', 'pc1_2015_1_p2', 'pc1_2015_1_p4', 'pc1_2015_2_p2', 'pc1_2015_2_p3' // pendientes, sin bloque fijo (miércoles quedó excluido: es antes de la única clase de MAT241)
+];
+QIDS['ING225'] = [
+  'pc1_14_1_p2', 'ex1_08_1_p1', 'ex1_17_1_p3', 'pc1_08_2_p4', 'pc2_23_1_p3', 'pc1_25_2_p2',  // Mar 14-17 (Clase 1, +difícil primero)
+  'ex1_22_1_p1', 'pc1_22_1_ej1',                                                              // Mar 17.5-18.5
+  'pc2_25_2_e1',                                                                              // Mar 18.5-19
+  'pc1_25_1_p1', 'ex1t_25_2_p1', 'pc1_21_1_e1', 'pc1_21_2_e1',                                // Mar 21-23
+  'ex1_12_1_p1', 'pc1_21_1_e2', 'pc1_21_1_e3', 'pc1_21_1_e4', 'pc1_19_1_p3', 'pc1_20_1_e2', 'pc1_17_1_p3', 'pc1_18_2_p2', // Mie 14-17.5 (Clase 2)
+  'pc1_18_2_p3', 'pc1_11_2_e2', 'pc1_12_1_p3', 'pc1_25_1_ej4',                                // Mie 18-20
+  'pc1_19_1_p1', 'pc1_19_1_p2', 'pc1_20_2_p1',                                                // Vie 14-16 (relleno, +fácil)
+  'pc1_20_2_p2', 'ex1_24_2_c1', 'pc1_17_1_p1', 'pc1_17_1_p2', 'pc1_18_2_p1', 'pc1_15_1_p2',   // Sab 20-22 (relleno)
+  'pc1_15_1_p3', 'pc1_11_2_e1'                                                                // pendientes, sin bloque fijo aún
+];
 QIDS['1MEC02'] = ['s5-1']; // clave real: la misma pieza "Soporte inclinado" del BAPEC_1MEC02.html
 
 // ---------- Días y bloques ----------
 const DAYS = [
-  {n:'Domingo', d:'16 ago', tag:'Sin BAPEC — nada enseñado aún'},
-  {n:'Lunes', d:'17 ago'},
-  {n:'Martes', d:'18 ago'},
-  {n:'Miércoles', d:'19 ago'},
-  {n:'Jueves', d:'20 ago', tag:'MAT241 aquí — día más largo'},
-  {n:'Viernes', d:'21 ago', tag:'Mañana libre de campus'},
-  {n:'Sábado', d:'22 ago', tag:'Compras tras el lab'}
+  {n:'Domingo', d:'16/08', tag:'Sin BAPEC — nada enseñado aún; solo prerrequisito si algún día hay banco de Mecánica 1'},
+  {n:'Lunes', d:'17/08'},
+  {n:'Martes', d:'18/08'},
+  {n:'Miércoles', d:'19/08'},
+  {n:'Jueves', d:'20/08', tag:'MAT241 aquí — día más largo'},
+  {n:'Viernes', d:'21/08', tag:'Mañana libre de campus'},
+  {n:'Sábado', d:'22/08', tag:'Compras tras el lab'}
 ];
 const HSTART=6.5, HEND=23; // arranca 30 min antes de las 7 para que el desayuno adelantado del jueves (6:30-7:00) no quede fuera de rango
 const COURSE = {
@@ -271,9 +314,11 @@ B({day:1,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
 T(1,9,10,'Traslado a PUCP'),
 B({day:1,s:10,e:12,type:'MEC257',title:'MEC257 — Clase',detail:'Cap. 1: Introducción a la Ing. de Materiales',fixed:true}),
 B({day:1,s:12,e:13,type:'COMIDA',title:'Almuerzo (en campus)'}),
-BQ(1,13,14,'MEC257','BAPEC MEC257',0,1,'1 pregunta — hueco antes del lab, contenido recién visto',
+BQ(1,13,13.5,'MEC257','BAPEC MEC257',8,9,'1 pregunta — hueco corto antes del lab (ahora empieza 13:30, ya no 14:00), contenido recién visto',
   {tipo:'EX1',nivel:'Alto primero',ventana:'3 sem. hasta Examen 1',tiempo:'39 min/preg',razon:'IPHS asigna 26.9% a MEC257 (7.5h, 12 preg. esta semana) — se arranca en el primer hueco disponible'}),
-B({day:1,s:14,e:18,type:'MEC257',title:'MEC257 — Laboratorio',detail:'Quincenal',fixed:true}),
+B({day:1,s:13.5,e:17.5,type:'MEC257',title:'MEC257 — Laboratorio',detail:'Quincenal · horario actualizado a 13:30–17:30 (Ingema)',fixed:true}),
+BQ(1,17.5,18,'MEC257','BAPEC MEC257',0,1,'1 pregunta — justo después del lab, parte del crecimiento a 35h/semana',
+  {tipo:'EX1',nivel:'Medio',ventana:'crecimiento a 35h',tiempo:'39 min/preg',razon:'Ebbinghaus: resolver lo más cerca posible del laboratorio recién visto'}),
 T(1,18,19,'Traslado a casa'),
 B({day:1,s:19,e:19.5,type:'COMIDA',title:'Snack PM'}),
 BQ(1,19.5,22,'MEC257','BAPEC MEC257',1,4,'3 preguntas más — cierra 4 de las 12 de la semana',
@@ -291,9 +336,13 @@ BQ(2,14,17,'ING225','BAPEC RM1 — Clase 1',0,6,'6 preguntas — bloque grande, 
 B({day:2,s:17,e:17.5,type:'COMIDA',title:'Snack PM'}),
 BQ(2,17.5,18.5,'ING225','BAPEC RM1 — Clase 1',6,8,'2 preguntas más — cierra 8 de las 25 de la semana',
   {tipo:'PC1 / 1E',nivel:'Medio',ventana:'2 sem. hasta PC03',tiempo:'29-33 min/preg',razon:'Continúa el mismo bloque, empujando hacia la meta semanal de 25'}),
+BQ(2,18.5,19,'ING225','BAPEC RM1',8,9,'1 pregunta — parte del crecimiento a 35h/semana',
+  {tipo:'PC1/1E',nivel:'Medio',ventana:'crecimiento a 35h',tiempo:'29 min/preg',razon:'Mismo día de Clase 1, aprovechando el hueco corto antes de cenar'}),
 B({day:2,s:19,e:20,type:'COMIDA',title:'Cena'}),
 B({day:2,s:20,e:20.5,type:'PERSONAL',title:'Inglés autoestudio'}),
 B({day:2,s:20.5,e:21,type:'PERSONAL',title:'Rutina personal (parte 1)',detail:'Interdiario'}),
+BQ(2,21,23,'ING225','BAPEC RM1',9,13,'4 preguntas — parte del crecimiento a 35h/semana, cierre del día de Clase 1',
+  {tipo:'PC1/1E',nivel:'Medio',ventana:'crecimiento a 35h',tiempo:'29 min/preg',razon:'Ebbinghaus: mismo día de Clase 1, último bloque disponible antes de dormir'}),
 
 // MIERCOLES 3 — ING225 Clase 2
 B({day:3,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
@@ -301,9 +350,11 @@ T(3,9,10,'Traslado a PUCP'),
 B({day:3,s:10,e:12,type:'ING225',title:'ING225 — Clase 2',detail:'Uniones empernadas o remachadas',fixed:true}),
 T(3,12,13,'Traslado a casa'),
 B({day:3,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
-BQ(3,14,17.5,'ING225','BAPEC RM1 — Clase 2',8,16,'8 preguntas — cierra 16 de las 25 de la semana',
+BQ(3,14,17.5,'ING225','BAPEC RM1 — Clase 2',13,21,'8 preguntas — cierra 16 de las 25 de la semana',
   {tipo:'PC1 / 1E',nivel:'Alto → medio',ventana:'2 sem. hasta PC03',tiempo:'31-34 min/preg',razon:'Contenido de hoy, más urgente por Ebbinghaus — bloque grande porque ING225 sigue liderando el reparto IPHS'}),
 B({day:3,s:17.5,e:18,type:'COMIDA',title:'Snack PM'}),
+BQ(3,18,20,'ING225','BAPEC RM1',21,25,'4 preguntas — cierra las 36 de la semana (35h), mismo día de Clase 2',
+  {tipo:'PC1/1E',nivel:'Medio',ventana:'crecimiento a 35h',tiempo:'29 min/preg',razon:'Ebbinghaus: mismo día de Clase 2, cierre del crecimiento de ING225 a 35h'}),
 B({day:3,s:20,e:21,type:'COMIDA',title:'Cena'}),
 B({day:3,s:21,e:21.5,type:'PERSONAL',title:'Inglés autoestudio'}),
 
@@ -321,15 +372,17 @@ T(4,19,20,'Traslado a casa'),
 B({day:4,s:20,e:20.5,type:'COMIDA',title:'Cena (tardía)'}),
 BQ(4,20.5,22,'MEC257','BAPEC MEC257',4,6,'2 preguntas — cierra 6 de las 12 de la semana',
   {tipo:'EX1',nivel:'Medio',ventana:'3 sem. hasta Examen 1',tiempo:'39 min/preg',razon:'Segunda exposición a MEC257 esta semana'}),
+BQ(4,22,23,'MAT241','BAPEC MAT241',4,6,'2 preguntas — cierra las 26 de la semana (35h), mismo día de Clase',
+  {tipo:'PC1/PC2',nivel:'Medio-alto',ventana:'crecimiento a 35h',tiempo:'28 min/preg',razon:'Ebbinghaus: mismo día de Clase MAT241, último bloque antes de dormir'}),
 
 // VIERNES 5 — mañana libre de campus
 B({day:5,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
-BQ(5,8,11.5,'MAT241','BAPEC MAT241',4,10,'6 preguntas — única mañana libre de campus, se aprovecha al máximo',
+BQ(5,8,11.5,'MAT241','BAPEC MAT241',6,12,'6 preguntas — única mañana libre de campus, se aprovecha al máximo',
   {tipo:'PC1 / PC2',nivel:'Medio-alto',ventana:'3 sem. hasta PC1',tiempo:'25-37 min/preg',razon:'Empuja MAT241 a 10 de las 18 preguntas de la semana'}),
 BQ(5,11.5,13,'MEC257','BAPEC MEC257',6,8,'2 preguntas — cierra 8 de las 12 de la semana',
   {tipo:'EX1',nivel:'Medio',ventana:'3 sem. hasta Examen 1',tiempo:'39 min/preg',razon:'Cierre parcial antes de la tarde'}),
 B({day:5,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
-BQ(5,14,16,'ING225','BAPEC RM1',16,19,'3 preguntas — cierra 19 de las 25 de la semana',
+BQ(5,14,16,'ING225','BAPEC RM1',25,28,'3 preguntas — cierra 19 de las 25 de la semana',
   {tipo:'PC1 / PC2 / 1ET',nivel:'Lo que falte',ventana:'2 sem. hasta PC03',tiempo:'5-31 min/preg',razon:'Última ventana libre antes de la práctica calificada de hoy'}),
 B({day:5,s:16,e:16.5,type:'COMIDA',title:'Snack PM'}),
 T(5,17,18,'Traslado a PUCP'),
@@ -350,7 +403,7 @@ BQ(6,15,16.35,'1MEC02','BAPEC 1MEC02',0,1,'Soporte inclinado — vistas y seccio
 B({day:6,s:16.5,e:18.5,type:'PERSONAL',title:'Rutina personal',detail:'2h, interdiario'}),
 B({day:6,s:18.5,e:19.5,type:'PERSONAL',title:'Cuidado personal (semanal)',detail:'+1h, bloque semanal adicional'}),
 B({day:6,s:19.5,e:20,type:'COMIDA',title:'Snack PM'}),
-BQ(6,20,22,'ING225','BAPEC RM1',19,25,'6 preguntas — cierra las 25 de la semana',
+BQ(6,20,22,'ING225','BAPEC RM1',28,34,'6 preguntas — cierra las 25 de la semana',
   {tipo:'PC1 / PC2',nivel:'Lo que falte',ventana:'2 sem. hasta PC03',tiempo:'28-31 min/preg',razon:'Último bloque de la semana — completa la meta de 25 preguntas que IPHS asignó a ING225'}),
 B({day:6,s:22,e:23,type:'COMIDA',title:'Cena'})
 ];
@@ -497,8 +550,13 @@ function blockSolvedCount(block) {
 
 function fmtH(dec){ const h=Math.floor(dec), m=Math.round((dec-h)*60); return h+':'+(m<10?'0':'')+m; }
 function hoursByCourse(){
-  const out={ING225:0,MAT241:0,MEC257:0,'1MEC02':0};
-  BLOCKS.forEach(function(b){ if(out[b.type]!==undefined) out[b.type]+=(b.e-b.s); });
+  const out={ING225:{total:0,bapec:0,clase:0},MAT241:{total:0,bapec:0,clase:0},MEC257:{total:0,bapec:0,clase:0},'1MEC02':{total:0,bapec:0,clase:0}};
+  BLOCKS.forEach(function(b){
+    if(out[b.type]===undefined) return;
+    const dur=b.e-b.s;
+    out[b.type].total+=dur;
+    if(b.bapec) out[b.type].bapec+=dur; else out[b.type].clase+=dur;
+  });
   return out;
 }
 
@@ -507,12 +565,14 @@ function renderIphsBar(){
   const el=document.getElementById('iphsBar');
   el.innerHTML = ['ING225','MAT241','MEC257'].map(function(k){
     const solved = courseSolvedCount(k), total = QID_TARGET[k];
-    const pct = total ? Math.round(solved/total*100) : 0;
-    return '<div class="iphs-card" style="--c:'+COURSE[k].c+'"><div class="n">'+hrs[k].toFixed(1)+'h</div><div class="l">'+k+' — programado</div>'+
+    const h = hrs[k];
+    const pct = COURSE_HOURS[k] ? Math.round(h.bapec/COURSE_HOURS[k]*100) : 0;
+    return '<div class="iphs-card" style="--c:'+COURSE[k].c+'"><div class="n">'+h.bapec.toFixed(1)+'h</div><div class="l">'+k+' — autoestudio BAPEC (obj. '+COURSE_HOURS[k].toFixed(1)+'h)</div>'+
       '<div class="pct">IPHS '+IPHS_PCT[k]+'% · '+solved+'/'+total+' resueltas</div>'+
+      '<div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab/PC = '+h.total.toFixed(1)+'h total esta semana</div>'+
       '<div class="bar"><i style="width:'+pct+'%"></i></div></div>';
   }).join('') +
-  (function(){ const s=courseSolvedCount('1MEC02'); return '<div class="iphs-card" style="--c:'+COURSE['1MEC02'].c+'"><div class="n">1.35h</div><div class="l">1MEC02 — ritmo fijo</div><div class="pct">'+s+'/1 · fuera del reparto IPHS</div><div class="bar"><i style="width:'+(s*100)+'%"></i></div></div>'; })();
+  (function(){ const s=courseSolvedCount('1MEC02'); const h=hrs['1MEC02']; return '<div class="iphs-card" style="--c:'+COURSE['1MEC02'].c+'"><div class="n">'+h.bapec.toFixed(2)+'h</div><div class="l">1MEC02 — ritmo fijo (autoestudio)</div><div class="pct">'+s+'/1 resuelta · fuera del reparto IPHS</div><div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab = '+h.total.toFixed(2)+'h total esta semana</div><div class="bar"><i style="width:'+(s*100)+'%"></i></div></div>'; })();
 }
 
 function renderQidPills(curso, qids) {
@@ -522,12 +582,14 @@ function renderQidPills(curso, qids) {
     (linked ? '<span class="badge-linked">vinculado a tu BAPEC_'+curso+'.html real</span>' : '<span class="badge-local">en Drive, pendiente del otro lado</span>')+
     '</div><div class="qid-pills">';
   qids.forEach(function(q, i){
-    html += '<button type="button" class="qid-pill'+(isSolved(curso,q)?' solved':'')+'" data-curso="'+curso+'" data-qid="'+q+'">'+
-      (linked ? (isSolved(curso,q)?'✓ Soporte inclinado':'Soporte inclinado') : (isSolved(curso,q)?'✓ Preg. '+(i+1):'Preg. '+(i+1)))+
+    const label = (curso === '1MEC02') ? 'Soporte inclinado' : (QID_CODIGO[q] || ('Preg. ' + (i+1)));
+    const bloqueada = !driveConnected;
+    html += '<button type="button" class="qid-pill'+(isSolved(curso,q)?' solved':'')+(bloqueada?' locked':'')+'" data-curso="'+curso+'" data-qid="'+q+'" title="'+(bloqueada?'Conéctate a Google Drive para poder marcar':'')+'">'+
+      (bloqueada ? '🔒 ' : (isSolved(curso,q) ? '✓ ' : '')) + label +
       '</button>';
   });
   html += '</div>' + (linked ?
-    '<div class="link-note">Esta pastilla lee y escribe <code>bapec_progreso.json</code> en tu Drive — la misma clave <code>'+qids[0]+'</code> que ahora también lee y escribe tu BAPEC_'+curso+'.html real. Márcala aquí o allá: es el mismo dato, con una recarga de por medio.</div>' :
+    '<div class="link-note">Estas pastillas leen y escriben <code>bapec_progreso.json</code> en tu Drive con los IDs reales de tu BAPEC_'+curso+'.html — márcalas aquí o allá, es el mismo dato, con una recarga de por medio.</div>' :
     '<div class="link-note">Ya se guarda en <code>bapec_progreso.json</code> de tu Drive (persiste de verdad), pero tu BAPEC_'+curso+'.html real (500+ KB) todavía no fue actualizado para leer de ahí — pídemelo cuando confirmes que la conexión funciona.</div>'
   ) + '</div>';
   return html;
@@ -626,10 +688,10 @@ function renderMetrics(){
   });
   html += '</div>';
 
-  html += '<div class="metric-section"><h3>Horas programadas vs. meta IPHS</h3><div class="msub">Meta = % de IPHS v5 aplicado a 28h de presupuesto semanal (3 cursos competidores). 1MEC02 no compite, va aparte.</div>';
+  html += '<div class="metric-section"><h3>Autoestudio BAPEC vs. meta IPHS</h3><div class="msub">Meta = % de IPHS v5 aplicado a 28h de presupuesto semanal (3 cursos competidores). Solo cuenta autoestudio, no clases/lab/PC. 1MEC02 no compite, va aparte.</div>';
   ['ING225','MAT241','MEC257'].forEach(function(k){
-    const pct=Math.round(hrs[k]/COURSE_HOURS[k]*100);
-    html += '<div class="hbar-row"><div class="hbar-label">'+k+'</div><div class="hbar-track"><div class="hbar-fill" style="width:'+Math.min(pct,100)+'%;background:'+COURSE[k].c+'">'+hrs[k].toFixed(1)+'h / '+COURSE_HOURS[k]+'h ('+pct+'%)</div></div></div>';
+    const pct=Math.round(hrs[k].bapec/COURSE_HOURS[k]*100);
+    html += '<div class="hbar-row"><div class="hbar-label">'+k+'</div><div class="hbar-track"><div class="hbar-fill" style="width:'+Math.min(pct,100)+'%;background:'+COURSE[k].c+'">'+hrs[k].bapec.toFixed(1)+'h / '+COURSE_HOURS[k]+'h ('+pct+'%)</div></div></div>';
   });
   html += '</div>';
 
