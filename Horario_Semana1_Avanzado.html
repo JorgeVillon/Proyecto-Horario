@@ -433,6 +433,7 @@ let gTokenClient = null;
 let gAccessToken = null;
 let gProgressFileId = null;
 let syncBusy = false;
+let syncQueuedCurso = null;
 
 function setSyncStatus(state, text) {
   const dot = document.getElementById('syncDot');
@@ -519,13 +520,16 @@ function connectGoogleDrive() {
 function isSolved(curso, qid) { return !!(progreso[curso] && progreso[curso][qid]); }
 async function toggleQid(curso, qid) {
   if (!driveConnected) { setSyncStatus('err', 'Conéctate a Google Drive primero (botón de arriba) — si no, esta marca no se guarda.'); return; }
-  if (syncBusy) return;
-  syncBusy = true;
   if (!progreso[curso]) progreso[curso] = {};
   progreso[curso][qid] = !progreso[curso][qid];
   renderAll();
+  syncCurso(curso);
+}
+async function syncCurso(curso) {
+  if (syncBusy) { syncQueuedCurso = curso; return; }
+  syncBusy = true;
+  setSyncStatus('', 'Guardando…');
   try {
-    // vuelve a leer antes de escribir, por si otro archivo (BAPEC real, u otra pestaña) cambió algo mientras tanto
     const latest = await readProgressFromDrive();
     latest[curso] = progreso[curso];
     progreso = latest;
@@ -536,6 +540,7 @@ async function toggleQid(curso, qid) {
   }
   syncBusy = false;
   renderAll();
+  if (syncQueuedCurso) { const c = syncQueuedCurso; syncQueuedCurso = null; syncCurso(c); }
 }
 function courseSolvedCount(curso) {
   const all = QIDS[curso];

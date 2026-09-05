@@ -1997,6 +1997,22 @@
     tokenClient.requestAccessToken({ prompt: '' });
   }
 
+  let syncBusy = false;
+  let syncQueued = false;
+  async function syncProgreso() {
+    if (syncBusy) { syncQueued = true; return; }
+    syncBusy = true;
+    setSyncStatus('', 'Guardando…');
+    try {
+      const all = await readAllProgress();
+      all[CURSO] = progreso;
+      await writeAllProgress(all);
+      setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
+    } catch (e) { setSyncStatus('err', 'Se marcó localmente pero no se pudo guardar en Drive: ' + e.message); }
+    syncBusy = false;
+    if (syncQueued) { syncQueued = false; syncProgreso(); }
+  }
+
   function attachHandlers() {
     document.addEventListener('click', function(ev) {
       const syncBtn = ev.target.closest('#syncBtn');
@@ -2007,14 +2023,7 @@
       const qid = btn.getAttribute('data-qid');
       progreso[qid] = !progreso[qid];
       updateDynamicUI();
-      (async function() {
-        try {
-          const all = await readAllProgress();
-          all[CURSO] = progreso;
-          await writeAllProgress(all);
-          setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
-        } catch (e) { setSyncStatus('err', 'Se marcó localmente pero no se pudo guardar en Drive: ' + e.message); }
-      })();
+      syncProgreso();
     });
   }
 
