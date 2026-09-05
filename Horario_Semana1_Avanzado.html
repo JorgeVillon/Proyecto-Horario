@@ -603,7 +603,7 @@ function renderQidPills(curso, qids) {
 function renderCalendar(){
   const grid=document.getElementById('calGrid');
   const rows=Math.round((HEND-HSTART)*4);
-  grid.style.gridTemplateRows = '32px repeat('+rows+',19px)';
+  grid.style.gridTemplateRows = '46px repeat('+rows+',19px)';
   let html='<div class="cal-corner"></div>';
   DAYS.forEach(function(d){ html+='<div class="cal-daylabel"><div class="dn">'+d.n+'</div><div class="dd">'+d.d+'</div></div>'; });
   for(let h=Math.ceil(HSTART);h<HEND;h++){
