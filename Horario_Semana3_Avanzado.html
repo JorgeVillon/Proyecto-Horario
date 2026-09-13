@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Horario Semana 1 — avanzado, con BAPEC vinculado</title>
+<title>Horario Semana 3 — avanzado, con BAPEC vinculado</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -143,7 +143,7 @@ h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:29px;color:var(-
 
 <header class="masthead">
   <div class="eyebrow">Horario integrado · Término 1 2026-2 · Ingeniería Mecánica PUCP</div>
-  <h1>Semana 1 — avanzado, con BAPEC vinculado</h1>
+  <h1>Semana 3 — avanzado, con BAPEC vinculado</h1>
   <div class="subtitle">Domingo 16 — Sábado 22 de agosto · ING225 · MAT241 · MEC257 · 1MEC02</div>
   <div class="name-note">IPHS v5 (10 señales): ING225 42.5% · MAT241 30.5% · MEC257 26.9% · pesos 25/10/20/14/10/10/8/6/6/8 · 1MEC02 fuera del reparto, ritmo fijo aparte</div>
 </header>
@@ -164,12 +164,12 @@ h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:29px;color:var(-
 
 <div class="note link">
   <h4>Cómo funciona el contador vinculado — ahora vía tu Google Drive</h4>
-  Cada pastilla guarda su estado en un archivo <code>bapec_progreso.json</code> dentro de la carpeta raíz de tu proyecto en Drive, usando tu propia cuenta de Google (API de Drive, no <code>window.storage</code> de Artifacts — así funciona igual si abres este horario como artifact o como archivo descargado, siempre que lo sirvas por <code>http://localhost</code> o tu página de GitHub Pages). <strong>1MEC02</strong> e <strong>ING225</strong> ya están <span class="badge-linked">vinculados de verdad</span>: sus 26 preguntas (1 + 25) usan los IDs reales de tus archivos <code>BAPEC_1MEC02.html</code> y <code>BAPEC_ING225.html</code> — marcar en uno se refleja en el otro al recargar. Los bloques de <strong>MAT241 / MEC257</strong> todavía guardan IDs provisionales en ese mismo <code>bapec_progreso.json</code> <span class="badge-local">Drive, pendiente del otro lado</span> — el dato persiste de verdad, pero falta encontrar sus preguntas reales de esta semana y actualizar esos dos archivos (cada uno de 450+ KB).
+  Cada pastilla guarda su estado en un archivo <code>bapec_progreso.json</code> en tu Drive. Los <strong>4 cursos</strong> ya están <span class="badge-linked">vinculados de verdad</span>. Semana 3 trae contenido nuevo (propiedades mecánicas, sistemas no lineales, flexión/impacto). ING225 topado a 14 candidatas reales; MAT241 tiene 18 preguntas pendientes sin bloque fijo (nunca antes de su única clase del jueves); MEC257 tiene 1 pendiente.
 </div>
 
 <div class="note warn" id="setupNote">
   <h4>Cómo abrir este archivo</h4>
-  Ya tiene tu Client ID de Google Cloud configurado. Solo debes abrirlo por <code>http://localhost:8000</code> (o el puerto que hayas puesto en "Authorized JavaScript origins"), no con doble clic directo — corre <code>python3 -m http.server 8000</code> en la carpeta donde tengas los archivos descargados, y ábrelo desde <code>http://localhost:8000/Horario_Semana1_Avanzado.html</code>.
+  Ya tiene tu Client ID de Google Cloud configurado. Solo debes abrirlo por <code>http://localhost:8000</code> (o el puerto que hayas puesto en "Authorized JavaScript origins"), no con doble clic directo — corre <code>python3 -m http.server 8000</code> en la carpeta donde tengas los archivos descargados, y ábrelo desde <code>http://localhost:8000/Horario_Semana3_Avanzado.html</code>.
 </div>
 
 <div class="note warn" id="gapNote">
@@ -194,7 +194,7 @@ h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:29px;color:var(-
 <div class="view" id="view-list"></div>
 <div class="view" id="view-metrics"></div>
 
-<div class="footer-credit">Horario Semana 1 · IPHS v5 (10 señales, T-score) · contador de preguntas sincronizado vía Google Drive API · 1MEC02 vinculado de verdad a su BAPEC real</div>
+<div class="footer-credit">Horario Semana 3 · IPHS v5 (10 señales, T-score) · contador de preguntas sincronizado vía Google Drive API · 1MEC02 vinculado de verdad a su BAPEC real</div>
 
 </div>
 
@@ -210,14 +210,14 @@ const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 const PROGRESS_FILE_NAME = 'bapec_progreso.json';
 const PROGRESS_PARENT_FOLDER_ID = '1Wm0X0zD-oVpOCIvHjCB32iAO-7WGpZyX'; // carpeta raíz de tu proyecto en Drive
 const BAPEC_LINKED = { ING225:true, MAT241:true, MEC257:true, '1MEC02':true }; // true = su BAPEC real ya lee/escribe el mismo archivo de Drive
-const QID_TARGET = { ING225: 50, MAT241: 0, MEC257: 17, '1MEC02': 1 };
+const QID_TARGET = { ING225: 14, MAT241: 24, MEC257: 23, '1MEC02': 1 };
 // Presupuesto recalculado con rigor (antes: 28h sin derivación) — ver metodología: 115.5h de ventana semanal (6:30-23:00 x7)
 // menos fijo/comida/protegido = 49.0h techo real; Jorge eligió operar a 35h, dejando ~10.5h libres antes del PC del viernes.
-const COURSE_HOURS = { ING225: 23.95, MAT241: 0, MEC257: 11.05 };
-const IPHS_PCT = { ING225: 60.0, MAT241: 0.0, MEC257: 40.0 };
+const COURSE_HOURS = { ING225: 6.77, MAT241: 11.20, MEC257: 14.95 };
+const IPHS_PCT = { ING225: 41.3, MAT241: 33.6, MEC257: 25.0 };
 // Código real de referencia (ej. "PC1-14.1-P2") de cada pregunta seleccionada — de los 3 bancos verificados esta sesión.
 // Pendiente en conversaciones aparte por curso: percentil/nivel visibles, tiempo ponderado granular, vínculo a la plancha y ancla de salto directo al BAPEC.
-const QID_CODIGO = {'e1_2020_1_p1':'1E-20.1-P1', 'ex1_08_1_p1':'1E-08.1-P1', 'ex1_12_1_p1':'1E-12.1-P1', 'ex1_17_1_p3':'1E-17.1-P3', 'ex1_2012_1_p2':'EX1-12.1-P2', 'ex1_2013_1_p2':'EX1-13.1-P2', 'ex1_2013_2_p2':'EX1-13.2-P2', 'ex1_2014_1_p2':'EX1-14.1-P2', 'ex1_2014_1_p4':'EX1-14.1-P4', 'ex1_2015_2_p3':'EX1-15.2-P3', 'ex1_2017_1_p1':'EX1-17.1-P1', 'ex1_2017_2_p1':'1E-17.2-P1', 'ex1_2017_2_p3':'EX1-17.2-P3', 'ex1_2018_2_p1':'EX1-18.2-P1', 'ex1_2018_2_p3':'EX1-18.2-P3', 'ex1_2019_2_p1':'EX1-19.2-P1', 'ex1_2020_2_p3':'EX1-20.2-P3', 'ex1_2021_2_p1':'EX1-21.2-P1', 'ex1_2021_2_p2':'EX1-21.2-P2', 'ex1_2023_2_p3':'EX1-23.2-P3', 'ex1_2024_2_p3':'EX1-24.2-P3', 'ex1_2025_1_p4':'EX1-25.1-P4', 'ex1_22_1_p1':'1E-22.1-P1', 'ex1_24_2_c1':'1E-24.2-C1', 'ex1t_25_2_p1':'1ET-25.2-P1', 'pc1_08_2_p4':'PC1-08.2-P4', 'pc1_11_2_e1':'PC1-11.2-Ej1', 'pc1_11_2_e2':'PC1-11.2-Ej2', 'pc1_12_1_p3':'PC1-12.1-P3', 'pc1_14_1_p2':'PC1-14.1-P2', 'pc1_15_1_p2':'PC1-15.1-P2', 'pc1_15_1_p3':'PC1-15.1-P3', 'pc1_17_1_p1':'PC1-17.1-P1', 'pc1_17_1_p2':'PC1-17.1-P2', 'pc1_17_1_p3':'PC1-17.1-P3', 'pc1_18_2_p1':'PC1-18.2-P1', 'pc1_18_2_p2':'PC1-18.2-P2', 'pc1_18_2_p3':'PC1-18.2-P3', 'pc1_19_1_p1':'PC1-19.1-P1', 'pc1_19_1_p2':'PC1-19.1-P2', 'pc1_19_1_p3':'PC1-19.1-P3', 'pc1_2015_1_p2':'PC1-15.1-P2', 'pc1_2015_1_p4':'PC1-15.1-P4', 'pc1_2015_2_p2':'PC1-15.2-P2', 'pc1_2015_2_p3':'PC1-15.2-P3', 'pc1_2016_1_p2':'PC1-16.1-P2', 'pc1_2016_1_p3':'PC1-16.1-P3', 'pc1_2016_2_p4':'PC1-16.2-P4', 'pc1_2017_2_p2':'PC1-17.2-P2', 'pc1_2019_2_p2':'PC1-19.2-P2', 'pc1_2020_2_p4':'PC1-20.2-P4', 'pc1_2022_1_p2':'PC1-22.1-P2', 'pc1_2023_2_p2':'PC1-23.2-P2', 'pc1_2025_1_p1':'PC1-25.1-P1', 'pc1_20_1_e2':'PC1-20.1-Ej2', 'pc1_20_2_p1':'PC1-20.2-P1', 'pc1_20_2_p2':'PC1-20.2-P2', 'pc1_21_1_e1':'PC1-21.1-Ej1', 'pc1_21_1_e2':'PC1-21.1-Ej2', 'pc1_21_1_e3':'PC1-21.1-Ej3', 'pc1_21_1_e4':'PC1-21.1-Ej4', 'pc1_21_2_e1':'PC1-21.2-Ej1', 'pc1_22_1_ej1':'PC1-22.1-Ej1', 'pc1_25_1_ej4':'PC1-25.1-Ej4', 'pc1_25_1_p1':'PC1-25.1-P1', 'pc1_25_2_p2':'PC1-25.2-P2', 'pc2_2016_1_p1':'PC2-16.1-P1', 'pc2_2016_1_p2':'PC2-16.1-P2', 'pc2_2017_2_p1':'PC2-17.2-P1', 'pc2_2019_2_p1':'PC2-19.2-P1', 'pc2_2020_1_p1':'PC2-20.1-P1', 'pc2_2021_1_p1':'PC2-21.1-P1', 'pc2_2021_1_p2':'PC2-21.1-P2', 'pc2_2021_1_p3':'PC2-21.1-P3', 'pc2_2024_2_p1':'PC2-24.2-P1', 'pc2_2025_2_p1':'PC2-25.2-P1', 'pc2_23_1_p3':'PC2-23.1-P3', 'pc2_25_2_e1':'PC2-25.2-Ej1', 'pc4_2025_2_p1':'PC4-25.2-P1'};
+const QID_CODIGO = {'e1_2020_1_p4':'1E-20.1-P4', 'e1_2020_2_p3':'1E-20.2-P3', 'ex1_2012_1_p1':'1E-12.1-P1', 'ex1_2013_1_p2':'1E-13.1-P2', 'ex1_2014_1_p3':'EX1-14.1-P3', 'ex1_2014_2_p1c':'EX1-14.2-P1c', 'ex1_2014_2_p3':'EX1-14.2-P3', 'ex1_2015_2_p1':'1E-15.2-P1', 'ex1_2016_2_p2':'1E-16.2-P2', 'ex1_2017_2_p2':'1E-17.2-P2', 'ex1_2019_2_p1':'1E-19.2-P1', 'ex1_2021_2_p3':'1E-21.2-P3', 'ex1_2023_2_p1':'1E-23.2-P1', 'ex1_2024_2_p1':'1E-24.2-P1', 'ex1_2025_1_p1':'EX1-25.1-P1', 'ex1_2025_2_p1':'1E-25.2-P1', 'ex1_21_2_c1':'1E-21.2-C1', 'ex2_2012_1_p1':'EX2-12.1-P1', 'ex2_2013_1_p1':'EX2-13.1-P1', 'ex2_2013_1_p3':'EX2-13.1-P3', 'ex2_2013_2_p4':'EX2-13.2-P4', 'ex2_2015_1_p1':'EX2-15.1-P1', 'ex2_2015_1_p3':'EX2-15.1-P3', 'ex2_2015_2_p1':'EX2-15.2-P1', 'ex2_2015_2_p2b':'EX2-15.2-P2b', 'ex2_2016_1_p1':'EX2-16.1-P1', 'ex2_2016_1_p4':'EX2-16.1-P4', 'ex2_2017_1_p1':'EX2-17.1-P1', 'ex2_2017_1_p2b':'EX2-17.1-P2b', 'ex2_2017_2_p1':'EX2-17.2-P1', 'ex2_2017_2_p4':'EX2-17.2-P4', 'ex2_2018_2_p1':'EX2-18.2-P1', 'ex2_2024_1_p1':'2E-24.1-P1', 'ex2_2025_2_p1':'EX2-25.2-P1', 'pc1_16_1_p1':'PC1-16.1-P1', 'pc1_18_2_p4':'PC1-18.2-P4', 'pc1_19_2_p5':'PC1-19.2-P5', 'pc1_2012_1_p3':'PC1-12.1-P3', 'pc1_20_1_e3':'PC1-20.1-Ej3', 'pc1_22_1_ej4':'PC1-22.1-Ej4', 'pc1_22_2_p4':'PC1-22.2-P4', 'pc2_15_1_p1':'PC2-15.1-P1', 'pc2_19_1_p2':'PC2-19.1-P2', 'pc2_2013_1_p2':'PC2-13.1-P2', 'pc2_2020_1_p2':'PC2-20.1-P2', 'pc2_21_1_e3':'PC2-21.1-Ej3', 'pc2_21_2_e4':'PC2-21.2-Ej4', 'pc2_23_1_p2':'PC2-23.1-P2', 'pc3_15_1_p2':'PC3-15.1-P2', 'pc3_2015_1_p1':'PC3-15.1-P1', 'pc3_2015_1_p2':'PC3-15.1-P2', 'pc3_2015_2_p2':'PC3-15.2-P2', 'pc3_25_2_p2':'PC3-25.2-P2', 'pc4_2016_2_p1':'PC4-16.2-P1', 'pc4_2016_2_p2':'PC4-16.2-P2', 'pc4_2017_2_p3':'PC4-17.2-P3', 'pc4_2019_1_p1':'PC4-19.1-P1', 'pc4_2021_1_p2':'PC4-21.1-P2', 'pc4_2023_1_pu':'PC4-23.1-PU', 'pc4_2024_2_p1':'PC4-24.2-P1', 'pc4_2024_2_p2':'PC4-24.2-P2', 'pc4_2025_1_p1':'PC4-25.1-P1', 'pc4_2025_1_p2':'PC4-25.1-P2', 'pc4_2025_2_p2':'PC4-25.2-P2', 'pc5_2017_2_p1':'PC5-17.2-P1', 'pc5_2017_2_p2':'PC5-17.2-P2', 'pc5_2020_2_p1':'PC5-20.2-P1'};
 const TIEMPO_PONDERADO = { ING225: 29, MAT241: 28, MEC257: 39 };
 
 function genQids(curso, n) {
@@ -237,20 +237,20 @@ Object.keys(QID_TARGET).forEach(function(c) { QIDS[c] = genQids(c, QID_TARGET[c]
 // MEC257 ya usa IDs reales confirmados del banco BAPEC_MEC257.html (Semana 1: Clase 1 "Introducción" no tiene
 // preguntas propias todavía —confirmado, no es un error—; toda la Semana 1 sale de Clase 2 "Ensayo de materiales",
 // 25 candidatas reales disponibles — se tomaron las 12 de mayor dificultad.
-QIDS['MEC257'] = ['ex1_2021_2_p2', 'ex1_2023_2_p3', 'ex1_2017_1_p1', 'ex1_2014_1_p4', 'ex1_2020_2_p3', 'ex1_2019_2_p1', 'ex1_2018_2_p3', 'ex1_2012_1_p2', 'ex1_2014_1_p2', 'ex1_2015_2_p3', 'ex1_2021_2_p1', 'ex1_2025_1_p4', 'ex1_2013_1_p2', 'ex1_2013_2_p2', 'ex1_2024_2_p3', 'ex1_2017_2_p3', 'ex1_2018_2_p1'];
-QIDS['ING225'] = ['pc1_14_1_p2', 'ex1_08_1_p1', 'ex1_17_1_p3', 'pc1_08_2_p4', 'pc2_23_1_p3', 'pc1_25_2_p2', 'ex1_22_1_p1', 'pc1_22_1_ej1', 'pc2_25_2_e1', 'pc1_25_1_p1', 'ex1t_25_2_p1', 'pc1_21_1_e1', 'pc1_21_2_e1', 'pc1_19_1_p1', 'pc1_19_1_p2', 'pc1_20_2_p1', 'pc1_20_2_p2', 'ex1_24_2_c1', 'pc1_17_1_p1', 'pc1_17_1_p2', 'pc1_18_2_p1', 'pc1_15_1_p2', 'pc1_15_1_p3', 'pc1_11_2_e1', 'ex1_13_1_ej1', 'ex1_12_1_p1', 'pc1_21_1_e2', 'pc1_21_1_e3', 'pc1_21_1_e4', 'pc1_19_1_p3', 'pc1_20_1_e2', 'pc1_17_1_p3', 'pc1_18_2_p2', 'pc1_18_2_p3', 'pc1_11_2_e2', 'pc1_12_1_p3', 'pc1_25_1_ej4', 'pc2_25_2_e4', 'pc1_25_1_ej3', 'pc1_25_1_ej2', 'pc2_25_2_e3', 'pc1_21_2_e4', 'pc2_21_2_e3', 'pc1_19_2_p1', 'pc1_19_1_p4', 'pc2_19_1_p1', 'ex1_19_1_c2', 'pc1_20_2_p3', 'pc1_20_2_p4', 'ex1_23_2_c1'];
-QIDS['MAT241'] = [];
-QIDS['1MEC02'] = ['s5-1']; // clave real: la misma pieza "Soporte inclinado" del BAPEC_1MEC02.html
+QIDS['ING225'] = ['pc2_21_2_e4', 'ex1_21_2_c1', 'pc1_19_2_p5', 'pc2_19_1_p2', 'pc1_18_2_p4', 'pc2_15_1_p1', 'pc3_25_2_p2', 'pc2_21_1_e3', 'pc1_20_1_e3', 'pc1_22_2_p4', 'pc2_23_1_p2', 'pc3_15_1_p2', 'pc1_16_1_p1', 'pc1_22_1_ej4'];
+QIDS['MAT241'] = ['pc4_2024_1_pu', 'pc3_2021_1_pu', 'ex1_2021_1_p3', 'pc3_2023_1_pu', 'pc2_2023_2_p2', 'pc3_2025_1_p1', 'pc3_2025_1_p2', 'ex1_2017_1_p1', 'pc2_2020_2_p1', 'pc2_2020_2_p2', 'pc3_2024_1_p1', 'pc3_2024_1_p2', 'pc1_2013_1_p1', 'pc2_2015_2_p1', 'pc2_2016_2_p2', 'pc2_2016_2_p3', 'pc3_2017_2_p1', 'pc3_2017_2_p2', 'pc2_2019_2_p2', 'pc2_2022_1_p4', 'pc1_2020_1_g1_p1', 'pc1_2020_1_g2_p1', 'pc1_2020_1_g3_p1', 'pc1_2020_1_g4_p1'];
+QIDS['MEC257'] = ['ex2_2016_1_p4', 'ex2_2017_2_p4', 'ex2_2017_1_p2b', 'ex2_2013_1_p3', 'ex2_2015_1_p3', 'ex2_2015_2_p2b', 'ex2_2013_2_p4', 'ex1_2014_2_p1c', 'ex2_2016_1_p1', 'ex2_2025_2_p1', 'ex2_2012_1_p1', 'ex2_2013_1_p1', 'ex1_2014_1_p3', 'ex1_2014_2_p3', 'ex2_2015_1_p1', 'ex2_2015_2_p1', 'ex2_2017_1_p1', 'ex2_2017_2_p1', 'ex2_2018_2_p1', 'ex2_2019_2_p1', 'ex2_2021_2_p1', 'ex1_2025_1_p1', 'ex2_2013_2_p1'];
+QIDS['1MEC02'] = ['s5-3']; // clave real: la misma pieza "Soporte inclinado" del BAPEC_1MEC02.html
 
 // ---------- Días y bloques ----------
 const DAYS = [
-  {n:'Domingo', d:'16/08', tag:'Sin BAPEC — nada enseñado aún; solo prerrequisito si algún día hay banco de Mecánica 1'},
-  {n:'Lunes', d:'17/08'},
-  {n:'Martes', d:'18/08'},
-  {n:'Miércoles', d:'19/08'},
-  {n:'Jueves', d:'20/08', tag:'MAT241 aquí — día más largo'},
-  {n:'Viernes', d:'21/08', tag:'Mañana libre de campus'},
-  {n:'Sábado', d:'22/08', tag:'Compras tras el lab'}
+  {n:'Domingo', d:'30/08', tag:'Sin BAPEC — nada enseñado aún'},
+  {n:'Lunes', d:'31/08'},
+  {n:'Martes', d:'01/09'},
+  {n:'Miércoles', d:'02/09'},
+  {n:'Jueves', d:'03/09', tag:'MAT241 aquí — día más largo'},
+  {n:'Viernes', d:'04/09', tag:'PC3 de ING225 esta semana'},
+  {n:'Sábado', d:'05/09', tag:'Compras tras el lab'}
 ];
 const HSTART=6.5, HEND=23; // arranca 30 min antes de las 7 para que el desayuno adelantado del jueves (6:30-7:00) no quede fuera de rango
 const COURSE = {
@@ -290,79 +290,77 @@ B({day:0,s:21,e:22,type:'PERSONAL',title:'Ocio'}),
 // LUNES 1 — MEC257 clase + lab quincenal
 B({day:1,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
 T(1,9,10,'Traslado a PUCP'),
-B({day:1,s:10,e:12,type:'MEC257',title:'MEC257 — Clase',detail:'Cap. 1: Introducción a la Ing. de Materiales',fixed:true}),
+B({day:1,s:10,e:12,type:'MEC257',title:'MEC257 — Clase',detail:'Cap. 2: Ensayo de flexión e impacto',fixed:true}),
 B({day:1,s:12,e:13,type:'COMIDA',title:'Almuerzo (en campus)'}),
-BQ(1,13,13.5,'MEC257','BAPEC MEC257',9,10,'1 pregunta — hueco corto antes del lab',
-  {tipo:'EX1',nivel:'Alto',ventana:'2 sem. hasta EX1',tiempo:'39 min/preg',razon:'Contenido recién visto, antes del lab'}),
+BQ(1,13,13.5,'MEC257','BAPEC MEC257',0,1,'1 pregunta — hueco corto antes del lab',
+  {tipo:'EX2',nivel:'Alto',ventana:'1 sem. hasta EX1 (evalúa Sem.1-2-3)',tiempo:'39 min/preg',razon:'Contenido recién visto, antes del lab'}),
 B({day:1,s:13.5,e:17.5,type:'MEC257',title:'MEC257 — Laboratorio',detail:'Quincenal · horario actualizado a 13:30–17:30 (Ingema)',fixed:true}),
-BQ(1,17.5,18,'MEC257','BAPEC MEC257',0,1,'1 pregunta — justo después del lab',
-  {tipo:'EX1',nivel:'Alto',ventana:'2 sem. hasta EX1',tiempo:'39 min/preg',razon:'Ebbinghaus: recién salido del lab'}),
+BQ(1,17.5,18,'MEC257','BAPEC MEC257',1,2,'1 pregunta — justo después del lab',
+  {tipo:'EX2',nivel:'Alto',ventana:'1 sem. hasta EX1',tiempo:'39 min/preg',razon:'Ebbinghaus: recién salido del lab'}),
 T(1,18,19,'Traslado a casa'),
 B({day:1,s:19,e:19.5,type:'COMIDA',title:'Snack PM'}),
-BQ(1,19.5,22,'MEC257','BAPEC MEC257',1,5,'4 preguntas — cierre nocturno del lunes',
-  {tipo:'EX1',nivel:'Alto',ventana:'2 sem. hasta EX1',tiempo:'39 min/preg',razon:'Mismo día de clase y lab'}),
+BQ(1,19.5,22,'MEC257','BAPEC MEC257',2,6,'4 preguntas — cierre nocturno',
+  {tipo:'EX2',nivel:'Alto',ventana:'1 sem. hasta EX1',tiempo:'39 min/preg',razon:'Mismo día de clase y lab'}),
 B({day:1,s:22,e:23,type:'COMIDA',title:'Cena (tardía)'}),
 
 // MARTES 2 — ING225 Clase 1
 B({day:2,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
 T(2,9,10,'Traslado a PUCP'),
-B({day:2,s:10,e:12,type:'ING225',title:'ING225 — Clase 1',detail:'Concepto de esfuerzo, esfuerzo normal y cortante promedio',fixed:true}),
+B({day:2,s:10,e:12,type:'ING225',title:'ING225 — Clase 1',detail:'Propiedades mecánicas: hipótesis básicas, comportamiento a carga axial (E, dúctil/frágil, Poisson)',fixed:true}),
 T(2,12,13,'Traslado a casa'),
 B({day:2,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
 BQ(2,14,17,'ING225','BAPEC RM1 — Clase 1',0,6,'6 preguntas — bloque grande, contenido recién visto',
-  {tipo:'PC/1E mixto',nivel:'Alto primero',ventana:'1 sem. hasta PC2 (evalúa Sem.1+2)',tiempo:'29 min/preg',razon:'Mismo día de Clase 1'}),
+  {tipo:'PC/EX mixto',nivel:'Alto primero',ventana:'1 sem. hasta PC3 (evalúa esto mismo)',tiempo:'29 min/preg (ESTIMADO)',razon:'Mismo día de Clase 1'}),
 B({day:2,s:17,e:17.5,type:'COMIDA',title:'Snack PM'}),
 BQ(2,17.5,19,'ING225','BAPEC RM1 — Clase 1',6,9,'3 preguntas más',
-  {tipo:'PC/1E mixto',nivel:'Alto',ventana:'1 sem. hasta PC2',tiempo:'29 min/preg',razon:'Continúa el mismo día'}),
+  {tipo:'PC/EX mixto',nivel:'Alto',ventana:'1 sem. hasta PC3',tiempo:'29 min/preg (ESTIMADO)',razon:'Continúa el mismo día'}),
 B({day:2,s:19,e:20,type:'COMIDA',title:'Cena'}),
 B({day:2,s:20,e:20.5,type:'PERSONAL',title:'Inglés autoestudio'}),
 B({day:2,s:20.5,e:21,type:'PERSONAL',title:'Rutina personal (parte 1)',detail:'Interdiario'}),
-BQ(2,21,23,'ING225','BAPEC RM1 — Clase 1',9,13,'4 preguntas — cierre nocturno del martes',
-  {tipo:'PC/1E mixto',nivel:'Medio',ventana:'1 sem. hasta PC2',tiempo:'29 min/preg',razon:'Cierre del día de Clase 1'}),
+BQ(2,21,23,'ING225','BAPEC RM1 — Clase 1',9,13,'4 preguntas — cierra las 13 de Clase 1',
+  {tipo:'PC/EX mixto',nivel:'Medio',ventana:'1 sem. hasta PC3',tiempo:'29 min/preg (ESTIMADO)',razon:'Cierre nocturno del martes'}),
 
 // MIERCOLES 3 — ING225 Clase 2
 B({day:3,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
 T(3,9,10,'Traslado a PUCP'),
-B({day:3,s:10,e:12,type:'ING225',title:'ING225 — Clase 2',detail:'Uniones empernadas o remachadas',fixed:true}),
+B({day:3,s:10,e:12,type:'ING225',title:'ING225 — Clase 2',detail:'Incertidumbre y factor de seguridad; carga cortante (G); ecuaciones constitutivas (Cap.2 completo) — inicia Cap.3',fixed:true}),
 T(3,12,13,'Traslado a casa'),
 B({day:3,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
-BQ(3,14,17.5,'ING225','BAPEC RM1 — Clase 2',25,32,'7 preguntas — bloque grande, contenido recién visto',
-  {tipo:'PC/1E mixto',nivel:'Alto primero',ventana:'1 sem. hasta PC2',tiempo:'29 min/preg',razon:'Mismo día de Clase 2'}),
+BQ(3,14,14.5,'ING225','BAPEC RM1 — Clase 2',13,14,'1 pregunta — única candidata de Clase 2 esta semana',
+  {tipo:'PC',nivel:'Medio',ventana:'1 sem. hasta PC3',tiempo:'29 min/preg (ESTIMADO)',razon:'Mismo día de Clase 2, contenido acotado'}),
+BQ(3,14.5,17.5,'MEC257','BAPEC MEC257',6,11,'5 preguntas — dos días después de la clase',
+  {tipo:'EX2',nivel:'Medio',ventana:'1 sem. hasta EX1',tiempo:'39 min/preg',razon:'Relleno, aprovecha el hueco de la tarde'}),
 B({day:3,s:17.5,e:18,type:'COMIDA',title:'Snack PM'}),
-BQ(3,18,20,'ING225','BAPEC RM1 — Clase 2',32,36,'4 preguntas más',
-  {tipo:'PC/1E mixto',nivel:'Alto',ventana:'1 sem. hasta PC2',tiempo:'29 min/preg',razon:'Continúa el mismo día'}),
 B({day:3,s:20,e:21,type:'COMIDA',title:'Cena'}),
 B({day:3,s:21,e:21.5,type:'PERSONAL',title:'Inglés autoestudio'}),
-BQ(3,21.5,23,'ING225','BAPEC RM1 — Clase 2',36,39,'3 preguntas — cierra las 39 de Clase 2 (todas)',
-  {tipo:'PC/1E mixto',nivel:'Medio',ventana:'1 sem. hasta PC2',tiempo:'29 min/preg',razon:'Cierre nocturno del miércoles'}),
 
 // JUEVES 4 — día más largo, MAT241 aquí
 B({day:4,s:6.5,e:7,type:'COMIDA',title:'Desayuno (adelantado)'}),
 T(4,7,8,'Traslado a PUCP'),
-B({day:4,s:8,e:10,type:'MAT241',title:'MAT241 — Clase',detail:'Cap. 1: Introducción, preliminares matemáticos, algoritmos y convergencia',fixed:true}),
-B({day:4,s:10,e:12,type:'MEC257',title:'MEC257 — Clase',detail:'Cap. 2: Ensayo de materiales',fixed:true}),
+B({day:4,s:8,e:10,type:'MAT241',title:'MAT241 — Clase',detail:'Algoritmos para ecuaciones no lineales de una variable: Bisección [Cronograma oficial]',fixed:true}),
+B({day:4,s:10,e:12,type:'MEC257',title:'MEC257 — Clase',detail:'Ensayos no destructivos',fixed:true}),
 B({day:4,s:12,e:13,type:'COMIDA',title:'Almuerzo (en campus)'}),
-BQ(4,13,15,'ING225','BAPEC RM1 — Clase 1',13,17,'4 preguntas — relleno, hueco liberado al quitar MAT241 esta semana',
-  {tipo:'PC/1E mixto',nivel:'Medio',ventana:'1 sem. hasta PC2',tiempo:'29 min/preg',razon:'Hueco disponible tras topar MAT241 en 0 esta semana'}),
+BQ(4,13,15,'MAT241','BAPEC MAT241',0,4,'4 preguntas — mismo día de clase, todas las 24 candidatas reales de Bisección se usan esta semana',
+  {tipo:'PC1',nivel:'Alto primero',ventana:'1 sem. hasta PC1 (jueves 10/09)',tiempo:'28 min/preg',razon:'Mismo día de clase, contenido recién visto'}),
 B({day:4,s:15,e:17,type:'1MEC02',title:'1MEC02 — Clase',detail:'Vistas: generalidades, proyección',fixed:true}),
-B({day:4,s:17,e:19,type:'MAT241',title:'MAT241 — Laboratorio',detail:'Introducción a MATLAB',fixed:true}),
+B({day:4,s:17,e:19,type:'MAT241',title:'MAT241 — Laboratorio',detail:'Comandos MATLAB para raíces y sistemas (roots, linsolve, feval)',fixed:true}),
 T(4,19,20,'Traslado a casa'),
 B({day:4,s:20,e:20.5,type:'COMIDA',title:'Cena (tardía)'}),
-BQ(4,20.5,22,'MEC257','BAPEC MEC257',5,7,'2 preguntas — mismo día de la 2da clase',
-  {tipo:'EX1',nivel:'Medio',ventana:'2 sem. hasta EX1',tiempo:'39 min/preg',razon:'Ebbinghaus: mismo día de Clase 2 de MEC257'}),
-BQ(4,22,23,'ING225','BAPEC RM1 — Clase 1',17,19,'2 preguntas — cierra 19 de las 25 de Clase 1',
-  {tipo:'PC/1E mixto',nivel:'Medio',ventana:'1 sem. hasta PC2',tiempo:'29 min/preg',razon:'Relleno nocturno, hueco liberado de MAT241'}),
+BQ(4,20.5,23,'MEC257','BAPEC MEC257',11,15,'4 preguntas — cierra 15 de las 23 reales de la semana (8 pendientes sin bloque fijo)',
+  {tipo:'EX2',nivel:'Medio',ventana:'1 sem. hasta EX1',tiempo:'39 min/preg',razon:'Mismo día de la 2da clase'}),
 
 // VIERNES 5 — mañana libre de campus
 B({day:5,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
-BQ(5,8,11.5,'ING225','BAPEC RM1 — Clase 2',39,46,'7 preguntas — mañana libre completa, hueco liberado al quitar MAT241 esta semana',
-  {tipo:'PC/1E mixto',nivel:'Alto',ventana:'1 sem. hasta PC2',tiempo:'29 min/preg',razon:'Única mañana libre, se aprovecha al máximo tras topar MAT241 en 0'}),
-BQ(5,11.5,13,'MEC257','BAPEC MEC257',7,9,'2 preguntas — cierra 9 de las 17 de la semana',
-  {tipo:'EX1',nivel:'Medio',ventana:'2 sem. hasta EX1',tiempo:'39 min/preg',razon:'Día después de la clase, sigue el hilo del repaso'}),
+BQ(5,8,13,'MAT241','BAPEC MAT241',4,15,'11 preguntas — mañana completa libre de campus',
+  {tipo:'PC1',nivel:'Alto',ventana:'1 sem. hasta PC1',tiempo:'28 min/preg',razon:'Única mañana libre, se aprovecha al máximo'}),
 B({day:5,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
+BQ(5,14,16,'MAT241','BAPEC MAT241',15,19,'4 preguntas más',
+  {tipo:'PC1',nivel:'Medio-alto',ventana:'1 sem. hasta PC1',tiempo:'28 min/preg',razon:'Tarde del viernes, antes del PC3 de ING225'}),
 B({day:5,s:16,e:16.5,type:'COMIDA',title:'Snack PM'}),
+BQ(5,16.5,17,'MAT241','BAPEC MAT241',19,20,'1 pregunta — cierra 20 de las 24',
+  {tipo:'PC1',nivel:'Medio',ventana:'1 sem. hasta PC1',tiempo:'28 min/preg',razon:'Último hueco antes de salir al PC de ING225'}),
 T(5,17,18,'Traslado a PUCP'),
-B({day:5,s:18,e:20,type:'ING225',title:'ING225 — Práctica calificada 01',detail:'Equilibrio y fuerzas internas (prerrequisito, no contenido nuevo de RM1)',fixed:true}),
+B({day:5,s:18,e:20,type:'ING225',title:'ING225 — Práctica calificada 03',detail:'Propiedades mecánicas: fricción, deformación angular, módulo de elasticidad y Poisson desde ensayo de compresión — esta sí evalúa el contenido nuevo de esta semana',fixed:true}),
 T(5,20,21,'Traslado a casa'),
 B({day:5,s:21,e:22,type:'COMIDA',title:'Cena'}),
 B({day:5,s:22,e:22.5,type:'PERSONAL',title:'Rutina personal',detail:'Interdiario'}),
@@ -374,13 +372,13 @@ B({day:6,s:10,e:12,type:'1MEC02',title:'1MEC02 — Laboratorio',detail:'Soporte 
 B({day:6,s:12,e:13,type:'PERSONAL',title:'Compras semanales',detail:'Supermercado cerca de la universidad',fixed:true}),
 T(6,13,14,'Traslado a casa'),
 B({day:6,s:14,e:15,type:'COMIDA',title:'Almuerzo (tarde)'}),
-BQ(6,15,16.35,'1MEC02','BAPEC 1MEC02',0,1,'Soporte inclinado — vistas y secciones (mano alzada + AutoCAD)',
-  {tipo:'Nivel A (Sección 5, sem.1)',nivel:'A — fijo por Paideia',ventana:'Hoy, recién salido del lab',tiempo:'80 min real (Pb1)',razon:'1MEC02 no compite en IPHS — sigue su propio ritmo fijo para no agotar su banco de 56 ítems'}),
+BQ(6,15,16.35,'1MEC02','BAPEC 1MEC02',0,1,'Soporte fundido / Guía / Placa extremo — Actividad 3.1/3.2/3.3',
+  {tipo:'Nivel A (Sección 5, sem.3)',nivel:'A — fijo por Paideia',ventana:'Hoy, recién salido del lab',tiempo:'80 min real (Pb1, estimado igual que Sem.1)',razon:'1MEC02 no compite en IPHS — sigue su propio ritmo fijo'}),
 B({day:6,s:16.5,e:18.5,type:'PERSONAL',title:'Rutina personal',detail:'2h, interdiario'}),
 B({day:6,s:18.5,e:19.5,type:'PERSONAL',title:'Cuidado personal (semanal)',detail:'+1h, bloque semanal adicional'}),
 B({day:6,s:19.5,e:20,type:'COMIDA',title:'Snack PM'}),
-BQ(6,20,22,'ING225','BAPEC RM1 — Clase 2',46,50,'4 preguntas — cierra las 50 de la semana (todas las de Clase 2, 46-50)',
-  {tipo:'PC/1E mixto',nivel:'Medio',ventana:'1 sem. hasta PC2',tiempo:'29 min/preg',razon:'Último bloque disponible de la semana'}),
+BQ(6,20,22,'MAT241','BAPEC MAT241',20,24,'4 preguntas — cierra las 24 de la semana (100% de lo disponible)',
+  {tipo:'PC1',nivel:'Medio',ventana:'1 sem. hasta PC1',tiempo:'28 min/preg',razon:'Último bloque disponible de la semana'}),
 B({day:6,s:22,e:23,type:'COMIDA',title:'Cena'})
 ];
 

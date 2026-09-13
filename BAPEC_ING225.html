@@ -1,4 +1,3 @@
-<script src="https://accounts.google.com/gsi/client"></script>
 <style>
   :root {
     --paper: #F7F3EA;
@@ -195,15 +194,6 @@
     .legend-section { grid-template-columns: 1fr; }
     .bapec-masthead-right { text-align: left; }
   }
-
-  .sync-bar{display:flex;align-items:center;gap:12px;background:var(--paper-raised);border:1px solid var(--line);border-radius:6px;padding:10px 16px;margin-bottom:16px;flex-wrap:wrap}
-  .sync-dot{width:9px;height:9px;border-radius:50%;background:var(--slate);flex-shrink:0}
-  .sync-dot.ok{background:var(--confirm)}
-  .sync-dot.err{background:#8A2B2B}
-  .sync-text{font-size:12.5px;color:var(--slate);flex:1}
-  .sync-text strong{color:var(--ink)}
-  .sync-btn{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:5px;cursor:pointer;border:1.5px solid var(--navy-deep);color:var(--navy-deep);background:transparent}
-  .sync-btn:hover{background:var(--navy-soft)}
 </style>
 
 <div class="bapec-root">
@@ -220,12 +210,6 @@
       Ciclos procesados: <strong>2007-1 (parcial), 2007-2 (parcial), 2008-1 (parcial), 2008-2, 2010-1, 2010-2, 2011-2, 2012-1, 2012-2, 2013-1 (parcial), 2014-1 (parcial), 2014-2 (parcial), 2015-1 a 2018-2, 2019-1 a 2024-2, 2025-1, 2025-2, 2026-1 (parcial)</strong><br>
       Preguntas: <strong>581</strong> · 0 pendientes — banco completo según lo disponible hasta la fecha
     </div>
-  </div>
-
-  <div class="sync-bar">
-    <span class="sync-dot" id="syncDot"></span>
-    <span class="sync-text" id="syncText">No conectado — conéctate para cargar tu progreso real y vincularlo con tu horario.</span>
-    <button type="button" class="sync-btn" id="syncBtn">Conectar con Google Drive</button>
   </div>
 
   <div class="info-card">
@@ -313,12 +297,7 @@
 
 <script>
 (function() {
-  // 1) Mismo Client ID que ya usaste en el horario y en BAPEC_1MEC02 (Google Cloud Console)
-  const GOOGLE_CLIENT_ID = '176230481298-pbv52qu67pp82sfjce23ccumabn6ub7o.apps.googleusercontent.com';
-  const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
-  const PROGRESS_FILE_NAME = 'bapec_progreso.json';
-  const PROGRESS_PARENT_FOLDER_ID = '1Wm0X0zD-oVpOCIvHjCB32iAO-7WGpZyX'; // carpeta raíz de tu proyecto en Drive
-  const CURSO = 'ING225';
+  const STORAGE_KEY = 'bapec:ing225:progreso-piloto';
 
   const inventario = [
     { tipo: 'PC1', banco: ['2008-2','2011-2','2012-1','2014-1','2015-1','2016-1','2017-1','2018-2','2019-1','2019-2','2020-1','2020-2','2021-1','2021-2','2022-1','2022-2','2025-1','2025-2'], hecho: ['2021-1','2022-1','2025-1','2025-2','2021-2','2019-2','2019-1','2020-1','2020-2','2016-1','2017-1','2018-2','2015-1','2011-2','2012-1','2014-1','2022-2','2008-2'], ilegible: [] },
@@ -2843,119 +2822,27 @@
     if (el) el.textContent = resueltas + ' / ' + qs.length + ' (' + pctTotal + '%)';
   }
 
-  let driveConnected = false;
-  let gAccessToken = null;
-  let gProgressFileId = null;
-
-  function setSyncStatus(state, text) {
-    const dot = document.getElementById('syncDot');
-    const txt = document.getElementById('syncText');
-    const btn = document.getElementById('syncBtn');
-    if (!dot) return;
-    dot.className = 'sync-dot' + (state === 'ok' ? ' ok' : state === 'err' ? ' err' : '');
-    txt.innerHTML = text;
-    btn.textContent = state === 'ok' ? 'Reconectar' : 'Conectar con Google Drive';
-  }
-
-  async function driveApiFetch(url, opts) {
-    opts = opts || {};
-    opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + gAccessToken });
-    const r = await fetch(url, opts);
-    if (!r.ok) { const t = await r.text(); throw new Error('Drive API ' + r.status + ': ' + t); }
-    return r;
-  }
-
-  async function getOrCreateProgressFile() {
-    const cached = localStorage.getItem('driveProgressFileId');
-    if (cached) { gProgressFileId = cached; return cached; }
-    const q = encodeURIComponent("name='" + PROGRESS_FILE_NAME + "' and '" + PROGRESS_PARENT_FOLDER_ID + "' in parents and trashed=false");
-    const listRes = await driveApiFetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=files(id,name)');
-    const listJson = await listRes.json();
-    if (listJson.files && listJson.files.length) {
-      gProgressFileId = listJson.files[0].id;
-    } else {
-      const metadata = { name: PROGRESS_FILE_NAME, parents: [PROGRESS_PARENT_FOLDER_ID], mimeType: 'application/json' };
-      const initial = JSON.stringify({ ING225: {}, MAT241: {}, MEC257: {}, '1MEC02': {} });
-      const boundary = 'bapecsyncboundary';
-      const body = '--' + boundary + '\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) + '\r\n' +
-        '--' + boundary + '\r\nContent-Type: application/json\r\n\r\n' + initial + '\r\n--' + boundary + '--';
-      const createRes = await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
-        method: 'POST', headers: { 'Content-Type': 'multipart/related; boundary=' + boundary }, body: body
-      });
-      const createJson = await createRes.json();
-      gProgressFileId = createJson.id;
-    }
-    localStorage.setItem('driveProgressFileId', gProgressFileId);
-    return gProgressFileId;
-  }
-
-  async function readAllProgress() {
-    const id = await getOrCreateProgressFile();
-    const r = await driveApiFetch('https://www.googleapis.com/drive/v3/files/' + id + '?alt=media');
-    const text = await r.text();
-    try { const parsed = JSON.parse(text); return Object.assign({ ING225: {}, MAT241: {}, MEC257: {}, '1MEC02': {} }, parsed); }
-    catch (e) { return { ING225: {}, MAT241: {}, MEC257: {}, '1MEC02': {} }; }
-  }
-
-  async function writeAllProgress(data) {
-    const id = await getOrCreateProgressFile();
-    await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files/' + id + '?uploadType=media', {
-      method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
-    });
-  }
-
-  function connectGoogleDrive() {
-    if (GOOGLE_CLIENT_ID.indexOf('PASTE_TU') === 0) {
-      setSyncStatus('err', 'Falta pegar tu <code>GOOGLE_CLIENT_ID</code> en el código.');
-      return;
-    }
-    setSyncStatus('', 'Abriendo ventana de Google…');
-    const tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: GOOGLE_CLIENT_ID,
-      scope: DRIVE_SCOPE,
-      callback: async function(resp) {
-        if (resp.error) { setSyncStatus('err', 'No se pudo conectar: ' + resp.error); return; }
-        gAccessToken = resp.access_token;
-        driveConnected = true;
-        setSyncStatus('', 'Cargando tu progreso real desde Drive…');
-        try {
-          const all = await readAllProgress();
-          progreso = all[CURSO] || {};
-          setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
-          updateDynamicUI();
-        } catch (e) { setSyncStatus('err', 'Conectado, pero falló la lectura: ' + e.message); }
-      }
-    });
-    tokenClient.requestAccessToken({ prompt: '' });
-  }
-
-  let syncBusy = false;
-  let syncQueued = false;
-  async function syncProgreso() {
-    if (syncBusy) { syncQueued = true; return; }
-    syncBusy = true;
-    setSyncStatus('', 'Guardando…');
+  async function loadProgreso() {
     try {
-      const all = await readAllProgress();
-      all[CURSO] = progreso;
-      await writeAllProgress(all);
-      setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
-    } catch (e) { setSyncStatus('err', 'Se marcó localmente pero no se pudo guardar en Drive: ' + e.message); }
-    syncBusy = false;
-    if (syncQueued) { syncQueued = false; syncProgreso(); }
+      const res = await window.storage.get(STORAGE_KEY);
+      progreso = (res && res.value) ? JSON.parse(res.value) : {};
+    } catch (e) { progreso = {}; }
+    updateDynamicUI();
+  }
+
+  async function saveProgreso() {
+    try { await window.storage.set(STORAGE_KEY, JSON.stringify(progreso)); }
+    catch (e) { console.error('No se pudo guardar el progreso', e); }
   }
 
   function attachHandlers() {
     document.addEventListener('click', function(ev) {
-      const syncBtn = ev.target.closest('#syncBtn');
-      if (syncBtn) { connectGoogleDrive(); return; }
       const btn = ev.target.closest('.solve-pill');
       if (!btn) return;
-      if (!driveConnected) { setSyncStatus('err', 'Conéctate a Google Drive primero (botón de arriba) para que esto se guarde de verdad.'); return; }
       const qid = btn.getAttribute('data-qid');
       progreso[qid] = !progreso[qid];
       updateDynamicUI();
-      syncProgreso();
+      saveProgreso();
     });
   }
 
@@ -2964,6 +2851,6 @@
   renderInventario();
   renderAuditoria();
   attachHandlers();
-  updateDynamicUI();
+  loadProgreso();
 })();
 </script>

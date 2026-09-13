@@ -1,4 +1,3 @@
-<script src="https://accounts.google.com/gsi/client"></script>
 <style>
   :root {
     --paper: #F7F3EA;
@@ -195,15 +194,6 @@
     .legend-section { grid-template-columns: 1fr; }
     .bapec-masthead-right { text-align: left; }
   }
-
-  .sync-bar{display:flex;align-items:center;gap:12px;background:var(--paper-raised);border:1px solid var(--line);border-radius:6px;padding:10px 16px;margin-bottom:16px;flex-wrap:wrap}
-  .sync-dot{width:9px;height:9px;border-radius:50%;background:var(--slate);flex-shrink:0}
-  .sync-dot.ok{background:var(--confirm)}
-  .sync-dot.err{background:#8A2B2B}
-  .sync-text{font-size:12.5px;color:var(--slate);flex:1}
-  .sync-text strong{color:var(--ink)}
-  .sync-btn{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:5px;cursor:pointer;border:1.5px solid var(--navy-deep);color:var(--navy-deep);background:transparent}
-  .sync-btn:hover{background:var(--navy-soft)}
 </style>
 <div class="bapec-root">
 <div class="bapec-sheet">
@@ -219,12 +209,6 @@
       Ciclos procesados: <strong>2012-1 a 2025-1 (parcial)</strong><br>
       Metodolog&iacute;a: <strong>id&eacute;ntica a BAPEC ING225 / MAT241</strong>
     </div>
-  </div>
-
-  <div class="sync-bar">
-    <span class="sync-dot" id="syncDot"></span>
-    <span class="sync-text" id="syncText">No conectado &mdash; con&eacute;ctate para cargar tu progreso real y vincularlo con tu horario.</span>
-    <button type="button" class="sync-btn" id="syncBtn">Conectar con Google Drive</button>
   </div>
 
   <div class="info-card">
@@ -294,12 +278,7 @@
 </div>
 <script>
 (function() {
-  // Mismo Client ID que en el horario, BAPEC_1MEC02, BAPEC_ING225 y BAPEC_MAT241
-  const GOOGLE_CLIENT_ID = '176230481298-pbv52qu67pp82sfjce23ccumabn6ub7o.apps.googleusercontent.com';
-  const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
-  const PROGRESS_FILE_NAME = 'bapec_progreso.json';
-  const PROGRESS_PARENT_FOLDER_ID = '1Wm0X0zD-oVpOCIvHjCB32iAO-7WGpZyX';
-  const CURSO = 'MEC257';
+  const STORAGE_KEY = 'bapec:mec257:progreso-piloto';
   const inventario = [
     { tipo: 'EX1', banco: ['2012-1','2013-1','2013-2','2014-1','2014-2','2015-1','2015-2','2016-1','2017-1','2017-2','2018-2','2019-2','2020-1','2020-2','2021-2','2023-2','2024-2','2025-1'], hecho: ['2012-1','2013-1','2013-2','2014-1','2014-2','2015-1','2015-2','2016-1','2017-1','2017-2','2018-2','2019-2','2020-1','2020-2','2021-2','2023-2','2024-2','2025-1'], ilegible: [] },
     { tipo: 'EX2', banco: ['2012-1','2013-1','2013-2','2014-1','2014-2','2015-1','2015-2','2016-1','2017-1','2017-2','2018-2','2019-2','2020-1','2021-2','2023-2','2024-2','2025-1','2025-2'], hecho: ['2012-1','2013-1','2013-2','2014-1','2014-2','2015-1','2015-2','2016-1','2017-1','2017-2','2018-2','2019-2','2020-1','2021-2','2023-2','2024-2','2025-1','2025-2'], ilegible: [] },
@@ -375,6 +354,7 @@
     { tag: 'sesion', codigo: 'Revision extendida a EX2/EX4 de 2021-2 y a EX3 de 2023-2025: 6 preguntas nuevas mas recuperadas', motivo: 'EX2-2021-2 (47 pag., solo se tenia P4): se encontro exportacion completa de Paideia -- se recuperaron P1 (END, 9 items), P2 (enlaces K/Cl+tabla 5 materiales) y P3 (control de propiedades via microestructura+cristalografia). IMPORTANTE: al escribir P1/P2 se detecto que colisionaban con variables ya existentes (ex2_2021_2_p1/p2 ya habian sido renombradas en la sesion anterior desde el archivo "2021-1" mal catalogado, con contenido identico) -- se elimino la declaracion duplicada, quedando solo P3 como genuinamente nueva. EX4-2021-2 (17 pag., solo se tenia P1 via snippet): se descargo y verifico el PDF completo -- P1 coincidio exactamente con lo ya banqueado, y se encontraron ademas P2 (4 puntos, comparacion AISI-SAE 1045 vs 1095) y P3 (6 puntos, primer problema de diseño de tratamiento termico de ablandamiento post-laminacion en frio con lectura de grafico real de propiedades vs. %reduccion, en el banco). EX3-2023-2 y EX3-2024-2 (11 pag. cada uno): se revisaron las paginas restantes -- EX3-2023-2 tenia una Pregunta 4 completa (mismo sistema hipotetico A-B) que no se habia capturado; EX3-2024-2 confirmo que su cobertura ya era completa (P2/P3 siguen siendo Paideia-only genuinamente sin captura). EX3-2025-1 (25 pag., la mas grande de las revisadas parcialmente): tenia una exportacion completa de Paideia para Pregunta 2 (30 proposiciones, cedencia superior/inferior + regla de la palanca en el sistema hipotetico A-B).', accion: 'Con esto, el patron de "revisar paginas no exploradas" quedo aplicado a todos los archivos grandes de 2020-2021 y a los tres ciclos de EX3 de 2023-2025 ya en el banco. Pendiente, si Jorge lo solicita: aplicar la misma revision a EX1/EX2/EX4 de 2023-2025 (2023-2, 2024-2, 2025-1, 2025-2), que aun se banquearon principalmente desde fragmentos de busqueda sin descarga completa del PDF.' },
     { tag: 'sesion', codigo: 'Extension final de la revision a EX1/EX2/EX4 de 2023-2025: solo EX1-2025-1 tenia capturas ocultas, el resto confirmado sin contenido adicional', motivo: 'Se verifico sistematicamente el tamano/paginas reales de los archivos restantes antes de descargar completo, como heuristica de priorizacion: EX1-2023-2 (9 pag.), EX2-2023-2 (3 pag.), EX2-2024-2 (3 pag. via snippet) confirmaron ser documentos limpios (enunciado+Parte2 en papel) sin capturas de Paideia embebidas -- coinciden con lo ya banqueado. EX4-2025-2 (10,5 MB) excede el limite de descarga directa de 10 MB, igual que EX2-2013-2; se uso el fragmento de busqueda -mas extenso que el disponible antes- para refinar la Pregunta 1 ya banqueada, corrigiendo valores del ASTM A36 propios de este ciclo (limite de fluencia >=220 MPa en vez de >=250, resistencia maxima 450-550 en vez de 400-550, ductilidad >=25% en vez de >20%) -- variante real detectada, no error. EX1-2025-1 (36 pag., contrario a la heuristica de tamano) SI tenia una exportacion completa de Paideia para las 4 preguntas Paideia-only (P1 a P4) que se creian inaccesibles -- se recuperaron completas, incluyendo un detalle normativo de valor: la Pregunta 4 confirma que el organismo peruano actual de normas de ensayo es INACAL (ya no ITINTEC ni INDECOPI, vistos en ciclos mas antiguos del banco) y un problema nuevo de tipo "transferencia de curva carga-alargamiento entre dos probetas de distintas dimensiones del mismo material" no visto antes en el banco.', accion: 'Con esta ultima verificacion, la revision "pagina por pagina, no solo fragmento de busqueda" solicitada por Jorge queda aplicada a la totalidad de archivos grandes o de tamano ambiguo del banco (2020-2025, los 4 tipos de examen). El pendiente de EX2-2013-2 y EX4-2025-2 (>10MB, requieren que Jorge los suba directamente) sigue siendo el unico hueco de acceso restante conocido.' },
     { tag: 'sesion', codigo: 'Jorge subio directamente ambos archivos bloqueados por tamano: EX2-2013-2 y EX4-2025-2 quedan completos (248 -> preguntas nuevas). El inventario original de 71 combinaciones queda 100% cerrado.', motivo: 'EX2-2013-2 (pendiente desde el inicio del proyecto, bloqueado por 19MB en Drive): 5 preguntas completas -- P1 (END, 6 items, identica en formato a EX2-12.1-P1, una de las versiones mas tempranas de esta bateria recurrente), P2 (23 items: bloque F-Mg config. electronica/MgF2, y el mismo "resumen incorrecto" ceramicos/metales/polimeros de EX2-12.1-P2b pero en formato V/F en vez de reescritura abierta), P3 (27 items, cristalografia general + dislocaciones, bateria muy recurrente, version temprana y completa), P4 (Charpy %Si, misma tabla recurrente vista en EX1-18.2-P1 y otros, aqui en formato de pregunta abierta), P5 (construccion celda NaCl con radios ionicos explicitos, identica a EX2-21.2-P4, aparicion mas temprana registrada en el banco de este problema). EX4-2025-2 (bloqueado por 10,5MB): se completo el Tema 3 de la Pregunta 1 (items 5-15, antes cortados en el fragmento de busqueda) y se agregaron dos preguntas enteras nunca antes capturadas -- Pregunta 2 (identificar 4 aceros AISI-SAE de %C creciente a partir de sus curvas de traccion, primera aparicion de este formato con 4 alternativas en el banco) y Pregunta 3 (diseno completo de tratamiento termico en 6 variables para un eje AISI-SAE 1060, con inciso adicional de rediseno para un objetivo de propiedad distinto). Se detecto tambien una inconsistencia interna real del propio examen EX4-2025-2: los valores del ASTM A36 en la Pregunta 1/Tema1 (>=220MPa) no coinciden con los usados en la Pregunta 2.2 del mismo examen (>=250MPa) -- se documento como hallazgo, no se corrigio ninguno de los dos ya que ambos son fieles al documento original.', accion: 'Con esto, las 71 combinaciones tipo/ciclo del inventario original de Drive quedan completas en el banco (documentadas con brechas especificas donde corresponde -Paideia sin exportar, principalmente-, nunca con contenido inventado). El proyecto BAPEC_MEC257 alcanza su cobertura maxima posible con todas las fuentes ahora disponibles. Quedan como pendientes opcionales, no bloqueantes: las brechas Paideia-only sin exportacion ya documentadas en cada ciclo especifico, y la inconsistencia del ASTM A36 en EX4-2025-2 si Jorge desea investigarla con el profesor.' },
+    { tag: 'tecnico', codigo: 'Correccion: feriado jueves 8 de octubre (semana 8) reflejado en BAPEC, verificado sin impacto en Ppee', motivo: 'Jorge senalo que la Programacion Semanal de MEC257 2026-2 se corrigio por un feriado el jueves 8 de octubre y que esto podria afectar BAPEC y/o Ppee. Se verifico la Programacion Semanal actualizada: el jueves 8/10 (semana 8) queda sin clase presencial por feriado ya contemplado en el calendario de la Facultad; el contenido (Endurecimiento por deformacion y Recristalizacion, parte de Cap. 4) sigue avanzando dentro de la programacion normal, y Cap. 4 se mantiene "completo -- 10h" igual que antes de la correccion. En BAPEC_MEC257, la fila "Clase 2" de la semana 8 seguia etiquetada como clase normal, sin ninguna marca de feriado -- desactualizada respecto a la Programacion Semanal ya corregida. Se corrigio esa fila (tipo, tag "feriado" y contenido) para reflejarlo; la pregunta ya asociada (ex3_2012_1_p1) se mantuvo sin cambios, porque el contenido/capitulo al que pertenece no cambio.', accion: 'Ppee_MEC257 NO requirio ningun cambio numerico: su formula agrupa las preguntas del banco por el o los capitulos activos cada semana (ver formula en el propio Ppee), no por dia ni por hora de contacto -- y el capitulo activo de la semana 8 sigue siendo unicamente Cap. 4, exactamente igual que antes de la correccion del feriado. El feriado no mueve ninguna pregunta entre capitulos ni semanas, asi que n, difPond, propInteg, nCap, puntajeTot, compuesto y el T-score de la semana 8 (44.0) quedan igual. Se agrego una nota en Ppee_MEC257 documentando esta verificacion explicitamente, para que quede registrado que se revisó y no que se paso por alto. Si en el futuro se implementa la señal de "horas de contacto" que el propio Ppee_MEC257 ya lista como pendiente, este feriado si pasaria a tener peso real en el calculo -- con la formula actual, no lo tiene.' },
   ];
 
   function renderAuditoria() {
@@ -1754,7 +1734,7 @@
     ]},
     { num: 8, dates: '5–10 Oct', rows: [
       { tipo: 'Clase 1', contenido: 'Resistencia real de los metales.', preguntas: [] },
-      { tipo: 'Clase 2', contenido: 'Endurecimiento por deformación. Recristalización de los metales. (Cap. 4 completo — 10h)', preguntas: [ex3_2012_1_p1] },
+      { tipo: 'Jueves 08/10 · Sin clase', tagTxt: 'feriado', contenido: 'Feriado — la Facultad ya lo contempla en el calendario académico 2026-2; no hay clase presencial este jueves. Endurecimiento por deformación y Recristalización de los metales avanza dentro de la programación normal, sin necesitar una sesión presencial ese día (Cap. 4 completo — 10h).', preguntas: [ex3_2012_1_p1] },
       { tipo: 'Examen 2', tagTxt: 'martes 6 oct · Nota Única', esPractica: true, contenido: 'Ensayos no destructivos (cierre Cap. 2) ▪ Estructura de los materiales completo: enlaces, tipos de materiales, estructuras cristalinas (contenido interpolado del patrón histórico — verificar al extraer).', preguntas: [] },
     ]},
     { num: 10, dates: '19–24 Oct', rows: [
@@ -1911,119 +1891,27 @@
     if (el) el.textContent = resueltas + ' / ' + qs.length + ' (' + pctTotal + '%)';
   }
 
-  let driveConnected = false;
-  let gAccessToken = null;
-  let gProgressFileId = null;
-
-  function setSyncStatus(state, text) {
-    const dot = document.getElementById('syncDot');
-    const txt = document.getElementById('syncText');
-    const btn = document.getElementById('syncBtn');
-    if (!dot) return;
-    dot.className = 'sync-dot' + (state === 'ok' ? ' ok' : state === 'err' ? ' err' : '');
-    txt.innerHTML = text;
-    btn.textContent = state === 'ok' ? 'Reconectar' : 'Conectar con Google Drive';
-  }
-
-  async function driveApiFetch(url, opts) {
-    opts = opts || {};
-    opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + gAccessToken });
-    const r = await fetch(url, opts);
-    if (!r.ok) { const t = await r.text(); throw new Error('Drive API ' + r.status + ': ' + t); }
-    return r;
-  }
-
-  async function getOrCreateProgressFile() {
-    const cached = localStorage.getItem('driveProgressFileId');
-    if (cached) { gProgressFileId = cached; return cached; }
-    const q = encodeURIComponent("name='" + PROGRESS_FILE_NAME + "' and '" + PROGRESS_PARENT_FOLDER_ID + "' in parents and trashed=false");
-    const listRes = await driveApiFetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=files(id,name)');
-    const listJson = await listRes.json();
-    if (listJson.files && listJson.files.length) {
-      gProgressFileId = listJson.files[0].id;
-    } else {
-      const metadata = { name: PROGRESS_FILE_NAME, parents: [PROGRESS_PARENT_FOLDER_ID], mimeType: 'application/json' };
-      const initial = JSON.stringify({ ING225: {}, MAT241: {}, MEC257: {}, '1MEC02': {} });
-      const boundary = 'bapecsyncboundary';
-      const body = '--' + boundary + '\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) + '\r\n' +
-        '--' + boundary + '\r\nContent-Type: application/json\r\n\r\n' + initial + '\r\n--' + boundary + '--';
-      const createRes = await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
-        method: 'POST', headers: { 'Content-Type': 'multipart/related; boundary=' + boundary }, body: body
-      });
-      const createJson = await createRes.json();
-      gProgressFileId = createJson.id;
-    }
-    localStorage.setItem('driveProgressFileId', gProgressFileId);
-    return gProgressFileId;
-  }
-
-  async function readAllProgress() {
-    const id = await getOrCreateProgressFile();
-    const r = await driveApiFetch('https://www.googleapis.com/drive/v3/files/' + id + '?alt=media');
-    const text = await r.text();
-    try { const parsed = JSON.parse(text); return Object.assign({ ING225: {}, MAT241: {}, MEC257: {}, '1MEC02': {} }, parsed); }
-    catch (e) { return { ING225: {}, MAT241: {}, MEC257: {}, '1MEC02': {} }; }
-  }
-
-  async function writeAllProgress(data) {
-    const id = await getOrCreateProgressFile();
-    await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files/' + id + '?uploadType=media', {
-      method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
-    });
-  }
-
-  function connectGoogleDrive() {
-    if (GOOGLE_CLIENT_ID.indexOf('PASTE_TU') === 0) {
-      setSyncStatus('err', 'Falta pegar tu <code>GOOGLE_CLIENT_ID</code> en el código.');
-      return;
-    }
-    setSyncStatus('', 'Abriendo ventana de Google…');
-    const tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: GOOGLE_CLIENT_ID,
-      scope: DRIVE_SCOPE,
-      callback: async function(resp) {
-        if (resp.error) { setSyncStatus('err', 'No se pudo conectar: ' + resp.error); return; }
-        gAccessToken = resp.access_token;
-        driveConnected = true;
-        setSyncStatus('', 'Cargando tu progreso real desde Drive…');
-        try {
-          const all = await readAllProgress();
-          progreso = all[CURSO] || {};
-          setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
-          updateDynamicUI();
-        } catch (e) { setSyncStatus('err', 'Conectado, pero falló la lectura: ' + e.message); }
-      }
-    });
-    tokenClient.requestAccessToken({ prompt: '' });
-  }
-
-  let syncBusy = false;
-  let syncQueued = false;
-  async function syncProgreso() {
-    if (syncBusy) { syncQueued = true; return; }
-    syncBusy = true;
-    setSyncStatus('', 'Guardando…');
+  async function loadProgreso() {
     try {
-      const all = await readAllProgress();
-      all[CURSO] = progreso;
-      await writeAllProgress(all);
-      setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
-    } catch (e) { setSyncStatus('err', 'Se marcó localmente pero no se pudo guardar en Drive: ' + e.message); }
-    syncBusy = false;
-    if (syncQueued) { syncQueued = false; syncProgreso(); }
+      const res = await window.storage.get(STORAGE_KEY);
+      progreso = (res && res.value) ? JSON.parse(res.value) : {};
+    } catch (e) { progreso = {}; }
+    updateDynamicUI();
+  }
+
+  async function saveProgreso() {
+    try { await window.storage.set(STORAGE_KEY, JSON.stringify(progreso)); }
+    catch (e) { console.error('No se pudo guardar el progreso', e); }
   }
 
   function attachHandlers() {
     document.addEventListener('click', function(ev) {
-      const syncBtn = ev.target.closest('#syncBtn');
-      if (syncBtn) { connectGoogleDrive(); return; }
       const btn = ev.target.closest('.solve-pill');
       if (!btn) return;
-      if (!driveConnected) { setSyncStatus('err', 'Conéctate a Google Drive primero (botón de arriba) para que esto se guarde de verdad.'); return; }
       const qid = btn.getAttribute('data-qid');
       progreso[qid] = !progreso[qid];
       updateDynamicUI();
-      syncProgreso();
+      saveProgreso();
     });
   }
 
@@ -2032,6 +1920,6 @@
   renderInventario();
   renderAuditoria();
   attachHandlers();
-  updateDynamicUI();
+  loadProgreso();
 })();
 </script>
