@@ -297,7 +297,6 @@
 
 <script>
 (function() {
-  const STORAGE_KEY = 'bapec:ing225:progreso-piloto';
 
   const inventario = [
     { tipo: 'PC1', banco: ['2008-2','2011-2','2012-1','2014-1','2015-1','2016-1','2017-1','2018-2','2019-1','2019-2','2020-1','2020-2','2021-1','2021-2','2022-1','2022-2','2025-1','2025-2'], hecho: ['2021-1','2022-1','2025-1','2025-2','2021-2','2019-2','2019-1','2020-1','2020-2','2016-1','2017-1','2018-2','2015-1','2011-2','2012-1','2014-1','2022-2','2008-2'], ilegible: [] },
@@ -2700,7 +2699,114 @@
     ]},
   ];
 
-  let progreso = {};
+const GOOGLE_CLIENT_ID = '176230481298-pbv52qu67pp82sfjce23ccumabn6ub7o.apps.googleusercontent.com';
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
+const PROGRESS_FILE_NAME = 'bapec_progreso.json';
+const PROGRESS_PARENT_FOLDER_ID = '1Wm0X0zD-oVpOCIvHjCB32iAO-7WGpZyX';
+const CURSO = 'ING225';
+
+let progreso = { ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} };
+let driveConnected = false;
+let gTokenClient = null;
+let gAccessToken = null;
+let gProgressFileId = null;
+let syncBusy = false;
+
+function setSyncStatus(state, text) {
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncText');
+  const btn = document.getElementById('syncBtn');
+  if (!dot) return;
+  dot.className = 'sync-dot' + (state === 'ok' ? ' ok' : state === 'err' ? ' err' : '');
+  txt.innerHTML = text;
+  btn.textContent = state === 'ok' ? 'Reconectar' : 'Conectar con Google Drive';
+  btn.disabled = false;
+}
+
+async function driveApiFetch(url, opts) {
+  opts = opts || {};
+  opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + gAccessToken });
+  const r = await fetch(url, opts);
+  if (!r.ok) { const t = await r.text(); throw new Error('Drive API ' + r.status + ': ' + t); }
+  return r;
+}
+
+async function getOrCreateProgressFile() {
+  const cached = localStorage.getItem('driveProgressFileId');
+  if (cached) { gProgressFileId = cached; return cached; }
+  const q = encodeURIComponent("name='" + PROGRESS_FILE_NAME + "' and '" + PROGRESS_PARENT_FOLDER_ID + "' in parents and trashed=false");
+  const listRes = await driveApiFetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=files(id,name)');
+  const listJson = await listRes.json();
+  if (listJson.files && listJson.files.length) {
+    gProgressFileId = listJson.files[0].id;
+  } else {
+    const metadata = { name: PROGRESS_FILE_NAME, parents: [PROGRESS_PARENT_FOLDER_ID], mimeType: 'application/json' };
+    const initial = JSON.stringify({ ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} });
+    const boundary = 'bapecsyncboundary';
+    const body = '--' + boundary + '\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) + '\r\n' +
+      '--' + boundary + '\r\nContent-Type: application/json\r\n\r\n' + initial + '\r\n--' + boundary + '--';
+    const createRes = await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
+      method: 'POST', headers: { 'Content-Type': 'multipart/related; boundary=' + boundary }, body: body
+    });
+    const createJson = await createRes.json();
+    gProgressFileId = createJson.id;
+  }
+  localStorage.setItem('driveProgressFileId', gProgressFileId);
+  return gProgressFileId;
+}
+
+async function readProgressFromDrive() {
+  const id = await getOrCreateProgressFile();
+  const r = await driveApiFetch('https://www.googleapis.com/drive/v3/files/' + id + '?alt=media');
+  const text = await r.text();
+  try { const parsed = JSON.parse(text); return Object.assign({ ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} }, parsed); }
+  catch (e) { return { ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} }; }
+}
+
+async function writeProgressToDrive(data) {
+  const id = await getOrCreateProgressFile();
+  await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files/' + id + '?uploadType=media', {
+    method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
+  });
+}
+
+function connectGoogleDrive() {
+  setSyncStatus('', 'Abriendo ventana de Google…');
+  gTokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: GOOGLE_CLIENT_ID,
+    scope: DRIVE_SCOPE,
+    callback: async function(resp) {
+      if (resp.error) { setSyncStatus('err', 'No se pudo conectar: ' + resp.error); return; }
+      gAccessToken = resp.access_token;
+      driveConnected = true;
+      setSyncStatus('', 'Cargando tu progreso real desde Drive…');
+      try {
+        progreso = await readProgressFromDrive();
+        setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
+        renderAll();
+      } catch (e) { setSyncStatus('err', 'Conectado, pero falló la lectura: ' + e.message); }
+    }
+  });
+  gTokenClient.requestAccessToken({ prompt: '' });
+}
+
+async function syncProgreso() {
+  if (syncBusy) return;
+  syncBusy = true;
+  setSyncStatus('', 'Guardando…');
+  try {
+    const latest = await readProgressFromDrive();
+    latest[CURSO] = progreso[CURSO];
+    progreso = latest;
+    await writeProgressToDrive(progreso);
+    setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
+  } catch (e) {
+    setSyncStatus('err', 'Se marcó localmente pero no se pudo guardar en Drive: ' + e.message);
+  }
+  syncBusy = false;
+  renderAll();
+}
+
 
   function allQuestions() {
     const out = [];
@@ -2713,7 +2819,7 @@
 
   function counterText(preguntas) {
     const total = preguntas.length;
-    const resueltas = preguntas.filter(function(q) { return !!progreso[q.id]; }).length;
+    const resueltas = preguntas.filter(function(q) { return !!(progreso[CURSO] && progreso[CURSO][q.id]); }).length;
     const pct = total ? Math.round((resueltas / total) * 100) : 0;
     return resueltas + '/' + total + ' (' + pct + '%)';
   }
@@ -2810,29 +2916,16 @@
         const badge = document.querySelector('[data-row-counter="' + rk + '"]');
         if (!badge) return;
         badge.textContent = counterText(row.preguntas);
-        const resueltasRow = row.preguntas.filter(function(q) { return !!progreso[q.id]; }).length;
+        const resueltasRow = row.preguntas.filter(function(q) { return !!(progreso[CURSO] && progreso[CURSO][q.id]); }).length;
         badge.classList.toggle('complete', resueltasRow === row.preguntas.length);
       });
     });
 
     const qs = allQuestions();
-    const resueltas = qs.filter(function(q) { return progreso[q.id]; }).length;
+    const resueltas = qs.filter(function(q) { return (progreso[CURSO] && progreso[CURSO][q.id]); }).length;
     const pctTotal = qs.length ? Math.round((resueltas / qs.length) * 100) : 0;
     const el = document.getElementById('resumen-resueltas');
     if (el) el.textContent = resueltas + ' / ' + qs.length + ' (' + pctTotal + '%)';
-  }
-
-  async function loadProgreso() {
-    try {
-      const res = await window.storage.get(STORAGE_KEY);
-      progreso = (res && res.value) ? JSON.parse(res.value) : {};
-    } catch (e) { progreso = {}; }
-    updateDynamicUI();
-  }
-
-  async function saveProgreso() {
-    try { await window.storage.set(STORAGE_KEY, JSON.stringify(progreso)); }
-    catch (e) { console.error('No se pudo guardar el progreso', e); }
   }
 
   function attachHandlers() {
@@ -2840,9 +2933,11 @@
       const btn = ev.target.closest('.solve-pill');
       if (!btn) return;
       const qid = btn.getAttribute('data-qid');
-      progreso[qid] = !progreso[qid];
+      if (!driveConnected) { setSyncStatus('err', 'Conéctate a Google Drive primero (botón de arriba) — si no, esta marca no se guarda.'); return; }
+      if (!progreso[CURSO]) progreso[CURSO] = {};
+      progreso[CURSO][qid] = !progreso[CURSO][qid];
       updateDynamicUI();
-      saveProgreso();
+      syncProgreso();
     });
   }
 
@@ -2851,6 +2946,6 @@
   renderInventario();
   renderAuditoria();
   attachHandlers();
-  loadProgreso();
+  updateDynamicUI();
 })();
 </script>
