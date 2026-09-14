@@ -6,35 +6,102 @@
 <title>Proyecto Horario</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-  :root{ --paper:#F7F3EA; --navy-deep:#042354; --navy-mid:#123A6B; --slate:#5B6472; --line:#D8D0C0; }
+  :root{ --paper:#F7F3EA; --navy-deep:#042354; --navy-mid:#123A6B; --slate:#5B6472; --line:#D8D0C0; --err:#8A2B2B; }
   *{box-sizing:border-box}
   body{margin:0;background:var(--paper);color:#1E2430;font-family:'IBM Plex Sans',sans-serif;padding:60px 20px}
   .wrap{max-width:600px;margin:0 auto}
   .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate)}
   h1{font-family:'IBM Plex Serif',serif;color:var(--navy-deep);font-size:28px;margin:6px 0 28px}
+  h2{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);margin:24px 0 10px;font-weight:500}
   ul{list-style:none;margin:0;padding:0}
   li{margin-bottom:12px}
   a{display:block;padding:16px 20px;background:#fff;border:1px solid var(--line);border-left:4px solid var(--navy-deep);border-radius:6px;text-decoration:none;color:var(--navy-deep);font-weight:600;font-size:15.5px;transition:border-color .15s,background .15s}
   a:hover{background:var(--paper);border-left-color:var(--navy-mid)}
   .sub{display:block;font-weight:400;font-size:12.5px;color:var(--slate);margin-top:3px}
   .note{margin-top:32px;font-size:12px;color:var(--slate);text-align:center}
+  .status{font-size:12.5px;color:var(--slate);text-align:center;padding:20px}
+  .status.err{color:var(--err)}
+  .retry{display:inline-block;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:5px;cursor:pointer;border:1.5px solid var(--err);color:var(--err);background:transparent}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="eyebrow">Ingeniería Mecánica PUCP · Término 1 2026-2</div>
   <h1>Proyecto Horario</h1>
-  <ul>
-    <li><a href="Horario_Semana1_Avanzado.html">Horario Semana 1<span class="sub">Calendario, Lista y Métricas — sincronizado con Drive</span></a></li>
-    <li><a href="Horario_Semana2_Avanzado.html">Horario Semana 2<span class="sub">Calendario, Lista y Métricas — sincronizado con Drive</span></a></li>
-    <li><a href="Horario_Semana3_Avanzado.html">Horario Semana 3<span class="sub">Calendario, Lista y Métricas — sincronizado con Drive</span></a></li>
-    <li><a href="Horario_Semana4_Avanzado.html">Horario Semana 4<span class="sub">Calendario, Lista y Métricas — sincronizado con Drive</span></a></li>
-    <li><a href="BAPEC_1MEC02.html">BAPEC 1MEC02<span class="sub">Catálogo de práctica — Dibujo Mecánico 1 · vinculado</span></a></li>
-    <li><a href="BAPEC_ING225.html">BAPEC ING225<span class="sub">582 preguntas — Resistencia de Materiales 1 · vinculado</span></a></li>
-    <li><a href="BAPEC_MAT241.html">BAPEC MAT241<span class="sub">455 preguntas — Métodos Numéricos · vinculado</span></a></li>
-    <li><a href="BAPEC_MEC257.html">BAPEC MEC257<span class="sub">Ingeniería de Materiales 1 · vinculado</span></a></li>
-  </ul>
-  <div class="note">Índice actualizado manualmente — agrega el enlace cuando subas un archivo nuevo.</div>
+  <div id="content"><div class="status" id="statusMsg">Cargando lista de archivos desde GitHub…</div></div>
+  <div class="note">Esta lista se genera sola cada vez que abres la página — consulta directamente tu repositorio, no hace falta editarla nunca.</div>
 </div>
+<script>
+const REPO = 'JorgeVillon/Proyecto-Horario';
+const DESCRIPCIONES = {
+  '1mec02': 'Catálogo de práctica — Dibujo Mecánico 1 · vinculado',
+  'ing225': 'Resistencia de Materiales 1 · vinculado',
+  'mat241': 'Métodos Numéricos · vinculado',
+  'mec257': 'Ingeniería de Materiales 1 · vinculado'
+};
+
+function cursoDeArchivoBapec(name){
+  const m = name.match(/^BAPEC_([A-Za-z0-9]+)\.html$/i);
+  return m ? m[1].toLowerCase() : null;
+}
+function semanaDeArchivo(name){
+  const m = name.match(/^Horario_Semana(\d+)_Avanzado\.html$/i);
+  return m ? parseInt(m[1], 10) : null;
+}
+
+async function cargar(){
+  const statusEl = document.getElementById('statusMsg');
+  const contentEl = document.getElementById('content');
+  try {
+    const res = await fetch('https://api.github.com/repos/' + REPO + '/contents/');
+    if (!res.ok) {
+      const body = await res.json().catch(function(){ return {}; });
+      throw new Error(body.message || ('HTTP ' + res.status));
+    }
+    const files = await res.json();
+    if (!Array.isArray(files)) throw new Error('Respuesta inesperada de GitHub');
+
+    const horarios = [];
+    const bapecs = [];
+    files.forEach(function(f){
+      if (f.type !== 'file' || !/\.html$/i.test(f.name) || f.name.toLowerCase() === 'index.html') return;
+      const sem = semanaDeArchivo(f.name);
+      if (sem !== null) { horarios.push({ name: f.name, sem: sem }); return; }
+      const curso = cursoDeArchivoBapec(f.name);
+      if (curso !== null) { bapecs.push({ name: f.name, curso: curso }); return; }
+    });
+    horarios.sort(function(a,b){ return a.sem - b.sem; });
+    bapecs.sort(function(a,b){ return a.curso.localeCompare(b.curso); });
+
+    let html = '';
+    if (horarios.length) {
+      html += '<h2>Horarios semanales</h2><ul>';
+      horarios.forEach(function(h){
+        html += '<li><a href="' + h.name + '">Horario Semana ' + h.sem +
+          '<span class="sub">Calendario, Lista y Métricas — sincronizado con Drive</span></a></li>';
+      });
+      html += '</ul>';
+    }
+    if (bapecs.length) {
+      html += '<h2>Bancos BAPEC</h2><ul>';
+      bapecs.forEach(function(b){
+        const desc = DESCRIPCIONES[b.curso] || 'Banco de práctica · vinculado';
+        html += '<li><a href="' + b.name + '">BAPEC ' + b.curso.toUpperCase() +
+          '<span class="sub">' + desc + '</span></a></li>';
+      });
+      html += '</ul>';
+    }
+    if (!horarios.length && !bapecs.length) {
+      html = '<div class="status">No se encontraron archivos .html reconocidos en el repositorio todavía.</div>';
+    }
+    contentEl.innerHTML = html;
+  } catch (e) {
+    statusEl.className = 'status err';
+    statusEl.innerHTML = 'No se pudo cargar la lista desde GitHub: ' + e.message +
+      '<br><button class="retry" onclick="cargar()">Reintentar</button>';
+  }
+}
+cargar();
+</script>
 </body>
 </html>
