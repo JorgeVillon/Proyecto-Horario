@@ -1090,7 +1090,7 @@
   function updateDynamicUI() {
     document.querySelectorAll('.solve-pill').forEach(function(btn) {
       const qid = btn.getAttribute('data-qid');
-      const solved = !!progreso[qid];
+      const solved = !!(progreso[CURSO] && progreso[CURSO][q.id]);
       btn.classList.toggle('solved', solved);
       btn.textContent = solved ? '✓ Resuelto' : 'Marcar como resuelto';
       const row = btn.closest('tr');
