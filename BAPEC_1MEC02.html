@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script src="https://accounts.google.com/gsi/client"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dibujo Mecánico 1 — BAPEC (Catálogo de práctica)</title>
@@ -397,6 +398,14 @@
     .masthead { flex-direction: column; }
     .masthead-right { text-align: left; }
   }
+  .sync-bar{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 16px;margin-bottom:14px;flex-wrap:wrap}
+  .sync-dot{width:9px;height:9px;border-radius:50%;background:var(--slate);flex-shrink:0}
+  .sync-dot.ok{background:var(--confirm)}
+  .sync-dot.err{background:#8A2B2B}
+  .sync-text{font-size:12.5px;color:var(--slate);flex:1}
+  .sync-btn{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:5px;cursor:pointer;border:1.5px solid var(--navy-deep);color:var(--navy-deep);background:transparent}
+  .sync-btn:hover{background:var(--navy-soft)}
+  .sync-btn:disabled{opacity:.5;cursor:default}
 </style>
 </head>
 <body>
@@ -414,6 +423,12 @@
       Semestre: <strong>2026-2</strong> &nbsp;·&nbsp; Semanas 1–14
     </div>
   </header>
+
+  <div class="sync-bar">
+    <span class="sync-dot" id="syncDot"></span>
+    <span class="sync-text" id="syncText">No conectado — tus marcas se guardan en tu Google Drive, no en este navegador. Conéctate para cargar y guardar tu progreso real.</span>
+    <button class="sync-btn" id="syncBtn">Conectar con Google Drive</button>
+  </div>
 
   <section class="info-card" style="grid-template-columns:repeat(6,1fr)">
     <div class="info-item"><div class="label">Piezas/PCs con enlaces</div><div class="value">28 + 13 sem. + 11 PC</div></div>
@@ -1236,6 +1251,7 @@ async function syncProgreso() {
     syncProgreso();
   });
 
+  document.getElementById('syncBtn').onclick = connectGoogleDrive;
   updateDynamicUI();
 })();
 </script>

@@ -1,3 +1,4 @@
+<script src="https://accounts.google.com/gsi/client"></script>
 <style>
   :root {
     --paper: #F7F3EA;
@@ -194,6 +195,14 @@
     .legend-section { grid-template-columns: 1fr; }
     .bapec-masthead-right { text-align: left; }
   }
+  .sync-bar{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 16px;margin-bottom:14px;flex-wrap:wrap}
+  .sync-dot{width:9px;height:9px;border-radius:50%;background:var(--slate);flex-shrink:0}
+  .sync-dot.ok{background:var(--confirm)}
+  .sync-dot.err{background:#8A2B2B}
+  .sync-text{font-size:12.5px;color:var(--slate);flex:1}
+  .sync-btn{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:5px;cursor:pointer;border:1.5px solid var(--navy-deep);color:var(--navy-deep);background:transparent}
+  .sync-btn:hover{background:var(--navy-soft)}
+  .sync-btn:disabled{opacity:.5;cursor:default}
 </style>
 
 <div class="bapec-root">
@@ -205,7 +214,12 @@
       <h1>BAPEC — Resistencia de Materiales 1</h1>
       <div class="bapec-subtitle">2007-1, 2007-2, 2008-1, 2008-2, 2010-2, 2011-2, 2012-1, 2012-2, 2013-1, 2014-1, 2014-2 (parciales), 2015-1, 2016-1, 2017-1, 2018-2 (ciclos históricos) + 2019 a 2024 (según disponibilidad) + 2025-1/2025-2 completos + Segundo Examen 2026-1</div>
     </div>
-    <div class="bapec-masthead-right">
+    <div class="sync-bar">
+  <span class="sync-dot" id="syncDot"></span>
+  <span class="sync-text" id="syncText">No conectado — tus marcas se guardan en tu Google Drive, no en este navegador. Conéctate para cargar y guardar tu progreso real.</span>
+  <button class="sync-btn" id="syncBtn">Conectar con Google Drive</button>
+</div>
+<div class="bapec-masthead-right">
       Curso: <strong>ING225</strong><br>
       Ciclos procesados: <strong>2007-1 (parcial), 2007-2 (parcial), 2008-1 (parcial), 2008-2, 2010-1, 2010-2, 2011-2, 2012-1, 2012-2, 2013-1 (parcial), 2014-1 (parcial), 2014-2 (parcial), 2015-1 a 2018-2, 2019-1 a 2024-2, 2025-1, 2025-2, 2026-1 (parcial)</strong><br>
       Preguntas: <strong>581</strong> · 0 pendientes — banco completo según lo disponible hasta la fecha
@@ -2945,6 +2959,7 @@ async function syncProgreso() {
   renderTable();
   renderInventario();
   renderAuditoria();
+  document.getElementById('syncBtn').onclick = connectGoogleDrive;
   attachHandlers();
   updateDynamicUI();
 })();

@@ -1,3 +1,4 @@
+<script src="https://accounts.google.com/gsi/client"></script>
 <style>
   :root {
     --paper: #F7F3EA;
@@ -194,6 +195,14 @@
     .legend-section { grid-template-columns: 1fr; }
     .bapec-masthead-right { text-align: left; }
   }
+  .sync-bar{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 16px;margin-bottom:14px;flex-wrap:wrap}
+  .sync-dot{width:9px;height:9px;border-radius:50%;background:var(--slate);flex-shrink:0}
+  .sync-dot.ok{background:var(--confirm)}
+  .sync-dot.err{background:#8A2B2B}
+  .sync-text{font-size:12.5px;color:var(--slate);flex:1}
+  .sync-btn{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:5px;cursor:pointer;border:1.5px solid var(--navy-deep);color:var(--navy-deep);background:transparent}
+  .sync-btn:hover{background:var(--navy-soft)}
+  .sync-btn:disabled{opacity:.5;cursor:default}
 </style>
 <div class="bapec-root">
 <div class="bapec-sheet">
@@ -204,7 +213,12 @@
       <h1>BAPEC &mdash; M&eacute;todos Num&eacute;ricos en Ingenier&iacute;a</h1>
       <div class="bapec-subtitle">2012-1, 2013-1, 2015-1 a 2025-2 (seg&uacute;n disponibilidad) &mdash; ciclos hist&oacute;ricos del banco Drive/ASEIMEC</div>
     </div>
-    <div class="bapec-masthead-right">
+    <div class="sync-bar">
+  <span class="sync-dot" id="syncDot"></span>
+  <span class="sync-text" id="syncText">No conectado — tus marcas se guardan en tu Google Drive, no en este navegador. Conéctate para cargar y guardar tu progreso real.</span>
+  <button class="sync-btn" id="syncBtn">Conectar con Google Drive</button>
+</div>
+<div class="bapec-masthead-right">
       Curso: <strong>MAT241</strong><br>
       Ciclos procesados: <strong>2020-1 completo &middot; 2012-1 parcial (3/10)</strong><br>
       Metodolog&iacute;a: <strong>id&eacute;ntica a BAPEC ING225</strong>
@@ -2971,6 +2985,7 @@ async function syncProgreso() {
   renderTable();
   renderInventario();
   renderAuditoria();
+  document.getElementById('syncBtn').onclick = connectGoogleDrive;
   attachHandlers();
   updateDynamicUI();
 })();
