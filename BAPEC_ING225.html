@@ -2733,7 +2733,7 @@
   }
 
   function questionHtml(q, idx, total) {
-    const solved = !!progreso[q.id];
+    const solved = !!(progreso[CURSO] && progreso[CURSO][q.id]);
     let integradoraHtml = '';
     if (q.integradora) {
       const chips = q.integradora.caps.map(function(n) { return '<span class="cap-chip">Cap. ' + n + '</span>'; }).join('<span class="cap-link">⊕</span>');
@@ -2796,7 +2796,7 @@
   function updateDynamicUI() {
     document.querySelectorAll('.solve-pill').forEach(function(btn) {
       const qid = btn.getAttribute('data-qid');
-      const solved = !!progreso[qid];
+      const solved = !!(progreso[CURSO] && progreso[CURSO][q.id]);
       btn.classList.toggle('solved', solved);
       btn.textContent = solved ? '✓ Resuelta' : 'Marcar como resuelta';
       const card = document.querySelector('[data-qcard="' + qid + '"]');
