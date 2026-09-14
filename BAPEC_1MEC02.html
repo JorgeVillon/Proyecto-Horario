@@ -1170,7 +1170,7 @@ function connectGoogleDrive() {
       try {
         progreso = await readProgressFromDrive();
         setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
-        renderAll();
+        updateDynamicUI();
       } catch (e) { setSyncStatus('err', 'Conectado, pero falló la lectura: ' + e.message); }
     }
   });
@@ -1191,7 +1191,7 @@ async function syncProgreso() {
     setSyncStatus('err', 'Se marcó localmente pero no se pudo guardar en Drive: ' + e.message);
   }
   syncBusy = false;
-  renderAll();
+  updateDynamicUI();
 }
 
 
