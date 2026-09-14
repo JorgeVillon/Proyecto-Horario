@@ -463,17 +463,36 @@ async function writeProgressToDrive(data) {
   });
 }
 
-function connectGoogleDrive() {
-  if (GOOGLE_CLIENT_ID.indexOf('PASTE_TU') === 0) {
-    setSyncStatus('err', 'Falta pegar tu <code>GOOGLE_CLIENT_ID</code> en el código (ver nota de configuración arriba).');
+let pollHandle = null;
+function startPolling() {
+  if (pollHandle) return;
+  pollHandle = setInterval(async function() {
+    if (!driveConnected) return;
+    try {
+      const latest = await readProgressFromDrive();
+      if (JSON.stringify(latest) !== JSON.stringify(progreso)) {
+        progreso = latest;
+        renderAll();
+      }
+    } catch (e) { /* silencioso */ }
+  }, 15000);
+}
+
+function connectGoogleDrive(silent) {
+  if (typeof google === 'undefined' || !google.accounts || !google.accounts.oauth2) {
+    if (!silent) setSyncStatus('err', 'No se pudo cargar la librería de Google (accounts.google.com) — revisa tu conexión, o si algo la está bloqueando.');
     return;
   }
-  setSyncStatus('', 'Abriendo ventana de Google…');
+  if (GOOGLE_CLIENT_ID.indexOf('PASTE_TU') === 0) {
+    if (!silent) setSyncStatus('err', 'Falta pegar tu <code>GOOGLE_CLIENT_ID</code> en el código (ver nota de configuración arriba).');
+    return;
+  }
+  if (!silent) setSyncStatus('', 'Abriendo ventana de Google…');
   gTokenClient = google.accounts.oauth2.initTokenClient({
     client_id: GOOGLE_CLIENT_ID,
     scope: DRIVE_SCOPE,
     callback: async function(resp) {
-      if (resp.error) { setSyncStatus('err', 'No se pudo conectar: ' + resp.error); return; }
+      if (resp.error) { if (!silent) setSyncStatus('err', 'No se pudo conectar: ' + resp.error); return; }
       gAccessToken = resp.access_token;
       driveConnected = true;
       setSyncStatus('', 'Cargando tu progreso real desde Drive…');
@@ -481,6 +500,7 @@ function connectGoogleDrive() {
         progreso = await readProgressFromDrive();
         setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
         renderAll();
+        startPolling();
       } catch (e) { setSyncStatus('err', 'Conectado, pero falló la lectura: ' + e.message); }
     }
   });
@@ -691,8 +711,9 @@ function setView(v){
 }
 document.querySelectorAll('.tab').forEach(function(t){ t.onclick=function(){ setView(t.dataset.view); }; });
 
-document.getElementById('syncBtn').onclick = connectGoogleDrive;
+document.getElementById('syncBtn').onclick = function() { connectGoogleDrive(false); };
 renderAll(); // primer pintado con progreso vacío; se repinta solo al conectar
+connectGoogleDrive(true);
 </script>
 </body>
 </html>
