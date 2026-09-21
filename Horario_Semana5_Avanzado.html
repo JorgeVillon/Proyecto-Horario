@@ -252,7 +252,7 @@ const DAYS = [
   {n:'Viernes', d:'18/09', tag:'PC5 de ING225 esta semana — nada de MAT241 aquí (ya evaluado el jueves)'},
   {n:'Sábado', d:'19/09', tag:'1MEC02 lab + compras'}
 ];
-const HSTART=6.5, HEND=23; // arranca 30 min antes de las 7 para que el desayuno adelantado del jueves (6:30-7:00) no quede fuera de rango
+const HSTART=6, HEND=23; // arranca 30 min antes de las 7 para que el desayuno adelantado del jueves (6:30-7:00) no quede fuera de rango
 const COURSE = {
   ING225:{bg:'var(--navy-soft)',fg:'var(--navy-deep)',c:'var(--navy-mid)'},
   MAT241:{bg:'var(--gold-soft)',fg:'#5c4712',c:'var(--gold)'},
@@ -300,7 +300,9 @@ BQ(1,19.5,22,'MEC257','BAPEC MEC257',0,4,'4 preguntas — mismo día de clase, d
 B({day:1,s:22,e:23,type:'COMIDA',title:'Cena (tardía)'}),
 
 // MARTES 2 — ING225 Clase 1
-B({day:2,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
+B({day:2,s:6,e:6.5,type:'COMIDA',title:'Desayuno (breve)'}),
+T(2,6.5,7,'Traslado a Hochschild (Fac. Minas)'),
+B({day:2,s:7,e:9,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Profesor de RM1 no explica teoría en clase — anotar teoría antes de ir',fixed:true}),
 T(2,9,10,'Traslado a PUCP'),
 B({day:2,s:10,e:12,type:'ING225',title:'ING225 — Clase 1',detail:'Sistemas hiperestáticos compuestos por barras (continuación y resolución)',fixed:true}),
 T(2,12,13,'Traslado a casa'),
@@ -317,7 +319,9 @@ BQ(2,21,23,'ING225','BAPEC RM1 — Clase 1',9,13,'4 preguntas — cierre nocturn
   {tipo:'PC5',nivel:'Alto',ventana:'1 sem. hasta PC5',tiempo:'29 min/preg',razon:'Cierre del martes'}),
 
 // MIERCOLES 3 — ING225 Clase 2
-B({day:3,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
+B({day:3,s:6,e:6.5,type:'COMIDA',title:'Desayuno (breve)'}),
+T(3,6.5,7,'Traslado a Hochschild (Fac. Minas)'),
+B({day:3,s:7,e:9,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Misma dinámica que martes',fixed:true}),
 T(3,9,10,'Traslado a PUCP'),
 B({day:3,s:10,e:12,type:'ING225',title:'ING225 — Clase 2',detail:'Compatibilidad de desplazamientos (Cap.3 completo) — Flexión de vigas: introducción, ecuación fundamental de flexión simétrica',fixed:true}),
 T(3,12,13,'Traslado a casa'),
@@ -349,14 +353,10 @@ BQ(4,20.5,23,'MEC257','BAPEC MEC257',4,7,'3 preguntas — mismo día de la 2da c
 
 // VIERNES 5 — mañana libre de campus
 B({day:5,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
-BQ(5,8,13,'ING225','BAPEC RM1 — Clase 1/2',27,37,'10 preguntas — mañana completa libre de campus, todavía antes de la PC5 de hoy',
-  {tipo:'PC5',nivel:'Alto',ventana:'PC5 HOY a las 18:00',tiempo:'29 min/preg',razon:'Última mañana libre antes de la PC5, sin nada de MAT241 aquí (ya evaluado ayer)'}),
+B({day:5,s:8,e:13,type:'ING225',title:'Problemas del profesor (RM1)',detail:'Problemas subidos por el profesor + análogos de esos mismos libros (Hibbeler, Gere, Miroliubov)',fixed:true}),
 B({day:5,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
-BQ(5,14,16,'ING225','BAPEC RM1 — Clase 1/2',37,41,'4 preguntas más',
-  {tipo:'PC5',nivel:'Medio-alto',ventana:'PC5 HOY a las 18:00',tiempo:'29 min/preg',razon:'Tarde del viernes, antes de la PC5'}),
+B({day:5,s:14,e:16,type:'ING225',title:'Problemas del profesor (RM1) — continuación',detail:'Sigue con los problemas subidos y análogos',fixed:true}),
 B({day:5,s:16,e:16.5,type:'COMIDA',title:'Snack PM'}),
-BQ(5,16.5,17,'ING225','BAPEC RM1 — Clase 1/2',41,42,'1 pregunta — cierra 42 de las 51 (9 pendientes)',
-  {tipo:'PC5',nivel:'Medio',ventana:'PC5 HOY a las 18:00',tiempo:'29 min/preg',razon:'Último hueco antes de la PC5'}),
 T(5,17,18,'Traslado a PUCP'),
 B({day:5,s:18,e:20,type:'ING225',title:'ING225 — Práctica calificada 05',detail:'Elementos sometidos a carga axial (completo): sistemas hiperestáticos, compatibilidad de desplazamientos',fixed:true}),
 T(5,20,21,'Traslado a casa'),
@@ -364,12 +364,12 @@ B({day:5,s:21,e:22,type:'COMIDA',title:'Cena'}),
 B({day:5,s:22,e:22.5,type:'PERSONAL',title:'Rutina personal',detail:'Interdiario'}),
 
 // SABADO 6 — 1MEC02 lab + compras + cierres
-B({day:6,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
-T(6,9,10,'Traslado a PUCP'),
-B({day:6,s:10,e:12,type:'1MEC02',title:'1MEC02 — Laboratorio',detail:'Base fundida — Actividad 5.1: previa a mano alzada + dwg blanco/avance',fixed:true}),
-BQ(6,12,12.5833,'1MEC02','BAPEC 1MEC02',0,1,'Base fundida — actividad de esta semana',
-  {tipo:'Nivel A',nivel:'Fijo por Paideia',ventana:'Semana actual',tiempo:'~35 min real',razon:'Mismo día de laboratorio'}),
-B({day:6,s:12.5833,e:13,type:'PERSONAL',title:'Compras semanales',detail:'Supermercado cerca de la universidad',fixed:true}),
+B({day:6,s:6.5,e:7,type:'COMIDA',title:'Desayuno (adelantado)'}),
+T(6,7,8,'Traslado a PUCP'),
+B({day:6,s:8,e:10,type:'1MEC02',title:'Actividad 5.1 — previa',detail:'Pieza "Base fundida", mano alzada, método 3er cuadrante',fixed:true}),
+B({day:6,s:10,e:12,type:'1MEC02',title:'1MEC02 — Laboratorio dirigido 5',detail:'Base fundida en AutoCAD — supervisado por JP',fixed:true}),
+B({day:6,s:12,e:13,type:'1MEC02',title:'Terminar y subir Actividad 5.1 a Paideia',detail:'Cierre del laboratorio',fixed:true}),
+B({day:6,s:15,e:16,type:'PERSONAL',title:'Compras semanales',detail:'Supermercado cerca de la universidad',fixed:true}),
 T(6,13,14,'Traslado a casa'),
 B({day:6,s:14,e:15,type:'COMIDA',title:'Almuerzo (tarde)'}),
 B({day:6,s:16.5,e:18.5,type:'PERSONAL',title:'Rutina personal',detail:'2h, interdiario'}),
