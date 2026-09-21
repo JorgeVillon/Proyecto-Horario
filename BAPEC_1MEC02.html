@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<script src="https://accounts.google.com/gsi/client"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dibujo Mecánico 1 — BAPEC (Catálogo de práctica)</title>
@@ -398,14 +397,6 @@
     .masthead { flex-direction: column; }
     .masthead-right { text-align: left; }
   }
-  .sync-bar{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 16px;margin-bottom:14px;flex-wrap:wrap}
-  .sync-dot{width:9px;height:9px;border-radius:50%;background:var(--slate);flex-shrink:0}
-  .sync-dot.ok{background:var(--confirm)}
-  .sync-dot.err{background:#8A2B2B}
-  .sync-text{font-size:12.5px;color:var(--slate);flex:1}
-  .sync-btn{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:5px;cursor:pointer;border:1.5px solid var(--navy-deep);color:var(--navy-deep);background:transparent}
-  .sync-btn:hover{background:var(--navy-soft)}
-  .sync-btn:disabled{opacity:.5;cursor:default}
 </style>
 </head>
 <body>
@@ -424,19 +415,13 @@
     </div>
   </header>
 
-  <div class="sync-bar">
-    <span class="sync-dot" id="syncDot"></span>
-    <span class="sync-text" id="syncText">No conectado — tus marcas se guardan en tu Google Drive, no en este navegador. Conéctate para cargar y guardar tu progreso real.</span>
-    <button class="sync-btn" id="syncBtn">Conectar con Google Drive</button>
-  </div>
-
   <section class="info-card" style="grid-template-columns:repeat(6,1fr)">
-    <div class="info-item"><div class="label">Piezas/PCs con enlaces</div><div class="value">28 + 13 sem. + 11 PC</div></div>
+    <div class="info-item"><div class="label">Piezas/PCs con enlaces</div><div class="value">28 + 20 sem. + 11 PC</div></div>
     <div class="info-item"><div class="label">Recursos teóricos</div><div class="value">4 videos</div></div>
     <div class="info-item"><div class="label">PC1 2020-2</div><div class="value">excluida</div></div>
     <div class="info-item"><div class="label">Enlaces YouTube</div><div class="value">47</div></div>
     <div class="info-item"><div class="label">Fuentes del curso</div><div class="value">4 de 4 cubiertas</div></div>
-    <div class="info-item"><div class="label">Resueltos</div><div class="value" id="resumen-resueltos">0 / 56 (0%)</div></div>
+    <div class="info-item"><div class="label">Resueltos</div><div class="value" id="resumen-resueltos">0 / 63 (0%)</div></div>
   </section>
 
   <div class="confirm-banner">
@@ -865,64 +850,100 @@
   </div>
 
   <h2 class="section-title">Sección 5 — Actividades</h2>
-  <p class="section-caption">Fuente distinta a "Material para practicar": son las actividades semanales que sube el profesor a Paideia, ligadas a cada Laboratorio dirigido. El usuario determinó que las actividades se repiten entre ciclos — confirmado para la Semana 1 (Actividad 1.1 fue "Soporte inclinado" tanto en 2026-1 como en 2026-2) y asumido igual para el resto. Por eso ya no se separa "referencia" de "ciclo en curso": es un solo catálogo, con base en el contenido real de 2026-1. La Programación Semanal 2026-2 actualizada (28 ago 2026) ahora nombra estas mismas piezas semana a semana de forma independiente — todas las 13 coinciden con esta tabla, un segundo respaldo además de la confirmación puntual de la Semana 1.</p>
+  <p class="section-caption">Fuente distinta a "Material para practicar": son las Prácticas Dirigidas (PD) — también llamadas Laboratorio dirigido — que los jefes de práctica (JP) desarrollan durante el laboratorio para aplicar en AutoCAD/Inventor un tema visto en teoría; una vez terminado el laboratorio, esa actividad se sube a Paideia. El usuario determinó que las actividades se repiten entre ciclos — confirmado para la Semana 1 (misma pieza, "Soporte inclinado", en 2026-1 y 2026-2) y asumido igual para el resto. Los enlaces de esta sección son, salvo que se indique "enunciado", <strong>la solución que el propio usuario entregó en Paideia en 2026-1</strong> — así lo etiqueta Paideia mismo ("La solución de lo solicitado es…") — no un enunciado en blanco.</p>
   <div class="row-counter" data-row-counter="s5"></div>
 
   <div class="table-scroll">
     <table class="catalog">
-      <thead><tr><th style="width:8%">Sem.</th><th style="width:16%">Actividad(es)</th><th style="width:18%">Pieza</th><th>Contenido y enlace principal</th></tr></thead>
+      <thead><tr><th style="width:8%">Sem.</th><th style="width:16%">Actividad</th><th style="width:18%">Pieza</th><th>Contenido y enlace principal</th></tr></thead>
       <tbody>
         <tr>
           <td><span class="semana-tag">1</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>1.1</td><td><span class="pieza-name">Soporte inclinado</span></td>
-          <td>Sin dwg (mano alzada → AutoCAD desde cero) · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1Nr9PkajIfkCPiVbYDpEDlNStuDnQvnfb/view" target="_blank">enunciado</a><span class="conf-badge">CONFIRMADO EN 2026-2</span><button type="button" class="solve-pill" data-qid="s5-1">Marcar como resuelto</button></td>
+          <td>Mano alzada + AutoCAD en un solo envío, método 3er cuadrante · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1Nr9PkajIfkCPiVbYDpEDlNStuDnQvnfb/view" target="_blank">solución propia</a><span class="conf-badge">CONFIRMADO EN 2026-2</span><button type="button" class="solve-pill" data-qid="s5-1">Marcar como resuelto</button></td>
         </tr>
         <tr>
-          <td><span class="semana-tag">2</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>2.1, 2.2</td><td><span class="pieza-name">Soporte inclinado (repetida), Soporte deslizante</span></td>
-          <td>Sin dwg (excepción confirmada) · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1TYen-QJrhrRMsYBinCinuCJRdFd9D48E/view" target="_blank">enunciado 2.2</a><button type="button" class="solve-pill" data-qid="s5-2">Marcar como resuelto</button></td>
+          <td><span class="semana-tag">2</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>2.1</td><td><span class="pieza-name">Soporte inclinado</span></td>
+          <td>Mano alzada + AutoCAD, misma pieza que 1.1 · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1hnshz2Xdr7WnGIHfiGSu9j0VBFqc7hkH/view" target="_blank">solución propia</a><button type="button" class="solve-pill" data-qid="s5-2">Marcar como resuelto</button></td>
         </tr>
         <tr>
-          <td><span class="semana-tag">3</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>3.1 / 3.2 / 3.3</td><td><span class="pieza-name">Soporte fundido / Guía / Placa extremo</span></td>
-          <td>Solo 3.1 con dwg; 3.2 y 3.3 sin dwg (excepción confirmada) · <a class="link-pill dwg" href="https://drive.google.com/file/d/1OhUPgsC5IMmK-X4imwVI04m2iVlHVLkO/view" target="_blank">dwg 3.1</a><button type="button" class="solve-pill" data-qid="s5-3">Marcar como resuelto</button></td>
+          <td><span class="semana-tag">2</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>2.2</td><td><span class="pieza-name">Soporte deslizante</span></td>
+          <td>Actividad distinta de 2.1, mismo formato mano alzada + AutoCAD · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1TYen-QJrhrRMsYBinCinuCJRdFd9D48E/view" target="_blank">solución propia</a><button type="button" class="solve-pill" data-qid="s5-3">Marcar como resuelto</button></td>
         </tr>
         <tr>
-          <td><span class="semana-tag">4</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>PD4_INVENTOR</td><td><span class="pieza-name">Soporte fundido (reusa sem. 3)</span></td>
-          <td>Introducción a Inventor, no AutoCAD · <a class="link-pill dwg" href="https://drive.google.com/file/d/1PnAaeLxPjN1jbZq3BNiPDmEEJmPxksGT/view" target="_blank">dwg</a><button type="button" class="solve-pill" data-qid="s5-4">Marcar como resuelto</button></td>
+          <td><span class="semana-tag">3</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>3.1</td><td><span class="pieza-name">Soporte fundido</span></td>
+          <td>Mano alzada + AutoCAD · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1OhUPgsC5IMmK-X4imwVI04m2iVlHVLkO/view" target="_blank">solución propia</a><button type="button" class="solve-pill" data-qid="s5-4">Marcar como resuelto</button></td>
         </tr>
         <tr>
-          <td><span class="semana-tag">5</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>5.1</td><td><span class="pieza-name">Base fundida</span></td>
-          <td>Previa a mano alzada + dwg blanco/avance · <a class="link-pill dwg" href="https://drive.google.com/file/d/1W9i88gIBKZQw0ajK4JGx0PzBoOAAW3bK/view" target="_blank">dwg</a><button type="button" class="solve-pill" data-qid="s5-5">Marcar como resuelto</button></td>
+          <td><span class="semana-tag">3</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>3.2</td><td><span class="pieza-name">Guía</span></td>
+          <td>Actividad distinta de 3.1, mismo formato · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1XUPF67cWOvTQSUcR-6yq18pUYBdaeBpJ/view" target="_blank">solución propia</a><button type="button" class="solve-pill" data-qid="s5-5">Marcar como resuelto</button></td>
         </tr>
         <tr>
-          <td><span class="semana-tag">6</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>6.1</td><td><span class="pieza-name">Base circular</span></td>
-          <td>Previa + principal, dwg en blanco y versión con vistas y secciones resueltas · <a class="link-pill dwg" href="https://drive.google.com/file/d/1t9u3mYx62nXs8oMg49eWFncgzpQpy_31/view" target="_blank">dwg</a><button type="button" class="solve-pill" data-qid="s5-6">Marcar como resuelto</button></td>
+          <td><span class="semana-tag">3</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>3.3</td><td><span class="pieza-name">Placa extremo</span></td>
+          <td>Actividad distinta de 3.1 y 3.2, mismo formato · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1rDQz4876WDJ-2dsie1vijqnWaJ3aJ1us/view" target="_blank">solución propia</a><button type="button" class="solve-pill" data-qid="s5-6">Marcar como resuelto</button></td>
         </tr>
         <tr>
-          <td><span class="semana-tag">7</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>PD7</td><td><span class="pieza-name">Base fundida (reusa sem. 5)</span></td>
-          <td>Refuerzo de Inventor, archivo .ipt nativo · <a class="link-pill dwg" href="https://drive.google.com/file/d/1RdLFLii3LdA-4pPNYkrmO-tYCkv-SIB7/view" target="_blank">.ipt</a><button type="button" class="solve-pill" data-qid="s5-7">Marcar como resuelto</button></td>
+          <td><span class="semana-tag">4</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>PD4</td><td><span class="pieza-name">Soporte fundido (reusa sem. 3, en Inventor)</span>
+            <span class="pieza-material">el archivo se nombra internamente "PD3.1" (de otro ciclo) — es la PD4 de 2026-1</span></td>
+          <td>Introducción a Inventor, no AutoCAD · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1PnAaeLxPjN1jbZq3BNiPDmEEJmPxksGT/view" target="_blank">solución propia</a><button type="button" class="solve-pill" data-qid="s5-7">Marcar como resuelto</button></td>
         </tr>
         <tr>
-          <td><span class="semana-tag">8</span><span class="nivel-pill nivel-d">Nivel D</span></td><td>8.1</td><td><span class="pieza-name">Base de bomba</span></td>
-          <td>Dwg en blanco + <strong>solución completa modelo</strong> (único caso así en las 13 semanas) · <a class="link-pill dwg" href="https://drive.google.com/file/d/12WlLzthz2_K2EcIkB1rnXdvBlnqzueRz/view" target="_blank">dwg</a> <a class="link-pill enunciado" href="https://drive.google.com/file/d/1X0vdB1wqNN8O7C39TH_A3ecFObXLZzz3/view" target="_blank">solución completa</a><button type="button" class="solve-pill" data-qid="s5-8">Marcar como resuelto</button></td>
+          <td><span class="semana-tag">5</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>5.1 (previa)</td><td><span class="pieza-name">Base fundida</span></td>
+          <td>Previa al laboratorio: mano alzada solamente · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1rnz9cqpcf_Uea8ldsTTDXTuGq_sfcQ3h/view" target="_blank">solución propia</a><button type="button" class="solve-pill" data-qid="s5-8">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">5</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>5.1 (laboratorio)</td><td><span class="pieza-name">Base fundida</span>
+            <span class="pieza-material">misma numeración "5.1" que la previa, pero es una actividad distinta</span></td>
+          <td>Durante el laboratorio: AutoCAD, mismo dwg blanco/avance · <a class="link-pill dwg" href="https://drive.google.com/file/d/1W9i88gIBKZQw0ajK4JGx0PzBoOAAW3bK/view" target="_blank">dwg</a><button type="button" class="solve-pill" data-qid="s5-9">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">6</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>6.1 (previa)</td><td><span class="pieza-name">Base circular</span></td>
+          <td>Previa al laboratorio: AutoCAD, vistas · <a class="link-pill dwg" href="https://drive.google.com/file/d/1t9u3mYx62nXs8oMg49eWFncgzpQpy_31/view" target="_blank">dwg</a><button type="button" class="solve-pill" data-qid="s5-10">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">6</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>6.1 (laboratorio)</td><td><span class="pieza-name">Base circular</span>
+            <span class="pieza-material">misma numeración "6.1" que la previa, pero es una actividad distinta</span></td>
+          <td>Durante el laboratorio: vistas y secciones completas · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1-s3tgOB1TELKT27wHdx1gA7iGe7_3zC7/view" target="_blank">enunciado</a> <a class="link-pill dwg" href="https://drive.google.com/file/d/14b4-S8qnTv0TEttaAqkL0Bypo6UkbWez/view" target="_blank">dwg</a><button type="button" class="solve-pill" data-qid="s5-11">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">6</span><span class="nivel-pill nivel-b">Nivel B</span></td><td>6.3</td><td><span class="pieza-name">Ejercicio 2 — dimensionamiento</span>
+            <span class="pieza-material">agregado por el usuario recientemente; no se abrió el contenido del dwg en detalle</span></td>
+          <td>Tercera actividad de la semana, tema dimensionamiento (Cap. 6) · <a class="link-pill dwg" href="https://drive.google.com/file/d/1K34jiypOF7nUwR0yXVTWm8SDdaQAmMM_/view" target="_blank">dwg</a><button type="button" class="solve-pill" data-qid="s5-12">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">7</span><span class="nivel-pill nivel-a">Nivel A</span></td><td>PD7</td><td><span class="pieza-name">Base fundida (reusa sem. 5, en Inventor)</span></td>
+          <td>Refuerzo de Inventor, archivo .ipt nativo · <a class="link-pill dwg" href="https://drive.google.com/file/d/1RdLFLii3LdA-4pPNYkrmO-tYCkv-SIB7/view" target="_blank">.ipt</a><button type="button" class="solve-pill" data-qid="s5-13">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">8</span><span class="nivel-pill nivel-d">Nivel D</span></td><td>8.1 (previa)</td><td><span class="pieza-name">Base de bomba</span>
+            <span class="pieza-material">los archivos se nombran internamente "PD07" (de otro ciclo) — es la Actividad 8.1 de 2026-1</span></td>
+          <td>Previa: dado un dwg con vistas, dimensionar completo · <a class="link-pill dwg" href="https://drive.google.com/file/d/12WlLzthz2_K2EcIkB1rnXdvBlnqzueRz/view" target="_blank">dwg</a> <a class="link-pill enunciado" href="https://drive.google.com/file/d/1X0vdB1wqNN8O7C39TH_A3ecFObXLZzz3/view" target="_blank">solución completa propia</a><button type="button" class="solve-pill" data-qid="s5-14">Marcar como resuelto</button></td>
+        </tr>
+        <tr>
+          <td><span class="semana-tag">8</span><span class="nivel-pill nivel-d">Nivel D</span></td><td>8.1 (laboratorio)</td><td><span class="pieza-name">Base de bomba</span>
+            <span class="pieza-material">misma numeración "8.1" que la previa, pero es una actividad distinta</span></td>
+          <td>Durante el laboratorio: mismo enunciado con tolerancias y acabado completos · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1XDiqK6ninAUJUFWUoYCMkdDrRGTMcugw/view" target="_blank">enunciado</a><button type="button" class="solve-pill" data-qid="s5-15">Marcar como resuelto</button></td>
         </tr>
         <tr>
           <td><span class="semana-tag">10</span><span class="nivel-pill nivel-d">Nivel D</span></td><td>9.1</td><td><span class="pieza-name">Cuerpo de Válvula</span></td>
-          <td>Archivos Inventor nativos (.ipt+.idw), transición a despiece · <a class="link-pill dwg" href="https://drive.google.com/file/d/1t7-IVJwPtmkmeGwEKrs48-3qWVPL2NdZ/view" target="_blank">.ipt</a><button type="button" class="solve-pill" data-qid="s5-9">Marcar como resuelto</button></td>
+          <td>Archivos Inventor nativos (.ipt), transición a despiece · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1UIzrCDubTTRnyxKkBI6bMrlPMKzxjAxf/view" target="_blank">enunciado</a> <a class="link-pill dwg" href="https://drive.google.com/file/d/1t7-IVJwPtmkmeGwEKrs48-3qWVPL2NdZ/view" target="_blank">.ipt</a><button type="button" class="solve-pill" data-qid="s5-16">Marcar como resuelto</button></td>
         </tr>
         <tr>
           <td><span class="semana-tag">11</span><span class="nivel-pill nivel-e">Nivel E</span></td><td>10.1</td><td><span class="pieza-name">Bomba de combustible (15 piezas)</span></td>
-          <td>Ensamble real con ajustes incrustados (H7/h6, H7/j6, H7/p6), explosionado, video .wmv · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1cNWTU0pvu7du6BbKB79kqZytlIi19JZ4/view" target="_blank">enunciado</a> <a class="link-pill enunciado" href="https://drive.google.com/file/d/1IOlIbOjirbnYlMZagv-UcUZrPbYXnlH4/view" target="_blank">BOM</a><button type="button" class="solve-pill" data-qid="s5-10">Marcar como resuelto</button></td>
+          <td>Ensamble real con ajustes incrustados (H7/h6, H7/j6, H7/p6), explosionado, video .wmv · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1cNWTU0pvu7du6BbKB79kqZytlIi19JZ4/view" target="_blank">enunciado</a> <a class="link-pill enunciado" href="https://drive.google.com/file/d/1IOlIbOjirbnYlMZagv-UcUZrPbYXnlH4/view" target="_blank">BOM</a><button type="button" class="solve-pill" data-qid="s5-17">Marcar como resuelto</button></td>
         </tr>
         <tr>
-          <td><span class="semana-tag">12</span><span class="nivel-pill nivel-e">Nivel E</span></td><td>12.1</td><td><span class="pieza-name">Unión de leva</span></td>
-          <td>Ensamble con ajustes, animación, explosionado · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1zPponsQvJcUar8H3iRzAK6AopNeK3Tq9/view" target="_blank">enunciado</a> <a class="link-pill enunciado" href="https://drive.google.com/file/d/1N409tQT6SjPgXafs8MA8iONA7SJBa8Td/view" target="_blank">lista de piezas</a><button type="button" class="solve-pill" data-qid="s5-11">Marcar como resuelto</button></td>
+          <td><span class="semana-tag">12</span><span class="nivel-pill nivel-e">Nivel E</span></td><td>12.1</td><td><span class="pieza-name">Unión de leva</span>
+            <span class="pieza-material">el PDF se nombra internamente "PD8.1" (de 2025-1) — es la Actividad 12.1 de 2026-1</span></td>
+          <td>Ensamble con ajustes, animación, explosionado · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1zPponsQvJcUar8H3iRzAK6AopNeK3Tq9/view" target="_blank">enunciado</a> <a class="link-pill enunciado" href="https://drive.google.com/file/d/1N409tQT6SjPgXafs8MA8iONA7SJBa8Td/view" target="_blank">lista de piezas</a><button type="button" class="solve-pill" data-qid="s5-18">Marcar como resuelto</button></td>
         </tr>
         <tr>
           <td><span class="semana-tag">13</span><span class="nivel-pill nivel-e">Nivel E</span></td><td>13</td><td><span class="pieza-name">Inyector ("EX3-2026-1")</span></td>
-          <td>3 videos de subensamble, BOM · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1gH2KB1uMZh3pdo0QcuvKvbwIm6j_bFfZ/view" target="_blank">enunciado</a> <a class="link-pill enunciado" href="https://drive.google.com/file/d/1Nv6v3vP31Suzyf-uUUkJyAvBNUahAX96/view" target="_blank">BOM</a><button type="button" class="solve-pill" data-qid="s5-12">Marcar como resuelto</button></td>
+          <td>3 videos de subensamble, BOM · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1gH2KB1uMZh3pdo0QcuvKvbwIm6j_bFfZ/view" target="_blank">enunciado</a> <a class="link-pill enunciado" href="https://drive.google.com/file/d/1Nv6v3vP31Suzyf-uUUkJyAvBNUahAX96/view" target="_blank">BOM</a><button type="button" class="solve-pill" data-qid="s5-19">Marcar como resuelto</button></td>
         </tr>
         <tr>
-          <td><span class="semana-tag">14</span><span class="nivel-pill nivel-e">Nivel E</span></td><td>14</td><td><span class="pieza-name">Tornillo de prensa (PD9, de 2024-2)</span></td>
-          <td>Explosionado + paquete .zip · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1Zq5-ZHVdPAYRna4X-I1u_9tQiMbOA4Xr/view" target="_blank">explosionado</a><button type="button" class="solve-pill" data-qid="s5-13">Marcar como resuelto</button></td>
+          <td><span class="semana-tag">14</span><span class="nivel-pill nivel-e">Nivel E</span></td><td>14 (PD14)</td><td><span class="pieza-name">Tornillo de prensa</span>
+            <span class="pieza-material">el PDF explosionado se nombra internamente "PD9" (de 2024-2) — es la PD14/Actividad 14 de 2026-1; enunciado real ubicado en la subcarpeta "PD14-DM1"</span></td>
+          <td>Ensamble con ajustes (H7/h6), piezas .ipt individuales para 3D · <a class="link-pill enunciado" href="https://drive.google.com/file/d/1ys3XlBdtgS7yI6y8sdCrcQgEoMIWmQJf/view" target="_blank">enunciado</a> <a class="link-pill enunciado" href="https://drive.google.com/file/d/1Zq5-ZHVdPAYRna4X-I1u_9tQiMbOA4Xr/view" target="_blank">explosionado</a><button type="button" class="solve-pill" data-qid="s5-20">Marcar como resuelto</button></td>
         </tr>
       </tbody>
     </table>
@@ -1071,149 +1092,28 @@
         <li>En Sección 3, "vistas" y "explosionada" no son un PDF con tolerancias como el "enunciado" de la Sección 1 nivel D — son solo una imagen/PDF de referencia visual del ensamblaje. Se reutiliza el mismo color por ser ambos documentos estáticos de referencia, no por ser el mismo tipo de contenido.</li>
         <li>La columna Semana/Pb es una inferencia por nivel de complejidad y tipo de contenido cruzada con la Programación Semanal 2026-2, no una confirmación del profesor pieza por pieza.</li>
         <li>Pendiente para una futura pasada de auditoría: abrir y verificar individualmente los enlaces que no llevan la marca VERIF. (la mayoría de los enlaces de este documento).</li>
-        <li>Sección 5 (Actividades) dejó de separar "referencia 2026-1" de "ciclo en curso 2026-2": el usuario determinó que las actividades se repiten entre ciclos, confirmado para la Semana 1 (misma pieza, "Soporte inclinado", en ambos). Las 13 filas usan el contenido real de 2026-1 como el contenido esperado —y probable— de 2026-2.</li>
+        <li>Sección 5 (Actividades) dejó de separar "referencia 2026-1" de "ciclo en curso 2026-2": el usuario determinó que las actividades se repiten entre ciclos, confirmado para la Semana 1 (misma pieza, "Soporte inclinado", en ambos). Las 20 filas usan el contenido real de 2026-1 como el contenido esperado —y probable— de 2026-2.</li>
+        <li><strong>Corrección 21 set 2026 — Sección 5 reconstruida con más granularidad.</strong> Estas "Actividades" son en realidad Prácticas Dirigidas (PD) — también llamadas Laboratorio dirigido — que los jefes de práctica (JP) desarrollan durante el laboratorio para aplicar en AutoCAD/Inventor un tema de la clase teórica; al terminar el laboratorio se suben a Paideia. La versión anterior de esta sección combinaba en una sola fila actividades que Paideia registra por separado: (a) semanas con más de una actividad numerada distinto en el mismo laboratorio (ej. Semana 2 tenía Actividad 2.1 "Soporte inclinado" y Actividad 2.2 "Soporte deslizante", antes fusionadas en una fila; lo mismo en Semana 3 con 3.1/3.2/3.3); (b) semanas con dos actividades que comparten el mismo número pero son una "previa al laboratorio" (mano alzada, fuera de horario) y otra "durante el laboratorio" (AutoCAD, con Paideia abriéndola aparte) — ej. Semana 5 y Semana 8 tienen dos entradas "5.1"/"8.1" distintas, y Semana 6 tiene "6.1" previa + laboratorio más una tercera actividad "6.3" agregada recientemente por el usuario. Se verificó cada semana abriendo directamente su carpeta en Drive (capturas de Paideia con fecha de apertura/cierre), no por inferencia.</li>
+        <li><strong>Corrección de nombres de archivo heredados de otros ciclos.</strong> Varios archivos de Actividades conservan el nombre de la Práctica Dirigida de un ciclo anterior, no el número real de 2026-1 — confirmado por el usuario: Semana 4 (archivo "PD3.1", es la PD4 de 2026-1), Semana 8 (archivos "PD07", es la Actividad 8.1 de 2026-1), Semana 12 (archivo "PD8.1", es la Actividad 12.1 de 2026-1, heredado de 2025-1), Semana 14 (archivo explosionado "PD9", es la PD14/Actividad 14 de 2026-1, heredado de 2024-2). La tabla usa la numeración real de 2026-1 en la columna Actividad, y anota el nombre de archivo heredado como referencia.</li>
+        <li><strong>Desfase de numeración por la Semana 9 (examen, sin laboratorio).</strong> Como la Semana 9 no tiene laboratorio dirigido, el número de actividad queda una unidad detrás de la semana a partir de la Semana 10 (Semana 10 = Actividad 9.1, Semana 11 = Actividad 10.1). El profesor corrigió este desfase a partir de la Semana 12: desde ahí, número de actividad y número de semana vuelven a coincidir (Semana 12 = Actividad 12.1, Semana 14 = Actividad 14/PD14) — esto es una decisión del profesor, no un error a corregir.</li>
+        <li><strong>La mayoría de los enlaces de esta sección son la solución que el propio usuario entregó en Paideia en 2026-1, no un enunciado en blanco</strong> — así lo etiqueta la propia interfaz de Paideia ("La solución de lo solicitado es…"). Se marcan como "solución propia" en vez de "enunciado" donde esto se pudo confirmar directamente en la captura de Paideia. Donde sí se encontró un enunciado real con especificaciones (tolerancias, acabado, material) — Semanas 6, 8 (laboratorio), 10, 11 y 14 — se marca "enunciado".</li>
+        <li><strong>Nivel extendido a las 63 filas del documento (no solo Sección 1)</strong>: se agregaron Nivel E (ensamblaje) y Nivel F (teoría de cierre), inexistentes antes. Sección 2 es Nivel B uniforme (dimensionamiento puro, sin progresión interna). Sección 3 y las piezas de ensamble de Secciones 5-7 son Nivel E uniforme — no hay evidencia para distinguir dificultad entre los 8 ensamblajes de Sección 3, así que se dejaron sin sub-ranking en vez de inventar uno. Sección 4 es Nivel F uniforme. Sección 5 se asignó según la descripción literal de cada actividad: Semanas 1-7 son Nivel A (vistas y secciones), Semana 6.3 es Nivel B (dimensionamiento, sin verificar el contenido exacto del dwg), Semana 8 y 10 son Nivel D, Semanas 11-14 son Nivel E. Secciones 6-7 se asignaron por la correspondencia temática ya documentada con cada Pb (PC1↔Pb1↔A, PC2↔Pb2↔B, PC3↔Pb3↔D, PC4/PC5↔Pb4/Pb5↔E).</li>
         <li>La tabla de Actividades usa enlaces del Drive personal del usuario (no del profesor) y muestra solo el recurso principal por semana, no cada archivo individual — a diferencia de las Secciones 1–4, es la mejor aproximación disponible al contenido real de 2026-2, no una transcripción de un enunciado oficial de este ciclo semana por semana.</li>
         <li>PC1 2020-2 (Sección 7) queda fuera del catálogo: su solución incluye la pieza "Tapa inferior" sin enunciado ni archivo dwg propio disponible — no se puede verificar contra qué se dibujó, así que no se cataloga (confirmado con el usuario).</li>
         <li>Dos archivos de la Sección 7 (PC3 y PC4 2020-2) tienen una inconsistencia en su propio texto interno: el enunciado de la carpeta "PC3" pide guardar el archivo como "PC4.2", y el de "PC4" como "PC5.1". Es un desfase del documento original de 2020-2 (ciclo de pandemia), no un error de esta catalogación — se documenta tal cual, sin corregirlo, porque no hay forma de saber cuál numeración es la "correcta" sin más contexto del profesor.</li>
         <li>Los archivos "dwg" de la Sección 7 llevan a una carpeta o .zip comprimido (así los subió la Facultad), no a un archivo .dwg individual como en el resto del documento — no se abrió el contenido interno de esos comprimidos.</li>
-        <li><strong>Nivel extendido a las 56 filas del documento (no solo Sección 1)</strong>: se agregaron Nivel E (ensamblaje) y Nivel F (teoría de cierre), inexistentes antes. Sección 2 es Nivel B uniforme (dimensionamiento puro, sin progresión interna). Sección 3 y las piezas de ensamble de Secciones 5-7 son Nivel E uniforme — no hay evidencia para distinguir dificultad entre los 8 ensamblajes de Sección 3, así que se dejaron sin sub-ranking en vez de inventar uno. Sección 4 es Nivel F uniforme. Sección 5 se asignó según la descripción literal de cada actividad en la Programación Semanal 2026-2 (no por suposición): Semanas 1-7 son Nivel A (vistas y secciones, incluidas las dos activades de Inventor que reusan piezas ya Nivel A), Semanas 8 y 10 son Nivel D, Semanas 11-14 son Nivel E. Secciones 6-7 se asignaron por la correspondencia temática ya documentada con cada Pb (PC1↔Pb1↔A, PC2↔Pb2↔B, PC3↔Pb3↔D, PC4/PC5↔Pb4/Pb5↔E).</li>
+        <li><strong>Nivel extendido a las 63 filas del documento (no solo Sección 1)</strong>: se agregaron Nivel E (ensamblaje) y Nivel F (teoría de cierre), inexistentes antes. Sección 2 es Nivel B uniforme (dimensionamiento puro, sin progresión interna). Sección 3 y las piezas de ensamble de Secciones 5-7 son Nivel E uniforme — no hay evidencia para distinguir dificultad entre los 8 ensamblajes de Sección 3, así que se dejaron sin sub-ranking en vez de inventar uno. Sección 4 es Nivel F uniforme. Secciones 6-7 se asignaron por la correspondencia temática ya documentada con cada Pb (PC1↔Pb1↔A, PC2↔Pb2↔B, PC3↔Pb3↔D, PC4/PC5↔Pb4/Pb5↔E).</li>
       </ol>
     </div>
   </section>
 
-  <div class="footer-credit">BAPEC 1MEC02 — Las 4 fuentes del curso cubiertas: Material para practicar (completa) · Actividades (2026-1 y 2026-2 unificadas, se asumen repetidas salvo semana 1 confirmada) · PCs pasadas del profesor (completa) · Evaluaciones pasadas — Planchas (PC2-5, PC1 excluida) · Pendiente: Ppee_1MEC02</div>
+  <div class="footer-credit">BAPEC 1MEC02 — Las 4 fuentes del curso cubiertas: Material para practicar (completa) · Actividades (20 actividades reales de 2026-1, granularidad verificada 21 set 2026) · PCs pasadas del profesor (completa) · Evaluaciones pasadas — Planchas (PC2-5, PC1 excluida) · Ver también Ppee_1MEC02</div>
 
 </div>
 <script>
 (function() {
-const GOOGLE_CLIENT_ID = '176230481298-pbv52qu67pp82sfjce23ccumabn6ub7o.apps.googleusercontent.com';
-const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
-const PROGRESS_FILE_NAME = 'bapec_progreso.json';
-const PROGRESS_PARENT_FOLDER_ID = '1Wm0X0zD-oVpOCIvHjCB32iAO-7WGpZyX';
-const CURSO = '1MEC02';
-
-let progreso = { ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} };
-let driveConnected = false;
-let gTokenClient = null;
-let gAccessToken = null;
-let gProgressFileId = null;
-let syncBusy = false;
-
-function setSyncStatus(state, text) {
-  const dot = document.getElementById('syncDot');
-  const txt = document.getElementById('syncText');
-  const btn = document.getElementById('syncBtn');
-  if (!dot) return;
-  dot.className = 'sync-dot' + (state === 'ok' ? ' ok' : state === 'err' ? ' err' : '');
-  txt.innerHTML = text;
-  btn.textContent = state === 'ok' ? 'Reconectar' : 'Conectar con Google Drive';
-  btn.disabled = false;
-}
-
-async function driveApiFetch(url, opts) {
-  opts = opts || {};
-  opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + gAccessToken });
-  const r = await fetch(url, opts);
-  if (!r.ok) { const t = await r.text(); throw new Error('Drive API ' + r.status + ': ' + t); }
-  return r;
-}
-
-async function getOrCreateProgressFile() {
-  const cached = localStorage.getItem('driveProgressFileId');
-  if (cached) { gProgressFileId = cached; return cached; }
-  const q = encodeURIComponent("name='" + PROGRESS_FILE_NAME + "' and '" + PROGRESS_PARENT_FOLDER_ID + "' in parents and trashed=false");
-  const listRes = await driveApiFetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=files(id,name)');
-  const listJson = await listRes.json();
-  if (listJson.files && listJson.files.length) {
-    gProgressFileId = listJson.files[0].id;
-  } else {
-    const metadata = { name: PROGRESS_FILE_NAME, parents: [PROGRESS_PARENT_FOLDER_ID], mimeType: 'application/json' };
-    const initial = JSON.stringify({ ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} });
-    const boundary = 'bapecsyncboundary';
-    const body = '--' + boundary + '\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) + '\r\n' +
-      '--' + boundary + '\r\nContent-Type: application/json\r\n\r\n' + initial + '\r\n--' + boundary + '--';
-    const createRes = await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
-      method: 'POST', headers: { 'Content-Type': 'multipart/related; boundary=' + boundary }, body: body
-    });
-    const createJson = await createRes.json();
-    gProgressFileId = createJson.id;
-  }
-  localStorage.setItem('driveProgressFileId', gProgressFileId);
-  return gProgressFileId;
-}
-
-async function readProgressFromDrive() {
-  const id = await getOrCreateProgressFile();
-  const r = await driveApiFetch('https://www.googleapis.com/drive/v3/files/' + id + '?alt=media');
-  const text = await r.text();
-  try { const parsed = JSON.parse(text); return Object.assign({ ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} }, parsed); }
-  catch (e) { return { ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} }; }
-}
-
-async function writeProgressToDrive(data) {
-  const id = await getOrCreateProgressFile();
-  await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files/' + id + '?uploadType=media', {
-    method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
-  });
-}
-
-let pollHandle = null;
-function startPolling() {
-  if (pollHandle) return;
-  pollHandle = setInterval(async function() {
-    if (!driveConnected) return;
-    try {
-      const latest = await readProgressFromDrive();
-      if (JSON.stringify(latest[CURSO]) !== JSON.stringify(progreso[CURSO])) {
-        progreso = latest;
-        updateDynamicUI();
-      }
-    } catch (e) { /* silencioso */ }
-  }, 15000);
-}
-
-function connectGoogleDrive(silent) {
-  if (typeof google === 'undefined' || !google.accounts || !google.accounts.oauth2) {
-    if (!silent) setSyncStatus('err', 'No se pudo cargar la librería de Google (accounts.google.com) — revisa tu conexión, o si algo la está bloqueando.');
-    return;
-  }
-  if (!silent) setSyncStatus('', 'Abriendo ventana de Google…');
-  gTokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: GOOGLE_CLIENT_ID,
-    scope: DRIVE_SCOPE,
-    callback: async function(resp) {
-      if (resp.error) { if (!silent) setSyncStatus('err', 'No se pudo conectar: ' + resp.error); return; }
-      gAccessToken = resp.access_token;
-      driveConnected = true;
-      setSyncStatus('', 'Cargando tu progreso real desde Drive…');
-      try {
-        progreso = await readProgressFromDrive();
-        setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
-        updateDynamicUI();
-        startPolling();
-      } catch (e) { setSyncStatus('err', 'Conectado, pero falló la lectura: ' + e.message); }
-    }
-  });
-  gTokenClient.requestAccessToken({ prompt: '' });
-}
-
-async function syncProgreso() {
-  if (syncBusy) return;
-  syncBusy = true;
-  setSyncStatus('', 'Guardando…');
-  try {
-    const latest = await readProgressFromDrive();
-    latest[CURSO] = progreso[CURSO];
-    progreso = latest;
-    await writeProgressToDrive(progreso);
-    setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
-  } catch (e) {
-    setSyncStatus('err', 'Se marcó localmente pero no se pudo guardar en Drive: ' + e.message);
-  }
-  syncBusy = false;
-  updateDynamicUI();
-}
-
+  const STORAGE_KEY = 'bapec:1mec02:progreso';
+  let progreso = {};
 
   function allQids() {
     return Array.prototype.map.call(document.querySelectorAll('.solve-pill'), function(b) { return b.getAttribute('data-qid'); });
@@ -1231,7 +1131,7 @@ async function syncProgreso() {
   function updateDynamicUI() {
     document.querySelectorAll('.solve-pill').forEach(function(btn) {
       const qid = btn.getAttribute('data-qid');
-      const solved = !!(progreso[CURSO] && progreso[CURSO][qid]);
+      const solved = !!progreso[qid];
       btn.classList.toggle('solved', solved);
       btn.textContent = solved ? '✓ Resuelto' : 'Marcar como resuelto';
       const row = btn.closest('tr');
@@ -1260,20 +1160,30 @@ async function syncProgreso() {
     if (el) el.textContent = resueltos + ' / ' + total + ' (' + pct + '%)';
   }
 
+  async function loadProgreso() {
+    try {
+      const res = await window.storage.get(STORAGE_KEY);
+      progreso = (res && res.value) ? JSON.parse(res.value) : {};
+    } catch (e) { progreso = {}; }
+    updateDynamicUI();
+  }
+
+  async function saveProgreso() {
+    try { await window.storage.set(STORAGE_KEY, JSON.stringify(progreso)); }
+    catch (e) { /* fuera del entorno de artifacts: no persiste entre sesiones, pero funciona en esta */ }
+  }
+
   document.addEventListener('click', function(ev) {
     const btn = ev.target.closest('.solve-pill');
     if (!btn) return;
     const qid = btn.getAttribute('data-qid');
-    if (!driveConnected) { setSyncStatus('err', 'Conéctate a Google Drive primero (botón de arriba) — si no, esta marca no se guarda.'); return; }
-    if (!progreso[CURSO]) progreso[CURSO] = {};
-    progreso[CURSO][qid] = !progreso[CURSO][qid];
+    progreso[qid] = !progreso[qid];
     updateDynamicUI();
-    syncProgreso();
+    saveProgreso();
   });
 
-  document.getElementById('syncBtn').onclick = function() { connectGoogleDrive(false); };
   updateDynamicUI();
-  connectGoogleDrive(true);
+  loadProgreso();
 })();
 </script>
 </body>
