@@ -210,11 +210,11 @@ const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 const PROGRESS_FILE_NAME = 'bapec_progreso.json';
 const PROGRESS_PARENT_FOLDER_ID = '1Wm0X0zD-oVpOCIvHjCB32iAO-7WGpZyX'; // carpeta raíz de tu proyecto en Drive
 const BAPEC_LINKED = { ING225:true, MAT241:true, MEC257:true, '1MEC02':true }; // true = su BAPEC real ya lee/escribe el mismo archivo de Drive
-const QID_TARGET = { ING225: 57, MAT241: 4, MEC257: 0, '1MEC02': 4 };
+const QID_TARGET = { ING225: 43, MAT241: 30, MEC257: 0, '1MEC02': 7 };
 // Semana 2: ING225 topado a sus 8 candidatas reales (Clase 1 sin banco propio todavía); el sobrante de horas
 // se redistribuyó a MAT241/MEC257 proporcional a su peso IPHS. Tiempo ponderado ESTIMADO (reusa tarifa de Sem.1,
 // pendiente de reemplazo por el método granular en las conversaciones dedicadas de cada BAPEC).
-const COURSE_HOURS = { ING225: 27.55, MAT241: 1.87, MEC257: 0 };
+const COURSE_HOURS = { ING225: 21.00, MAT241: 14.00, MEC257: 0 };
 const IPHS_PCT = { ING225: 60.0, MAT241: 40.0, MEC257: 0 };
 // Código real de referencia (ej. "PC1-14.1-P2") de cada pregunta seleccionada — de los 3 bancos verificados esta sesión.
 // Pendiente en conversaciones aparte por curso: percentil/nivel visibles, tiempo ponderado granular, vínculo a la plancha y ancla de salto directo al BAPEC.
@@ -238,10 +238,10 @@ Object.keys(QID_TARGET).forEach(function(c) { QIDS[c] = genQids(c, QID_TARGET[c]
 // MEC257 ya usa IDs reales confirmados del banco BAPEC_MEC257.html (Semana 1: Clase 1 "Introducción" no tiene
 // preguntas propias todavía —confirmado, no es un error—; toda la Semana 1 sale de Clase 2 "Ensayo de materiales",
 // 25 candidatas reales disponibles — se tomaron las 12 de mayor dificultad.
-QIDS['ING225'] = ['pc4_16_1_p1', 'pc4_08_2_p3', 'ex1_14_2_p5', 'ex1_07_1_p2', 'ex1_07_1_p3', 'pc4_18_1_p2', 'ex2_18_1_p3', 'ex1p_25_2_e3', 'pc4_25_1_p3', 'ex1_21_1_p4', 'pc4_19_2_p2', 'ex1_19_2_p3', 'pc4_19_1_p2', 'ex1_20_1_p4', 'ex1_20_2_p4', 'pc3_23_2_p2', 'ex1_24_1_p4', 'ex1_24_2_p3', 'pc3_16_1_p2', 'pc3_16_1_p3', 'ex1_16_1_p5', 'pc3_17_1_p4', 'pc4_18_2_p2', 'pc7_18_2_p2', 'pc4_15_1_e2', 'pc4_15_1_e3', 'pc4_11_2_e2', 'ex1_11_2_p4', 'pc1_12_1_p1', 'ex1_12_1_p4', 'ex1_18_1_p6', 'pc4_22_1_ej2', 'pc5_21_1_e3', 'pc4_19_2_p3', 'pc4_19_1_p3', 'ex1_19_1_c3', 'pc7_19_1_p1', 'ex1_20_2_p3', 'pc4_16_1_p3', 'pc4_18_2_p1', 'pc3_15_1_p5', 'pc4_11_2_e1', 'pc4_11_2_e3', 'ex1_10_2_p4', 'ex1_12_1_p3', 'pc4_08_2_p1', 'ex2_07_1_p3', 'pc5_15_2_p1', 'ex1t_25_2_p5', 'ex1_23_2_c4', 'ex1_13_1_ej4', 'ex1t_25_1_p4', 'pc7_21_1_e3', 'ex1_21_2_c4', 'ex1_23_2_c3', 'ex2_24_2_t4', 'ex1_15_1_c3'];
-QIDS['MAT241'] = ['pc4_2024_1_pu', 'ex1_2015_2_p2', 'pc5_2016_2_p1', 'pc6_2017_2_p1'];
+QIDS['ING225'] = ['pc4_16_1_p1', 'pc4_08_2_p3', 'ex1_14_2_p5', 'ex1_07_1_p2', 'ex1_07_1_p3', 'pc4_18_1_p2', 'ex2_18_1_p3', 'ex1p_25_2_e3', 'pc4_25_1_p3', 'ex1_21_1_p4', 'pc4_19_2_p2', 'ex1_19_2_p3', 'pc4_19_1_p2', 'ex1_20_1_p4', 'ex1_20_2_p4', 'pc3_23_2_p2', 'ex1_24_1_p4', 'ex1_24_2_p3', 'pc3_16_1_p2', 'pc3_16_1_p3', 'ex1_16_1_p5', 'pc3_17_1_p4', 'pc4_18_2_p2', 'pc7_18_2_p2', 'pc4_15_1_e2', 'pc4_15_1_e3', 'pc4_11_2_e2', 'ex1_11_2_p4', 'pc1_12_1_p1', 'ex1_12_1_p4', 'ex1_18_1_p6', 'pc4_22_1_ej2', 'pc5_21_1_e3', 'pc4_19_2_p3', 'pc4_19_1_p3', 'ex1_19_1_c3', 'pc7_19_1_p1', 'ex1_20_2_p3', 'pc4_16_1_p3', 'pc4_18_2_p1', 'pc3_15_1_p5', 'pc4_11_2_e1', 'pc4_11_2_e3'];
+QIDS['MAT241'] = ['pc4_2024_1_pu', 'ex1_2015_2_p2', 'pc5_2016_2_p1', 'pc6_2017_2_p1', 'pc5_2019_2_p1', 'ex1_2021_1_p4', 'pc5_2022_1_p1', 'pc5_2021_2_p2', 'pc6_2023_1_p1', 'pc6_2023_1_p2', 'ex1_2023_2_p4', 'pc5_2024_2_p1', 'pc6_2024_2_p2', 'ex1_2024_2_p2', 'ex1_2024_2_p3', 'ex1_2025_2_p2', 'ex1_2025_2_p3', 'ex1_2025_1_p4', 'ex1_2017_1_p4', 'pc3_2015_2_p1', 'pc3_2016_2_p1', 'ex1_2016_2_p1', 'pc3_2021_1_pu', 'pc4_2021_1_p1', 'ex1_2021_1_p3', 'pc3_2022_1_pu', 'pc4_2022_1_p1', 'pc3_2023_1_pu', 'pc4_2023_1_pu', 'pc2_2023_2_p2', 'ex1_2023_2_p1', 'pc3_2024_2_pu', 'pc3_2025_2_p1', 'pc3_2025_2_p2'];
 QIDS['MEC257'] = [];
-QIDS['1MEC02'] = ['s5-10','s5-11','s5-12'];// Previa (VyS Base circular), Laboratorio (6.1+6.3), reales de Sección 5 — antes tenía las piezas equivocadas de Sección 1
+QIDS['1MEC02'] = ['s5-10','s5-11','s5-12','s1b-1','s1b-2','s1b-3','s1b-4'];// idx0-2: actividades fijas reales (Sección 5); idx3-6: autoestudio real (Sección 1, Nivel B) — las mismas 4 piezas que antes usé mal como actividad, ahora sí como autoestudio
 
 // ---------- Días y bloques ----------
 const DAYS = [
@@ -269,9 +269,10 @@ let uid=0;
 const B=(o)=>({id:'b'+(uid++), ...o});
 const T=(day,s,e,label)=>B({day,s,e,type:'COMMUTE',title:label,detail:'45 min de viaje + 15 min en cambiarme'});
 // Bloque de estudio BAPEC: recibe curso, rango de qids [ini,fin) sobre QIDS[curso], y detalle/meta
-const BQ=(day,s,e,curso,titulo,qidStart,qidEnd,detail,meta)=>B({
+const BQ=(day,s,e,curso,titulo,qidStart,qidEnd,detail,meta,esAutoestudio=true)=>B({
   day,s,e,type:curso,title:titulo,detail,meta,
-  bapec:{curso:curso, qids:QIDS[curso].slice(qidStart,qidEnd)}
+  bapec:{curso:curso, qids:QIDS[curso].slice(qidStart,qidEnd)},
+  autoestudioReal:esAutoestudio
 });
 
 const BLOCKS = [
@@ -279,29 +280,38 @@ const BLOCKS = [
 B({day:0,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
 B({day:0,s:8,e:8.5,type:'PERSONAL',title:'Lectura Ayn Rand'}),
 B({day:0,s:8.5,e:9.25,type:'PERSONAL',title:'Self-Authoring Suite'}),
+BQ(0,9.25,10.5,'1MEC02','Autoestudio — Soporte para eje',3,4,'Nivel B, Sección 1 — primera de las 4 piezas nuevas para Pb2 (sem.7)',
+  {tipo:'Autoestudio real',nivel:'Nivel B',ventana:'Antes de Pb2 (sem.7)',tiempo:'1.25h',razon:'Domingo, primera pieza de Nivel B'}),
 B({day:0,s:10.5,e:11,type:'COMIDA',title:'Snack AM'}),
 B({day:0,s:11,e:13,type:'PERSONAL',title:'Ocio'}),
 B({day:0,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
+BQ(0,14,15.5,'1MEC02','Autoestudio — Soporte conector y Carcasa soporte',4,6,'Nivel B, Sección 1 — dos piezas más',
+  {tipo:'Autoestudio real',nivel:'Nivel B',ventana:'Antes de Pb2 (sem.7)',tiempo:'1.5h',razon:'Segundo bloque del domingo'}),
 B({day:0,s:15.5,e:16.5,type:'PERSONAL',title:'Batch cooking'}),
 B({day:0,s:16.5,e:18.5,type:'PERSONAL',title:'Rutina personal',detail:'2h, interdiario'}),
 B({day:0,s:18.5,e:19,type:'COMIDA',title:'Snack PM'}),
+BQ(0,19,20,'1MEC02','Autoestudio — Carcasa',6,7,'Nivel B, Sección 1 — cierra las 4 piezas nuevas de esta semana',
+  {tipo:'Autoestudio real',nivel:'Nivel B',ventana:'Antes de Pb2 (sem.7)',tiempo:'1h',razon:'Tercer y último bloque del domingo'}),
 B({day:0,s:20,e:21,type:'COMIDA',title:'Cena'}),
 B({day:0,s:21,e:22,type:'PERSONAL',title:'Ocio'}),
 
 // LUNES 1 — MEC257 clase + lab quincenal
 B({day:1,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
+BQ(1,8,9,'MAT241','Repaso PC3 — Bisección/Newton',30,32,'2 preguntas — repaso para PC3 (hoy jueves), Bisección/Newton ya enseñados; Matrices (nuevo) todavía no, así que solo cabe repaso aquí',
+  {tipo:'PC3 repaso',nivel:'Alto',ventana:'PC3 jueves a las 17:00',tiempo:'28 min/preg',razon:'Lunes libre de MAT241 esta semana (sin laboratorio de MEC257), contenido ya enseñado'}),
 T(1,9,10,'Traslado a PUCP'),
 B({day:1,s:10,e:12,type:'MEC257',title:'MEC257 — Clase',detail:'Defectos cristalinos: planares y de volumen. Dislocaciones (tratamiento extendido: conceptos, tipos, vectores de Burgers) — Cap.3 completo, 0 preguntas BAPEC (tema conceptual)',fixed:true}),
 B({day:1,s:12,e:13,type:'COMIDA',title:'Almuerzo (en campus)'}),
+BQ(1,13,14,'MAT241','Repaso PC3 — Bisección/Newton',32,34,'2 preguntas más — cierra el repaso de PC3 (4 en total hoy, + 2 de la mañana), completa el mínimo semanal con margen (2h jueves + 2h aquí = 4h)',
+  {tipo:'PC3 repaso',nivel:'Alto',ventana:'PC3 jueves a las 17:00',tiempo:'28 min/preg',razon:'Tarde libre del lunes, mucho espacio disponible'}),
 T(1,18,19,'Traslado a casa'),
 B({day:1,s:19,e:19.5,type:'COMIDA',title:'Snack PM'}),
 B({day:1,s:22,e:23,type:'COMIDA',title:'Cena (tardía)'}),
 
 // MARTES 2 — ING225 Clase 1
-B({day:2,s:6,e:6.5,type:'COMIDA',title:'Desayuno (breve)'}),
-T(2,6.5,7,'Traslado a Hochschild (Fac. Minas)'),
-B({day:2,s:7,e:9,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Profesor de RM1 no explica teoría en clase — anotar teoría antes de ir',fixed:true}),
-T(2,9,10,'Traslado a PUCP'),
+B({day:2,s:6.5,e:7,type:'COMIDA',title:'Desayuno (breve)'}),
+T(2,7,8,'Traslado a la universidad (Fac. Minas / Hochschild) — mismo campus que la clase, un solo viaje'),
+B({day:2,s:8,e:10,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Profesor de RM1 no explica teoría en clase — anotar teoría antes de ir',fixed:true}),
 B({day:2,s:10,e:12,type:'ING225',title:'ING225 — Clase 1',detail:'Flexión asimétrica de vigas',fixed:true}),
 T(2,12,13,'Traslado a casa'),
 B({day:2,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
@@ -317,10 +327,9 @@ BQ(2,21,23,'ING225','BAPEC RM1 — Clase 1',9,13,'4 preguntas — cierre nocturn
   {tipo:'PC06',nivel:'Alto',ventana:'1 sem. hasta PC06',tiempo:'29 min/preg',razon:'Cierre del martes'}),
 
 // MIERCOLES 3 — ING225 Clase 2
-B({day:3,s:6,e:6.5,type:'COMIDA',title:'Desayuno (breve)'}),
-T(3,6.5,7,'Traslado a Hochschild (Fac. Minas)'),
-B({day:3,s:7,e:9,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Misma dinámica que martes',fixed:true}),
-T(3,9,10,'Traslado a PUCP'),
+B({day:3,s:6.5,e:7,type:'COMIDA',title:'Desayuno (breve)'}),
+T(3,7,8,'Traslado a la universidad (Fac. Minas / Hochschild) — mismo campus que la clase, un solo viaje'),
+B({day:3,s:8,e:10,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Misma dinámica que martes',fixed:true}),
 B({day:3,s:10,e:12,type:'ING225',title:'ING225 — Clase 2',detail:'Flexión y carga axial combinadas',fixed:true}),
 T(3,12,13,'Traslado a casa'),
 B({day:3,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
@@ -340,9 +349,9 @@ T(4,7,8,'Traslado a PUCP'),
 B({day:4,s:8,e:10,type:'MAT241',title:'MAT241 — Clase',detail:'Revisión de conceptos básicos de matrices. Matrices y vectores: operaciones. Sistemas de ecuaciones lineales. Eliminación Gaussiana. Estrategias de pivoteo. [Cronograma oficial]',fixed:true}),
 B({day:4,s:10,e:12,type:'MEC257',title:'MEC257 — Clase',detail:'Deformación plástica de los materiales. Mecanismos de deformación plástica en metales. Deslizamiento. Sistemas de deslizamiento — Cap.4, 0 preguntas BAPEC (tema conceptual)',fixed:true}),
 B({day:4,s:12,e:13,type:'COMIDA',title:'Almuerzo (en campus)'}),
-BQ(4,13,15,'MAT241','BAPEC MAT241',0,4,'4 preguntas — única ventana real antes de la PC3 de hoy (17:00). Todo lo demás de MAT241 queda pendiente.',
+BQ(4,13,15,'MAT241','BAPEC MAT241',0,4,'4 preguntas — única ventana real antes de la PC3 de hoy (17:00). Las 26 restantes del target real (30 preguntas, banco completo) quedan pendientes por la ventana angosta, no por falta de contenido.',
   {tipo:'PC3',nivel:'Alto',ventana:'PC3 HOY a las 17:00 — CONFIRMADO calendario académico',tiempo:'28 min/preg',razon:'Único hueco entre almuerzo y 1MEC02, antes de la PC3'}),
-B({day:4,s:15,e:17,type:'1MEC02',title:'1MEC02 — Clase',detail:'Vistas: generalidades, proyección',fixed:true}),
+B({day:4,s:15,e:17,type:'1MEC02',title:'1MEC02 — Clase',detail:'Cap.6 Dimensionamiento (2h)',fixed:true}),
 B({day:4,s:17,e:19,type:'MAT241',title:'MAT241 — PC3 (CONFIRMADO calendario académico: jueves 17:00–19:00)',detail:'Ecuaciones no lineales: Bisección y Newton para una variable — evaluación integradora (semanas anteriores)',fixed:true}),
 T(4,19,20,'Traslado a casa'),
 B({day:4,s:20,e:20.5,type:'COMIDA',title:'Cena (tardía)'}),
@@ -365,9 +374,9 @@ B({day:5,s:22,e:22.5,type:'PERSONAL',title:'Rutina personal',detail:'Interdiario
 B({day:6,s:6.5,e:7,type:'COMIDA',title:'Desayuno (adelantado)'}),
 T(6,7,8,'Traslado a PUCP'),
 BQ(6,8,10,'1MEC02','Previa — VyS Base circular',0,1,'Vistas y secciones de "Base circular", antes del laboratorio (según Programación Semanal, confirmado por ti en Paideia)',
-  {tipo:'Previa',nivel:'Fijo por Paideia',ventana:'Hoy, antes del laboratorio',tiempo:'~2h',razon:'Se dibuja primero; el dimensionamiento viene después, durante el laboratorio'}),
+  {tipo:'Previa',nivel:'Fijo por Paideia',ventana:'Hoy, antes del laboratorio',tiempo:'~2h',razon:'Se dibuja primero; el dimensionamiento viene después, durante el laboratorio'},false),
 BQ(6,10,12,'1MEC02','Laboratorio dirigido 6 — Actividades 6.1 y 6.3',1,3,'6.1: dimensionamiento de la Base circular ya dibujada en la previa. 6.3 (PD6 Ejercicio 2): dimensionamiento de un eje/árbol de transmisión, dado en .dwg',
-  {tipo:'Actividades 6.1+6.3',nivel:'Fijo por Paideia',ventana:'Hoy, supervisado por JP',tiempo:'2h',razon:'Ambas en Paideia — se suben al terminar'}),
+  {tipo:'Actividades 6.1+6.3',nivel:'Fijo por Paideia',ventana:'Hoy, supervisado por JP',tiempo:'2h',razon:'Ambas en Paideia — se suben al terminar'},false),
 B({day:6,s:12,e:12.5,type:'1MEC02',title:'Actividad 6.2 — placa a elección',detail:'Dimensionamiento de una placa a elección (de las compartidas por el profesor) — autopráctica, no se sube a Paideia',fixed:true}),
 B({day:6,s:12.5,e:13,type:'1MEC02',title:'Terminar y subir 6.1 y 6.3 a Paideia',detail:'Cierre del laboratorio',fixed:true}),
 B({day:6,s:13,e:14,type:'PERSONAL',title:'Compras semanales',detail:'Supermercado cerca de la universidad',fixed:true}),
@@ -531,7 +540,7 @@ function hoursByCourse(){
     if(out[b.type]===undefined) return;
     const dur=b.e-b.s;
     out[b.type].total+=dur;
-    if(b.bapec) out[b.type].bapec+=dur; else out[b.type].clase+=dur;
+    if(b.bapec && b.autoestudioReal!==false) out[b.type].bapec+=dur; else out[b.type].clase+=dur;
   });
   return out;
 }
@@ -548,7 +557,7 @@ function renderIphsBar(){
       '<div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab/PC = '+h.total.toFixed(1)+'h total esta semana</div>'+
       '<div class="bar"><i style="width:'+pct+'%"></i></div></div>';
   }).join('') +
-  (function(){ const s=courseSolvedCount('1MEC02'); const h=hrs['1MEC02']; return '<div class="iphs-card" style="--c:'+COURSE['1MEC02'].c+'"><div class="n">'+h.bapec.toFixed(2)+'h</div><div class="l">1MEC02 — ritmo fijo (autoestudio)</div><div class="pct">'+s+'/1 resuelta · fuera del reparto IPHS</div><div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab = '+h.total.toFixed(2)+'h total esta semana</div><div class="bar"><i style="width:'+(s*100)+'%"></i></div></div>'; })();
+  (function(){ const s=courseSolvedCount('1MEC02'); const h=hrs['1MEC02']; const tot=QID_TARGET['1MEC02']||1; return '<div class="iphs-card" style="--c:'+COURSE['1MEC02'].c+'"><div class="n">'+h.bapec.toFixed(2)+'h</div><div class="l">1MEC02 — ritmo fijo (autoestudio)</div><div class="pct">'+s+'/'+tot+' resuelta'+(tot===1?'':'s')+' · fuera del reparto IPHS</div><div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab = '+h.total.toFixed(2)+'h total esta semana</div><div class="bar"><i style="width:'+Math.round(s/tot*100)+'%"></i></div></div>'; })();
 }
 
 function renderQidPills(curso, qids) {
@@ -672,7 +681,7 @@ function renderMetrics(){
   html += '</div>';
 
   html += '<div class="metric-section"><h3>Preguntas sin bloque fijo esta semana</h3><div class="msub">Cuentan para el objetivo del curso, pero el horario recuperado no les asignó un hueco concreto todavía (ver nota de auditoría arriba). Puedes marcarlas igual si las resuelves en un rato libre.</div>';
-  ['MAT241','MEC257'].forEach(function(curso){
+  ['ING225','MAT241','MEC257'].forEach(function(curso){
     const placed = {}; BLOCKS.forEach(function(b){ if(b.bapec && b.bapec.curso===curso) b.bapec.qids.forEach(function(q){placed[q]=true;}); });
     const pending = QIDS[curso].filter(function(q){ return !placed[q]; });
     if (!pending.length) return;

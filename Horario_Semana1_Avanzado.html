@@ -210,7 +210,7 @@ const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 const PROGRESS_FILE_NAME = 'bapec_progreso.json';
 const PROGRESS_PARENT_FOLDER_ID = '1Wm0X0zD-oVpOCIvHjCB32iAO-7WGpZyX'; // carpeta raíz de tu proyecto en Drive
 const BAPEC_LINKED = { ING225:true, MAT241:true, MEC257:true, '1MEC02':true }; // true = su BAPEC real ya lee/escribe el mismo archivo de Drive
-const QID_TARGET = { ING225: 50, MAT241: 0, MEC257: 17, '1MEC02': 1 };
+const QID_TARGET = { ING225: 50, MAT241: 0, MEC257: 17, '1MEC02': 2 };
 // Presupuesto recalculado con rigor (antes: 28h sin derivación) — ver metodología: 115.5h de ventana semanal (6:30-23:00 x7)
 // menos fijo/comida/protegido = 49.0h techo real; Jorge eligió operar a 35h, dejando ~10.5h libres antes del PC del viernes.
 const COURSE_HOURS = { ING225: 23.95, MAT241: 0, MEC257: 11.05 };
@@ -240,7 +240,7 @@ Object.keys(QID_TARGET).forEach(function(c) { QIDS[c] = genQids(c, QID_TARGET[c]
 QIDS['MEC257'] = ['ex1_2021_2_p2', 'ex1_2023_2_p3', 'ex1_2017_1_p1', 'ex1_2014_1_p4', 'ex1_2020_2_p3', 'ex1_2019_2_p1', 'ex1_2018_2_p3', 'ex1_2012_1_p2', 'ex1_2014_1_p2', 'ex1_2015_2_p3', 'ex1_2021_2_p1', 'ex1_2025_1_p4', 'ex1_2013_1_p2', 'ex1_2013_2_p2', 'ex1_2024_2_p3', 'ex1_2017_2_p3', 'ex1_2018_2_p1'];
 QIDS['ING225'] = ['pc1_14_1_p2', 'ex1_08_1_p1', 'ex1_17_1_p3', 'pc1_08_2_p4', 'pc2_23_1_p3', 'pc1_25_2_p2', 'ex1_22_1_p1', 'pc1_22_1_ej1', 'pc2_25_2_e1', 'pc1_25_1_p1', 'ex1t_25_2_p1', 'pc1_21_1_e1', 'pc1_21_2_e1', 'pc1_19_1_p1', 'pc1_19_1_p2', 'pc1_20_2_p1', 'pc1_20_2_p2', 'ex1_24_2_c1', 'pc1_17_1_p1', 'pc1_17_1_p2', 'pc1_18_2_p1', 'pc1_15_1_p2', 'pc1_15_1_p3', 'pc1_11_2_e1', 'ex1_13_1_ej1', 'ex1_12_1_p1', 'pc1_21_1_e2', 'pc1_21_1_e3', 'pc1_21_1_e4', 'pc1_19_1_p3', 'pc1_20_1_e2', 'pc1_17_1_p3', 'pc1_18_2_p2', 'pc1_18_2_p3', 'pc1_11_2_e2', 'pc1_12_1_p3', 'pc1_25_1_ej4', 'pc2_25_2_e4', 'pc1_25_1_ej3', 'pc1_25_1_ej2', 'pc2_25_2_e3', 'pc1_21_2_e4', 'pc2_21_2_e3', 'pc1_19_2_p1', 'pc1_19_1_p4', 'pc2_19_1_p1', 'pc1_20_2_p3', 'pc1_20_2_p4', 'ex1_19_1_c2', 'ex1_23_2_c1'];
 QIDS['MAT241'] = [];
-QIDS['1MEC02'] = ['s5-1']; // clave real: la misma pieza "Soporte inclinado" del BAPEC_1MEC02.html
+QIDS['1MEC02'] = ['s5-1', 's1a-1']; // s5-1: actividad fija real (Sección 5); s1a-1: autoestudio real (Sección 1, Nivel A) — repaso de la misma pieza, distinto propósito
 
 // ---------- Días y bloques ----------
 const DAYS = [
@@ -268,9 +268,10 @@ let uid=0;
 const B=(o)=>({id:'b'+(uid++), ...o});
 const T=(day,s,e,label)=>B({day,s,e,type:'COMMUTE',title:label,detail:'45 min de viaje + 15 min en cambiarme'});
 // Bloque de estudio BAPEC: recibe curso, rango de qids [ini,fin) sobre QIDS[curso], y detalle/meta
-const BQ=(day,s,e,curso,titulo,qidStart,qidEnd,detail,meta)=>B({
+const BQ=(day,s,e,curso,titulo,qidStart,qidEnd,detail,meta,esAutoestudio=true)=>B({
   day,s,e,type:curso,title:titulo,detail,meta,
-  bapec:{curso:curso, qids:QIDS[curso].slice(qidStart,qidEnd)}
+  bapec:{curso:curso, qids:QIDS[curso].slice(qidStart,qidEnd)},
+  autoestudioReal:esAutoestudio
 });
 
 const BLOCKS = [
@@ -278,12 +279,18 @@ const BLOCKS = [
 B({day:0,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
 B({day:0,s:8,e:8.5,type:'PERSONAL',title:'Lectura Ayn Rand'}),
 B({day:0,s:8.5,e:9.25,type:'PERSONAL',title:'Self-Authoring Suite'}),
+BQ(0,9.25,10.5,'1MEC02','Autoestudio — Base inclinada (repaso)',1,2,'Repaso de "Base inclinada" (Nivel A, Sección 1) — mismo material que la Actividad 1.1, ahora como autoestudio libre, no dirigido',
+  {tipo:'Autoestudio real',nivel:'Nivel A',ventana:'Antes de Pb1 (sem.4)',tiempo:'1.25h',razon:'Domingo, sin restricción de "antes de la clase" al ser repaso de material ya visto'}),
 B({day:0,s:10.5,e:11,type:'COMIDA',title:'Snack AM'}),
 B({day:0,s:11,e:13,type:'PERSONAL',title:'Ocio'}),
 B({day:0,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
+BQ(0,14,15.5,'1MEC02','Autoestudio — Base inclinada (repaso)',1,2,'Continúa el repaso de "Base inclinada"',
+  {tipo:'Autoestudio real',nivel:'Nivel A',ventana:'Antes de Pb1 (sem.4)',tiempo:'1.5h',razon:'Segundo bloque del domingo'}),
 B({day:0,s:15.5,e:16.5,type:'PERSONAL',title:'Batch cooking'}),
 B({day:0,s:16.5,e:18.5,type:'PERSONAL',title:'Rutina personal',detail:'2h, interdiario'}),
 B({day:0,s:18.5,e:19,type:'COMIDA',title:'Snack PM'}),
+BQ(0,19,20,'1MEC02','Autoestudio — Base inclinada (repaso)',1,2,'Cierra el bloque de autoestudio del domingo (3.75h en total)',
+  {tipo:'Autoestudio real',nivel:'Nivel A',ventana:'Antes de Pb1 (sem.4)',tiempo:'1h',razon:'Tercer y último bloque del domingo'}),
 B({day:0,s:20,e:21,type:'COMIDA',title:'Cena'}),
 B({day:0,s:21,e:22,type:'PERSONAL',title:'Ocio'}),
 
@@ -304,10 +311,9 @@ BQ(1,19.5,22,'MEC257','BAPEC MEC257',1,5,'4 preguntas — cierre nocturno del lu
 B({day:1,s:22,e:23,type:'COMIDA',title:'Cena (tardía)'}),
 
 // MARTES 2 — ING225 Clase 1
-B({day:2,s:6,e:6.5,type:'COMIDA',title:'Desayuno (breve)'}),
-T(2,6.5,7,'Traslado a Hochschild (Fac. Minas)'),
-B({day:2,s:7,e:9,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Profesor de RM1 no explica teoría en clase (metodología socrática) — anotar teoría antes de ir, con post-it y resaltado',fixed:true}),
-T(2,9,10,'Traslado a PUCP'),
+B({day:2,s:6.5,e:7,type:'COMIDA',title:'Desayuno (breve)'}),
+T(2,7,8,'Traslado a la universidad (Fac. Minas / Hochschild) — mismo campus que la clase, un solo viaje'),
+B({day:2,s:8,e:10,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Profesor de RM1 no explica teoría en clase (metodología socrática) — anotar teoría antes de ir, con post-it y resaltado',fixed:true}),
 B({day:2,s:10,e:12,type:'ING225',title:'ING225 — Clase 1',detail:'Concepto de esfuerzo, esfuerzo normal y cortante promedio',fixed:true}),
 T(2,12,13,'Traslado a casa'),
 B({day:2,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
@@ -323,10 +329,9 @@ BQ(2,21,23,'ING225','BAPEC RM1 — Clase 1',9,13,'4 preguntas — cierre nocturn
   {tipo:'PC/1E mixto',nivel:'Medio',ventana:'1 sem. hasta PC2',tiempo:'29 min/preg',razon:'Cierre del día de Clase 1'}),
 
 // MIERCOLES 3 — ING225 Clase 2
-B({day:3,s:6,e:6.5,type:'COMIDA',title:'Desayuno (breve)'}),
-T(3,6.5,7,'Traslado a Hochschild (Fac. Minas)'),
-B({day:3,s:7,e:9,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Misma dinámica que martes',fixed:true}),
-T(3,9,10,'Traslado a PUCP'),
+B({day:3,s:6.5,e:7,type:'COMIDA',title:'Desayuno (breve)'}),
+T(3,7,8,'Traslado a la universidad (Fac. Minas / Hochschild) — mismo campus que la clase, un solo viaje'),
+B({day:3,s:8,e:10,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Misma dinámica que martes',fixed:true}),
 B({day:3,s:10,e:12,type:'ING225',title:'ING225 — Clase 2',detail:'Uniones empernadas o remachadas',fixed:true}),
 T(3,12,13,'Traslado a casa'),
 B({day:3,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
@@ -348,7 +353,7 @@ B({day:4,s:10,e:12,type:'MEC257',title:'MEC257 — Clase',detail:'Cap. 2: Ensayo
 B({day:4,s:12,e:13,type:'COMIDA',title:'Almuerzo (en campus)'}),
 BQ(4,13,15,'ING225','BAPEC RM1 — Clase 1',13,17,'4 preguntas — relleno, hueco liberado al quitar MAT241 esta semana',
   {tipo:'PC/1E mixto',nivel:'Medio',ventana:'1 sem. hasta PC2',tiempo:'29 min/preg',razon:'Hueco disponible tras topar MAT241 en 0 esta semana'}),
-B({day:4,s:15,e:17,type:'1MEC02',title:'1MEC02 — Clase',detail:'Vistas: generalidades, proyección',fixed:true}),
+B({day:4,s:15,e:17,type:'1MEC02',title:'1MEC02 — Clase',detail:'Introducción breve al curso + Cap.2 Vistas (sustantivo esta semana): generalidades, proyección',fixed:true}),
 B({day:4,s:17,e:19,type:'MAT241',title:'MAT241 — Laboratorio',detail:'Introducción a MATLAB',fixed:true}),
 T(4,19,20,'Traslado a casa'),
 B({day:4,s:20,e:20.5,type:'COMIDA',title:'Cena (tardía)'}),
@@ -539,7 +544,7 @@ function hoursByCourse(){
     if(out[b.type]===undefined) return;
     const dur=b.e-b.s;
     out[b.type].total+=dur;
-    if(b.bapec) out[b.type].bapec+=dur; else out[b.type].clase+=dur;
+    if(b.bapec && b.autoestudioReal!==false) out[b.type].bapec+=dur; else out[b.type].clase+=dur;
   });
   return out;
 }
@@ -556,7 +561,7 @@ function renderIphsBar(){
       '<div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab/PC = '+h.total.toFixed(1)+'h total esta semana</div>'+
       '<div class="bar"><i style="width:'+pct+'%"></i></div></div>';
   }).join('') +
-  (function(){ const s=courseSolvedCount('1MEC02'); const h=hrs['1MEC02']; return '<div class="iphs-card" style="--c:'+COURSE['1MEC02'].c+'"><div class="n">'+h.bapec.toFixed(2)+'h</div><div class="l">1MEC02 — ritmo fijo (autoestudio)</div><div class="pct">'+s+'/1 resuelta · fuera del reparto IPHS</div><div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab = '+h.total.toFixed(2)+'h total esta semana</div><div class="bar"><i style="width:'+(s*100)+'%"></i></div></div>'; })();
+  (function(){ const s=courseSolvedCount('1MEC02'); const h=hrs['1MEC02']; const tot=QID_TARGET['1MEC02']||1; return '<div class="iphs-card" style="--c:'+COURSE['1MEC02'].c+'"><div class="n">'+h.bapec.toFixed(2)+'h</div><div class="l">1MEC02 — ritmo fijo (autoestudio)</div><div class="pct">'+s+'/'+tot+' resuelta'+(tot===1?'':'s')+' · fuera del reparto IPHS</div><div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab = '+h.total.toFixed(2)+'h total esta semana</div><div class="bar"><i style="width:'+Math.round(s/tot*100)+'%"></i></div></div>'; })();
 }
 
 function renderQidPills(curso, qids) {
