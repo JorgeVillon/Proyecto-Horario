@@ -282,7 +282,7 @@ B({day:0,s:8.5,e:9.25,type:'PERSONAL',title:'Self-Authoring Suite'}),
 B({day:0,s:10.5,e:11,type:'COMIDA',title:'Snack AM'}),
 B({day:0,s:11,e:13,type:'PERSONAL',title:'Ocio'}),
 B({day:0,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
-BQ(0,14,15.5,'1MEC02','Autoestudio — Base inclinada (repaso)',1,2,'Repaso adicional de "Base inclinada" — completa el mínimo semanal junto con el repaso ya asignado el sábado antes de Pb1.2 (2h + 1.5h = 3.5h)',
+BQ(0,14,15.5,'1MEC02','BAPEC DM1 — Repaso',1,2,'Autoestudio: repaso adicional de "Base inclinada" — completa el mínimo semanal junto con el repaso ya asignado el sábado antes de Pb1.2 (2h + 1.5h = 3.5h)',
   {tipo:'Autoestudio real',nivel:'Nivel A',ventana:'Antes de Pb1 (sem.4)',tiempo:'1.5h',razon:'Domingo, complementa el repaso del sábado'}),
 B({day:0,s:15.5,e:16.5,type:'PERSONAL',title:'Batch cooking'}),
 B({day:0,s:16.5,e:18.5,type:'PERSONAL',title:'Rutina personal',detail:'2h, interdiario'}),
@@ -299,11 +299,11 @@ BQ(1,8,9,'MAT241','Repaso PC1 — MATLAB/Punto flotante',21,23,'2 preguntas — 
 T(1,9,10,'Traslado a PUCP'),
 B({day:1,s:10,e:12,type:'MEC257',title:'MEC257 — Clase',detail:'Cap. 3: Estructura de los materiales (enlaces, tipos: metales/cerámicos/polímeros)',fixed:true}),
 B({day:1,s:12,e:13,type:'COMIDA',title:'Almuerzo (en campus)'}),
-BQ(1,13,18,'MEC257','REPASO EX1 (Sem.1-2-3)',0,8,'8 preguntas de repaso — las más difíciles de las 70 ya resueltas en Semanas 1-3, examen mañana',
+BQ(1,13,18,'MEC257','Repaso EX1 (Sem.1-2-3)',0,8,'8 preguntas de repaso — las más difíciles de las 70 ya resueltas en Semanas 1-3, examen mañana',
   {tipo:'EX1 repaso',nivel:'Máxima dificultad primero',ventana:'Examen mañana martes',tiempo:'39 min/preg',razon:'Día completo antes del examen — repaso, no cuenta en Demanda de esta semana'}),
 T(1,18,19,'Traslado a casa'),
 B({day:1,s:19,e:19.5,type:'COMIDA',title:'Snack PM'}),
-BQ(1,19.5,22,'MEC257','REPASO EX1 (Sem.1-2-3)',8,14,'6 preguntas más — cierra las 14 de repaso antes del examen',
+BQ(1,19.5,22,'MEC257','Repaso EX1 (Sem.1-2-3)',8,14,'6 preguntas más — cierra las 14 de repaso antes del examen',
   {tipo:'EX1 repaso',nivel:'Alto',ventana:'Examen mañana martes',tiempo:'39 min/preg',razon:'Cierre nocturno del repaso'}),
 B({day:1,s:22,e:23,type:'COMIDA',title:'Cena (tardía)'}),
 
@@ -371,7 +371,7 @@ B({day:5,s:22,e:22.5,type:'PERSONAL',title:'Rutina personal',detail:'Interdiario
 // SABADO 6 — 1MEC02 lab + compras + cierres
 B({day:6,s:6.5,e:7,type:'COMIDA',title:'Desayuno (adelantado)'}),
 T(6,7,8,'Traslado a PUCP'),
-BQ(6,8,10,'1MEC02','Repaso previo a Pb1.2',0,1,'Repaso de VyS en AutoCAD usando referencia de Sección 1 — Pb1.2 evalúa esto en 45 min, hoy mismo',
+BQ(6,8,10,'1MEC02','BAPEC DM1 — Repaso',0,1,'Autoestudio: repaso de VyS en AutoCAD usando referencia de Sección 1 — Pb1.2 evalúa esto en 45 min, hoy mismo',
   {tipo:'Repaso Pb1.2',nivel:'Antes de la evaluación',ventana:'Pb1.2 HOY a las 10:00',tiempo:'~2h',razon:'Principio: repaso siempre antes de la evaluación que lo prueba, nunca después'}),
 BQ(6,10,10.75,'1MEC02','Pb 1.2 — CONFIRMADO cronograma oficial',1,2,'6 pts, 45 min: una pieza en AutoCAD — modificar vistas dadas dejando solo lo necesario',
   {tipo:'Pb1.2 (sábado)',nivel:'Evaluación real',ventana:'HOY — Pb1.2',tiempo:'45 min real, 6 pts',razon:'Cierra Pb1 completo (14+6=20 pts), evalúa Cap.1-3'},false),
@@ -577,7 +577,7 @@ function renderIphsBar(){
       '<div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab/PC = '+h.total.toFixed(1)+'h total esta semana</div>'+
       '<div class="bar"><i style="width:'+pct+'%"></i></div></div>';
   }).join('') +
-  (function(){ const s=courseSolvedCount('1MEC02'); const h=hrs['1MEC02']; const tot=QID_TARGET['1MEC02']||1; return '<div class="iphs-card" style="--c:'+COURSE['1MEC02'].c+'"><div class="n">'+h.bapec.toFixed(2)+'h</div><div class="l">1MEC02 — ritmo fijo (autoestudio)</div><div class="pct">'+s+'/'+tot+' resuelta'+(tot===1?'':'s')+' · fuera del reparto IPHS</div><div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab = '+h.total.toFixed(2)+'h total esta semana</div><div class="bar"><i style="width:'+Math.round(s/tot*100)+'%"></i></div></div>'; })();
+  (function(){ const s=courseSolvedCount('1MEC02'); const h=hrs['1MEC02']; const tot=QID_TARGET['1MEC02']||1; const MIN_1MEC02=3; const pct=Math.min(100,Math.round(h.bapec/MIN_1MEC02*100)); return '<div class="iphs-card" style="--c:'+COURSE['1MEC02'].c+'"><div class="n">'+h.bapec.toFixed(2)+'h</div><div class="l">1MEC02 — ritmo fijo (autoestudio, obj. '+MIN_1MEC02.toFixed(1)+'h)</div><div class="pct">'+s+'/'+tot+' resuelta'+(tot===1?'':'s')+' · fuera del reparto IPHS</div><div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab = '+h.total.toFixed(2)+'h total esta semana</div><div class="bar"><i style="width:'+pct+'%"></i></div></div>'; })();
 }
 
 function renderQidPills(curso, qids) {

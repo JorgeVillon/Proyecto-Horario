@@ -280,17 +280,17 @@ const BLOCKS = [
 B({day:0,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
 B({day:0,s:8,e:8.5,type:'PERSONAL',title:'Lectura Ayn Rand'}),
 B({day:0,s:8.5,e:9.25,type:'PERSONAL',title:'Self-Authoring Suite'}),
-BQ(0,9.25,10.5,'1MEC02','Autoestudio — Soporte para eje',3,4,'Nivel B, Sección 1 — primera de las 4 piezas nuevas para Pb2 (sem.7)',
+BQ(0,9.25,10.5,'1MEC02','BAPEC DM1',3,4,'Autoestudio: "Soporte para eje" (Nivel B, Sección 1) — primera de las 4 piezas nuevas para Pb2 (sem.7)',
   {tipo:'Autoestudio real',nivel:'Nivel B',ventana:'Antes de Pb2 (sem.7)',tiempo:'1.25h',razon:'Domingo, primera pieza de Nivel B'}),
 B({day:0,s:10.5,e:11,type:'COMIDA',title:'Snack AM'}),
 B({day:0,s:11,e:13,type:'PERSONAL',title:'Ocio'}),
 B({day:0,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
-BQ(0,14,15.5,'1MEC02','Autoestudio — Soporte conector y Carcasa soporte',4,6,'Nivel B, Sección 1 — dos piezas más',
+BQ(0,14,15.5,'1MEC02','BAPEC DM1',4,6,'Autoestudio: "Soporte conector" y "Carcasa soporte" (Nivel B, Sección 1) — dos piezas más',
   {tipo:'Autoestudio real',nivel:'Nivel B',ventana:'Antes de Pb2 (sem.7)',tiempo:'1.5h',razon:'Segundo bloque del domingo'}),
 B({day:0,s:15.5,e:16.5,type:'PERSONAL',title:'Batch cooking'}),
 B({day:0,s:16.5,e:18.5,type:'PERSONAL',title:'Rutina personal',detail:'2h, interdiario'}),
 B({day:0,s:18.5,e:19,type:'COMIDA',title:'Snack PM'}),
-BQ(0,19,20,'1MEC02','Autoestudio — Carcasa',6,7,'Nivel B, Sección 1 — cierra las 4 piezas nuevas de esta semana',
+BQ(0,19,20,'1MEC02','BAPEC DM1',6,7,'Autoestudio: "Carcasa" (Nivel B, Sección 1) — cierra las 4 piezas nuevas de esta semana',
   {tipo:'Autoestudio real',nivel:'Nivel B',ventana:'Antes de Pb2 (sem.7)',tiempo:'1h',razon:'Tercer y último bloque del domingo'}),
 B({day:0,s:20,e:21,type:'COMIDA',title:'Cena'}),
 B({day:0,s:21,e:22,type:'PERSONAL',title:'Ocio'}),
@@ -557,7 +557,7 @@ function renderIphsBar(){
       '<div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab/PC = '+h.total.toFixed(1)+'h total esta semana</div>'+
       '<div class="bar"><i style="width:'+pct+'%"></i></div></div>';
   }).join('') +
-  (function(){ const s=courseSolvedCount('1MEC02'); const h=hrs['1MEC02']; const tot=QID_TARGET['1MEC02']||1; return '<div class="iphs-card" style="--c:'+COURSE['1MEC02'].c+'"><div class="n">'+h.bapec.toFixed(2)+'h</div><div class="l">1MEC02 — ritmo fijo (autoestudio)</div><div class="pct">'+s+'/'+tot+' resuelta'+(tot===1?'':'s')+' · fuera del reparto IPHS</div><div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab = '+h.total.toFixed(2)+'h total esta semana</div><div class="bar"><i style="width:'+Math.round(s/tot*100)+'%"></i></div></div>'; })();
+  (function(){ const s=courseSolvedCount('1MEC02'); const h=hrs['1MEC02']; const tot=QID_TARGET['1MEC02']||1; const MIN_1MEC02=3; const pct=Math.min(100,Math.round(h.bapec/MIN_1MEC02*100)); return '<div class="iphs-card" style="--c:'+COURSE['1MEC02'].c+'"><div class="n">'+h.bapec.toFixed(2)+'h</div><div class="l">1MEC02 — ritmo fijo (autoestudio, obj. '+MIN_1MEC02.toFixed(1)+'h)</div><div class="pct">'+s+'/'+tot+' resuelta'+(tot===1?'':'s')+' · fuera del reparto IPHS</div><div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab = '+h.total.toFixed(2)+'h total esta semana</div><div class="bar"><i style="width:'+pct+'%"></i></div></div>'; })();
 }
 
 function renderQidPills(curso, qids) {
