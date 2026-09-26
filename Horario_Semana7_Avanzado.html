@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horario Semana 7 — avanzado, con BAPEC vinculado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client"></script>
+<style>
+:root{
+  --paper:#F7F3EA; --paper-raised:#FFFFFF;
+  --navy-deep:#042354; --navy-mid:#123A6B; --navy-soft:#E8ECF2;
+  --gold:#B08D2B; --gold-soft:#F3E9CE;
+  --teal:#16826E; --teal-soft:#DCEEE9;
+  --plum:#6B3F7A; --plum-soft:#EDE3F0;
+  --ink:#1E2430; --slate:#5B6472; --slate-soft:#E4E1D8; --line:#D8D0C0;
+  --confirm:#1F7A4D; --confirm-soft:#E1F0E6;
+  --commute:#8A8478; --commute-soft:#EDEAE2;
+  --warn:#8A4B12; --warn-soft:#F6E9D8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.sheet{max-width:1340px;margin:0 auto;padding:32px 22px 60px}
+.masthead{border-bottom:3px solid var(--navy-deep);padding-bottom:16px;margin-bottom:18px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate)}
+h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:29px;color:var(--navy-deep);margin:4px 0 4px;letter-spacing:-.01em}
+.subtitle{font-size:14px;color:var(--navy-mid);font-weight:500}
+.name-note{font-size:12px;color:var(--slate);margin-top:6px;font-style:italic}
+
+.tabbar{display:flex;gap:4px;margin-bottom:18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-weight:600;color:var(--slate);background:none;border:none;border-bottom:3px solid transparent;padding:10px 16px;cursor:pointer}
+.tab:hover{color:var(--navy-mid)}
+.tab.active{color:var(--navy-deep);border-bottom-color:var(--navy-deep)}
+.view{display:none}
+.view.active{display:block}
+
+.iphs-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.iphs-card{background:var(--paper-raised);border:1px solid var(--line);border-top:3px solid var(--c);border-radius:6px;padding:11px 13px}
+.iphs-card .n{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;color:var(--navy-deep)}
+.iphs-card .l{font-size:10.5px;color:var(--slate);margin-top:1px}
+.iphs-card .pct{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--teal);margin-top:5px}
+.iphs-card .pct2{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--slate);margin-top:2px}
+.iphs-card .bar{height:5px;background:var(--slate-soft);border-radius:3px;margin-top:6px;overflow:hidden}
+.iphs-card .bar i{display:block;height:100%;background:var(--c)}
+
+.note{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:3px;padding:12px 16px;font-size:12.5px;line-height:1.6;margin:0 0 14px}
+.note h4{margin:0 0 6px;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--navy-deep);font-family:'IBM Plex Mono',monospace}
+.note.link h4{color:var(--teal)}
+.note.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.note.warn h4{color:var(--warn)}
+.badge-linked{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--confirm);padding:2px 7px;border-radius:3px;margin-left:6px;vertical-align:middle}
+.badge-local{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--slate);border:1px solid var(--slate);padding:1px 6px;border-radius:3px;margin-left:6px;vertical-align:middle}
+
+.sync-bar{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 16px;margin-bottom:14px;flex-wrap:wrap}
+.sync-dot{width:9px;height:9px;border-radius:50%;background:var(--slate);flex-shrink:0}
+.sync-dot.ok{background:var(--confirm)}
+.sync-dot.err{background:#8A2B2B}
+.sync-text{font-size:12.5px;color:var(--slate);flex:1}
+.sync-text strong{color:var(--ink)}
+.sync-btn{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:5px;cursor:pointer;border:1.5px solid var(--navy-deep);color:var(--navy-deep);background:transparent}
+.sync-btn:hover{background:var(--navy-soft)}
+.sync-btn:disabled{opacity:.5;cursor:default}
+.setup-needed{font-size:11.5px;color:var(--warn);margin-top:4px}
+
+.cal-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper-raised)}
+.cal-grid{display:grid;grid-template-columns:52px repeat(7,minmax(132px,1fr));position:relative}
+.cal-corner{grid-row:1;grid-column:1;background:var(--navy-deep);border-top-left-radius:8px}
+.cal-daylabel{grid-row:1;background:var(--navy-deep);color:#fff;text-align:center;padding:9px 4px;font-family:'IBM Plex Mono',monospace}
+.cal-daylabel .dn{font-size:12px;font-weight:600;letter-spacing:.03em}
+.cal-daylabel .dd{font-size:10px;opacity:.75;margin-top:1px}
+.cal-hour{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--slate);text-align:right;padding:0 6px 0 0;border-top:1px solid var(--line)}
+.cal-cell{border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.cal-block{position:relative;margin:1px 2px 0;border-radius:4px;padding:4px 7px;font-size:12px;overflow:hidden;cursor:pointer;border-left:3px solid var(--c);background:var(--bg);color:var(--fg)}
+.cal-block:hover{filter:brightness(0.96)}
+.cal-block .t{font-weight:600;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-block .h{font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.8}
+.cal-block .cnt{font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.85;margin-top:1px}
+.cal-block.complete{opacity:.55}
+.cal-block.complete .t{text-decoration:line-through}
+.cal-block.commute{opacity:.6;font-style:italic}
+.cal-block.libre{border-left-style:dashed;opacity:.8}
+.cal-block.libre .t{font-style:italic;font-weight:500}
+
+.detail-panel{margin-top:14px;background:var(--paper-raised);border:1px solid var(--line);border-left:5px solid var(--navy-deep);border-radius:6px;padding:16px 20px;display:none}
+.detail-panel.show{display:block}
+.detail-panel .dh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.detail-panel h4{font-family:'IBM Plex Serif',serif;font-size:17px;color:var(--navy-deep);margin:0 0 3px}
+.detail-panel .dtime{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--slate)}
+.detail-panel p{font-size:13.5px;margin:8px 0 0;color:var(--ink)}
+.meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.meta-grid div .ml{font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--slate)}
+.meta-grid div .mv{font-size:12.5px;font-weight:600;color:var(--ink);margin-top:2px}
+
+.qid-box{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.qid-box .qh{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.qid-box .qh .qcount{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--navy-deep)}
+.qid-pills{display:flex;flex-wrap:wrap;gap:6px}
+.qid-pill{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:5px 11px;border-radius:12px;cursor:pointer;user-select:none;border:1.5px solid var(--slate);color:var(--slate);background:transparent;transition:background .15s,color .15s,border-color .15s}
+.qid-pill:hover{border-color:var(--navy-mid);color:var(--navy-mid)}
+.qid-pill.solved{border-color:var(--confirm);color:#fff;background:var(--confirm)}
+.qid-pill.pending-slot{border-style:dashed}
+.qid-pill.locked{opacity:.45;cursor:not-allowed;border-style:dashed}
+.qid-pill.locked:hover{border-color:var(--slate);color:var(--slate)}
+.link-note{font-size:11.5px;color:var(--slate);margin-top:8px;line-height:1.5}
+.link-note code{font-family:'IBM Plex Mono',monospace;background:var(--navy-soft);padding:1px 5px;border-radius:3px;font-size:10.5px}
+
+.day-block{margin-bottom:20px;border:1px solid var(--line);border-radius:8px;background:var(--paper-raised);overflow:hidden}
+.day-block-head{background:var(--navy-soft);padding:9px 16px;display:flex;justify-content:space-between;align-items:baseline}
+.day-block-head .dn{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:16px;color:var(--navy-deep)}
+.day-block-head .dd{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--navy-mid)}
+.list-row{padding:9px 16px;border-top:1px solid var(--line)}
+.list-row:hover{background:var(--navy-soft)}
+.list-row-top{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.list-row .lt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--navy-deep);font-weight:600;width:88px;flex-shrink:0;padding-top:1px}
+.list-row .lc{width:4px;border-radius:2px;flex-shrink:0;align-self:stretch}
+.list-row .lbody{flex:1}
+.list-row .ltitle{font-weight:600;font-size:13.5px}
+.list-row .ldetail{font-size:12px;color:var(--slate);margin-top:1px}
+.list-row.complete .ltitle{text-decoration:line-through;color:var(--slate)}
+.list-row .qid-box{margin-left:100px;margin-top:8px}
+
+.metric-section{background:var(--paper-raised);border:1px solid var(--line);border-radius:8px;padding:20px 24px;margin-bottom:18px}
+.metric-section h3{font-family:'IBM Plex Serif',serif;font-size:17px;color:var(--navy-deep);margin:0 0 4px}
+.metric-section .msub{font-size:12.5px;color:var(--slate);margin-bottom:16px}
+.hbar-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.hbar-label{width:96px;flex-shrink:0;font-size:12.5px;font-weight:600}
+.hbar-track{flex:1;height:22px;background:var(--slate-soft);border-radius:4px;overflow:hidden;position:relative}
+.hbar-fill{height:100%;display:flex;align-items:center;padding-left:8px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#fff;white-space:nowrap}
+.hbar-target-mark{position:absolute;top:0;bottom:0;width:2px;background:var(--ink)}
+.pending-block{margin-top:6px}
+.pending-block .pt{font-size:11px;color:var(--slate);margin-bottom:5px}
+
+.legend-row{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--slate);margin:14px 0}
+.legend-row .sw{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:5px;vertical-align:middle;border-left:3px solid}
+.footer-credit{margin-top:28px;padding-top:12px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--slate);text-align:center}
+@media (max-width:720px){.iphs-bar{grid-template-columns:repeat(2,1fr)}.meta-grid{grid-template-columns:repeat(2,1fr)}.list-row .qid-box{margin-left:0}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header class="masthead">
+  <div class="eyebrow">Horario integrado · Término 1 2026-2 · Ingeniería Mecánica PUCP</div>
+  <h1>Semana 7 — avanzado, con BAPEC vinculado</h1>
+  <div class="subtitle">Domingo 27 de septiembre — Sábado 3 de octubre de 2026 · ING225 · MAT241 · MEC257 · 1MEC02</div>
+  <div class="name-note">IPHS v2 (10 señales): ING225 34.4% · MAT241 35.9% · MEC257 29.6% (nominal, ya con el tope de banco de ING225 aplicado; antes de ese tope: 42.4% / 31.0% / 26.6%) · pesos 25/10/20/14/10/10/8/6/6/8 · 1MEC02 fuera del reparto, ritmo fijo aparte</div>
+</header>
+
+<div class="sync-bar">
+  <span class="sync-dot" id="syncDot"></span>
+  <span class="sync-text" id="syncText">No conectado — tus marcas se guardan en tu Google Drive, no en este navegador. Conéctate para cargar y guardar tu progreso real.</span>
+  <button class="sync-btn" id="syncBtn">Conectar con Google Drive</button>
+</div>
+
+<nav class="tabbar">
+  <button class="tab active" data-view="cal">Calendario</button>
+  <button class="tab" data-view="list">Lista</button>
+  <button class="tab" data-view="metrics">Métricas · BAPEC</button>
+</nav>
+
+<section class="iphs-bar" id="iphsBar"></section>
+
+<div class="note link">
+  <h4>Cómo funciona el contador vinculado — ahora vía tu Google Drive</h4>
+  Cada pastilla guarda su estado en un archivo <code>bapec_progreso.json</code> dentro de la carpeta raíz de tu proyecto en Drive, usando tu propia cuenta de Google. Los <strong>4 cursos</strong> (ING225, MAT241, MEC257, 1MEC02) ya están <span class="badge-linked">vinculados de verdad</span> a sus respectivos archivos BAPEC reales. Esta semana trae preguntas nuevas de verdad: ING225 Cap.4 (deflexión elástica de vigas — ecuación diferencial, superposición de deformaciones, influencia del esfuerzo cortante), MAT241 Cap.3 (determinante, adjunta, inversa, factorización triangular) y MEC257 Cap.4 (esfuerzo cortante crítico resuelto, resistencia teórica) — más repaso de Newton para sistemas de 2 variables (MAT241, antes de la PC4) y de las 4 piezas de Nivel B ya vistas en semana 6 (1MEC02, antes del Pb2). El cambio real de día de MAT241 esta semana (de jueves a martes, según su propio cronograma oficial) generó fuerte competencia de horarios con ING225 y MEC257 — detalle completo de lo que sí y no alcanzó hueco, en Métricas y en la nota de abajo.
+</div>
+
+<div class="note warn" id="setupNote">
+  <h4>Cómo abrir este archivo</h4>
+  Ya tiene tu Client ID de Google Cloud configurado. Solo debes abrirlo por <code>http://localhost:8000</code> (o el puerto que hayas puesto en "Authorized JavaScript origins"), no con doble clic directo — corre <code>python3 -m http.server 8000</code> en la carpeta donde tengas los archivos descargados, y ábrelo desde <code>http://localhost:8000/Horario_Semana7_Avanzado.html</code>.
+</div>
+
+<div class="note warn" id="gapNote">
+  <h4>Hallazgos de esta semana — pendientes y horas sin confirmar</h4>
+  MAT241 completa su banco semanal completo (<strong>27/27</strong>, sin pendientes) — priorizado porque su PC4 es la evaluación más próxima (jueves 17:00). ING225 programa <strong>22 de sus 25</strong> preguntas (~10.63h de las 12.08h nominales); las 3 restantes quedan cargadas en el contador (pestaña Métricas) como "sin bloque fijo esta semana". MEC257 es el más afectado: solo <strong>4 de sus 16</strong> preguntas consiguieron hueco (las que ya podían resolverse tras la Clase 1 del lunes); las otras 12 —las que necesitan también la Clase 2 del jueves— no encontraron espacio libre y quedan enteras como pendientes. La causa de los tres números es la misma: el cambio real de día de la clase de MAT241 (de jueves a martes, confirmado por su propio cronograma oficial) hizo que compitiera por las mismas tardes de martes y miércoles que ING225 y MEC257 normalmente usan, y al no tener MEC257 examen esta semana, es el que menos urgencia tenía para ceder terreno. Decidir qué hacer con los pendientes —adelantarlos en un rato libre, aceptarlos, o pedirme que rehaga el reparto— es tuyo. Además: la <strong>hora exacta</strong> de la Clase de MAT241 del martes y del Laboratorio 2 de MEC257 del lunes <strong>no aparece</strong> en ninguno de los dos cronogramas oficiales (solo el día) — las ubiqué en horarios razonables por continuidad con semanas anteriores, marcadas "HORA ESTIMADA" en su bloque; confírmalas en Paideia/aula virtual.
+</div>
+
+<div class="view active" id="view-cal">
+  <div class="cal-wrap"><div class="cal-grid" id="calGrid"></div></div>
+  <div class="legend-row">
+    <span><i class="sw" style="background:var(--navy-soft);border-color:var(--navy-mid)"></i>ING225</span>
+    <span><i class="sw" style="background:var(--gold-soft);border-color:var(--gold)"></i>MAT241</span>
+    <span><i class="sw" style="background:var(--teal-soft);border-color:var(--teal)"></i>MEC257</span>
+    <span><i class="sw" style="background:var(--plum-soft);border-color:var(--plum)"></i>1MEC02</span>
+    <span><i class="sw" style="background:var(--commute-soft);border-color:var(--commute)"></i>Traslado</span>
+    <span><i class="sw" style="background:var(--slate-soft);border-color:var(--slate)"></i>Personal / comida</span>
+    <span><i class="sw" style="background:#FFFFFF;border-color:var(--line);border-style:dashed"></i>Libre — aún sin asignar</span>
+  </div>
+  <div class="detail-panel" id="detailPanel"></div>
+</div>
+
+<div class="view" id="view-list"></div>
+<div class="view" id="view-metrics"></div>
+
+<div class="footer-credit">Horario Semana 7 · IPHS v2 (10 señales, T-score) · contador de preguntas sincronizado vía Google Drive API · 1MEC02 vinculado de verdad a su BAPEC real</div>
+
+</div>
+
+<script>
+// ---------- Config de vinculación BAPEC vía Google Drive ----------
+// 1) Ve a console.cloud.google.com, crea un proyecto, activa "Google Drive API"
+// 2) Configura la pantalla de consentimiento OAuth (External, modo Testing, agrégate como test user)
+// 3) Crea credenciales -> OAuth client ID -> tipo "Web application"
+//    Authorized JavaScript origins: http://localhost:8000
+// 4) Pega el Client ID resultante abajo (NO es secreto, es seguro dejarlo en el código del navegador)
+const GOOGLE_CLIENT_ID = '176230481298-pbv52qu67pp82sfjce23ccumabn6ub7o.apps.googleusercontent.com';
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
+const PROGRESS_FILE_NAME = 'bapec_progreso.json';
+const PROGRESS_PARENT_FOLDER_ID = '1Wm0X0zD-oVpOCIvHjCB32iAO-7WGpZyX'; // carpeta raíz de tu proyecto en Drive
+const BAPEC_LINKED = { ING225:true, MAT241:true, MEC257:true, '1MEC02':true }; // true = su BAPEC real ya lee/escribe el mismo archivo de Drive
+const QID_TARGET = { ING225: 25, MAT241: 27, MEC257: 16, '1MEC02': 6 };
+// Semana 7: ING225 topado a sus 25 candidatas reales de Cap.4-deflexión disponibles (12.08h de las 14.84h
+// nominales; IPHS nominal antes del tope: ING225 42.4% MAT241 31.0% MEC257 26.6%). El déficit de 2.76h se
+// redistribuyó a MAT241/MEC257 proporcional a su margen sobre el mínimo. Aparte, y ya en la fase de calendario
+// (no de IPHS): el cambio de día de MAT241 (jueves->martes) generó tope de calendario real esta semana —
+// ver nota de auditoría arriba para el reparto final de huecos entre los 3 cursos.
+const COURSE_HOURS = { ING225: 12.08, MAT241: 12.60, MEC257: 10.40 };
+const IPHS_PCT = { ING225: 34.4, MAT241: 35.9, MEC257: 29.6 };
+// Código real de referencia (ej. "PC1-14.1-P2") de cada pregunta seleccionada — de los 3 bancos verificados esta sesión.
+// Pendiente en conversaciones aparte por curso: percentil/nivel visibles, tiempo ponderado granular, vínculo a la plancha y ancla de salto directo al BAPEC.
+const QID_CODIGO = {'e1':'2E-26.1-Ej.1', 'p2':'2E-26.1-P.2', 'p3':'2E-26.1-P.3', 'p4':'2E-26.1-P.4', 'pc1_25_2_p1':'PC1-25.2-P1', 'pc1_25_2_p2':'PC1-25.2-P2', 'pc2_25_2_e1':'PC2-25.2-Ej1', 'pc2_25_2_e2':'PC2-25.2-Ej2', 'pc2_25_2_e3':'PC2-25.2-Ej3', 'pc2_25_2_e4':'PC2-25.2-Ej4', 'ex1t_25_2_p1':'1ET-25.2-P1', 'ex1t_25_2_p6':'1ET-25.2-P6', 'ex1t_25_2_p2':'1ET-25.2-P2', 'pc3_25_2_p1':'PC3-25.2-P1', 'pc4_25_2_e1':'PC4-25.2-Ej1', 'pc3_25_2_p2':'PC3-25.2-P2', 'pc4_25_2_e2':'PC4-25.2-Ej2', 'pc4_25_2_e3':'PC4-25.2-Ej3', 'ex1p_25_2_e1':'1EP-25.2-Ej1', 'ex1t_25_2_p3':'1ET-25.2-P3', 'ex1t_25_2_p4':'1ET-25.2-P4', 'ex2t_25_2_e3':'2ET-25.2-Ej3', 'ex2t_25_2_p2':'2ET-25.2-P2', 'ex1t_25_2_p5':'1ET-25.2-P5', 'ex1p_25_2_e3':'1EP-25.2-Ej3', 'ex1p_25_2_e2':'1EP-25.2-Ej2', 'pc9_25_2_e1':'PC9-25.2-Ej1', 'pc10_25_2_e1':'PC10-25.2-Ej1', 'pc10_25_2_e2':'PC10-25.2-Ej2', 'ex2t_25_2_p1':'2ET-25.2-P1', 'ex2t_25_2_e4b':'2ET-25.2-Ej4b', 'ex2t_25_2_e4a':'2ET-25.2-Ej4a', 'pc1_25_1_p1':'PC1-25.1-P1', 'pc1_25_1_ej2':'PC1-25.1-Ej2', 'pc1_25_1_ej3':'PC1-25.1-Ej3', 'pc1_25_1_ej4':'PC1-25.1-Ej4', 'pc2_25_1_p1':'PC2-25.1-P1', 'pc2_25_1_p2':'PC2-25.1-P2', 'pc2_25_1_p3':'PC2-25.1-P3', 'pc3_25_1_p1':'PC3-25.1-P1', 'pc3_25_1_p2':'PC3-25.1-P2', 'pc4_25_1_p1':'PC4-25.1-P1', 'pc4_25_1_p2':'PC4-25.1-P2', 'pc4_25_1_p3':'PC4-25.1-P3', 'pc7_25_1_ej1':'PC7-25.1-Ej1', 'pc7_25_1_ej2':'PC7-25.1-Ej2', 'pc7_25_1_ej3':'PC7-25.1-Ej3', 'ex1t_25_1_p1':'1ET-25.1-P1', 'ex1t_25_1_p2':'1ET-25.1-P2', 'ex1t_25_1_p3':'1ET-25.1-P3', 'ex1t_25_1_p4':'1ET-25.1-P4', 'ex1t_25_1_p5':'1ET-25.1-P5', 'ex1p_25_1_p1':'1EP-25.1-P1', 'ex1p_25_1_ej2':'1EP-25.1-Ej2', 'ex1p_25_1_ej4a':'1EP-25.1-Ej4a', 'ex1p_25_1_ej4b':'1EP-25.1-Ej4b', 'ex2_25_1_p1':'2E-25.1-P1', 'ex2_25_1_ej2':'2E-25.1-Ej2', 'ex2_25_1_ej4':'2E-25.1-Ej4', 'pc1_22_1_ej1':'PC1-22.1-Ej1', 'pc1_22_1_ej3':'PC1-22.1-Ej3', 'pc1_22_1_ej4':'PC1-22.1-Ej4', 'pc2_22_1_ej1':'PC2-22.1-Ej1', 'pc2_22_1_ej2':'PC2-22.1-Ej2', 'pc2_22_1_ej3':'PC2-22.1-Ej3', 'pc3_22_1_ej1':'PC3-22.1-Ej1', 'pc3_22_1_ej2':'PC3-22.1-Ej2', 'pc3_22_1_ej3':'PC3-22.1-Ej3', 'pc4_22_1_ej1':'PC4-22.1-Ej1', 'pc4_22_1_ej2':'PC4-22.1-Ej2', 'pc4_22_1_ej3':'PC4-22.1-Ej3', 'pc7_22_1_ej1':'PC7-22.1-Ej1', 'pc7_22_1_ej2':'PC7-22.1-Ej2', 'pc8_22_1_ej2':'PC8-22.1-Ej2', 'pc8_22_1_ej3':'PC8-22.1-Ej3', 'ex1_22_1_c1':'1E-22.1-C1', 'ex1_22_1_c2':'1E-22.1-C2', 'ex1_22_1_c3':'1E-22.1-C3', 'ex1_22_1_c4':'1E-22.1-C4', 'ex1_22_1_p1':'1E-22.1-P1', 'ex1_22_1_p2':'1E-22.1-P2', 'ex1_22_1_p3':'1E-22.1-P3', 'ex2_22_1_p1':'2E-22.1-P1', 'ex2_22_1_p2':'2E-22.1-P2', 'ex2_22_1_p3':'2E-22.1-P3', 'ex2_22_1_p4':'2E-22.1-P4', 'pc1_21_1_e1':'PC1-21.1-Ej1', 'pc1_21_1_e2':'PC1-21.1-Ej2', 'pc1_21_1_e3':'PC1-21.1-Ej3', 'pc1_21_1_e4':'PC1-21.1-Ej4', 'pc2_21_1_e1':'PC2-21.1-Ej1', 'pc2_21_1_e2':'PC2-21.1-Ej2', 'pc2_21_1_e3':'PC2-21.1-Ej3', 'pc2_21_1_e4':'PC2-21.1-Ej4', 'pc3_21_1_e1':'PC3-21.1-Ej1', 'pc3_21_1_e2':'PC3-21.1-Ej2', 'pc3_21_1_e3':'PC3-21.1-Ej3', 'pc4_21_1_e1':'PC4-21.1-Ej1', 'pc4_21_1_e2':'PC4-21.1-Ej2', 'pc4_21_1_e3':'PC4-21.1-Ej3', 'pc5_21_1_e1':'PC5-21.1-Ej1', 'pc5_21_1_e2':'PC5-21.1-Ej2', 'pc5_21_1_e3':'PC5-21.1-Ej3', 'pc6_21_1_e1':'PC6-21.1-Ej1', 'pc6_21_1_e2':'PC6-21.1-Ej2', 'pc6_21_1_e3':'PC6-21.1-Ej3', 'pc7_21_1_e1':'PC7-21.1-Ej1', 'pc7_21_1_e2':'PC7-21.1-Ej2', 'pc7_21_1_e3':'PC7-21.1-Ej3', 'pc7_21_1_e4':'PC7-21.1-Ej4', 'pc8_21_1_e1':'PC8-21.1-Ej1', 'pc8_21_1_e2':'PC8-21.1-Ej2', 'pc8_21_1_e3':'PC8-21.1-Ej3', 'ex1_21_1_p1':'1E-21.1-P1', 'ex1_21_1_p2':'1E-21.1-P2', 'ex1_21_1_p3':'1E-21.1-P3', 'ex1_21_1_p4':'1E-21.1-P4', 'ex2_21_1_c1':'2E-21.1-C1', 'ex2_21_1_c2':'2E-21.1-C2', 'ex2_21_1_p1':'2E-21.1-P1', 'ex2_21_1_p2':'2E-21.1-P2', 'ex2_21_1_p3':'2E-21.1-P3', 'ex2_21_1_p4':'2E-21.1-P4', 'pc1_21_2_e1':'PC1-21.2-Ej1', 'pc1_21_2_e2':'PC1-21.2-Ej2', 'pc1_21_2_e3':'PC1-21.2-Ej3', 'pc1_21_2_e4':'PC1-21.2-Ej4', 'pc1_21_2_e5':'PC1-21.2-Ej5', 'pc2_21_2_e1':'PC2-21.2-Ej1', 'pc2_21_2_e2':'PC2-21.2-Ej2', 'pc2_21_2_e3':'PC2-21.2-Ej3', 'pc2_21_2_e4':'PC2-21.2-Ej4', 'pc2_21_2_e5':'PC2-21.2-Ej5', 'pc3_21_2_e1':'PC3-21.2-Ej1', 'pc3_21_2_e2':'PC3-21.2-Ej2', 'pc3_21_2_e3':'PC3-21.2-Ej3', 'pc3_21_2_e4':'PC3-21.2-Ej4', 'pc4_21_2_e1':'PC4-21.2-Ej1', 'pc4_21_2_e2':'PC4-21.2-Ej2', 'pc4_21_2_e3':'PC4-21.2-Ej3', 'pc4_21_2_e4':'PC4-21.2-Ej4', 'pc5_21_2_p1':'PC5-21.2-P1', 'pc5_21_2_p2':'PC5-21.2-P2', 'pc5_21_2_p3':'PC5-21.2-P3', 'pc6_21_2_p1':'PC6-21.2-P1', 'pc6_21_2_p2':'PC6-21.2-P2', 'pc6_21_2_p3':'PC6-21.2-P3', 'pc7_21_2_p1':'PC7-21.2-P1', 'pc7_21_2_p2':'PC7-21.2-P2', 'pc7_21_2_p3':'PC7-21.2-P3', 'pc8_21_2_p1':'PC8-21.2-P1', 'pc8_21_2_p2':'PC8-21.2-P2', 'pc8_21_2_p3':'PC8-21.2-P3', 'ex1_21_2_c1':'1E-21.2-C1', 'ex1_21_2_c2':'1E-21.2-C2', 'ex1_21_2_c3':'1E-21.2-C3', 'ex1_21_2_c4':'1E-21.2-C4', 'ex1_21_2_p1':'1E-21.2-P1', 'ex1_21_2_p2':'1E-21.2-P2', 'ex1_21_2_p3':'1E-21.2-P3', 'ex1_21_2_p4':'1E-21.2-P4', 'ex2_21_2_p1':'2E-21.2-P1', 'ex2_21_2_p2':'2E-21.2-P2', 'ex2_21_2_p3':'2E-21.2-P3', 'ex2_21_2_p4':'2E-21.2-P4', 'pc1_19_2_p1':'PC1-19.2-P1', 'pc1_19_2_p2':'PC1-19.2-P2', 'pc1_19_2_p3':'PC1-19.2-P3', 'pc1_19_2_p4':'PC1-19.2-P4', 'pc1_19_2_p5':'PC1-19.2-P5', 'pc2_19_2_p1':'PC2-19.2-P1', 'pc2_19_2_p2':'PC2-19.2-P2', 'pc2_19_2_p3':'PC2-19.2-P3', 'pc3_19_2_p1':'PC3-19.2-P1', 'pc3_19_2_p2':'PC3-19.2-P2', 'pc3_19_2_p3':'PC3-19.2-P3', 'pc4_19_2_p1':'PC4-19.2-P1', 'pc4_19_2_p2':'PC4-19.2-P2', 'pc4_19_2_p3':'PC4-19.2-P3', 'pc5_19_2_p1':'PC5-19.2-P1', 'pc5_19_2_p2':'PC5-19.2-P2', 'pc5_19_2_p3':'PC5-19.2-P3', 'pc6_19_2_p1':'PC6-19.2-P1', 'pc6_19_2_p2':'PC6-19.2-P2', 'pc6_19_2_p3':'PC6-19.2-P3', 'pc6_19_2_p4':'PC6-19.2-P4', 'pc7_19_2_p1':'PC7-19.2-P1', 'pc7_19_2_p2':'PC7-19.2-P2', 'pc7_19_2_p3':'PC7-19.2-P3', 'pc7_19_2_p4':'PC7-19.2-P4', 'pc8_19_2_p2':'PC8-19.2-P2', 'pc8_19_2_p3':'PC8-19.2-P3', 'ex1_19_2_p1':'1E-19.2-P1', 'ex1_19_2_p2':'1E-19.2-P2', 'ex1_19_2_p3':'1E-19.2-P3', 'ex1_19_2_p4':'1E-19.2-P4', 'ex2_19_2_p1':'2E-19.2-P1', 'ex2_19_2_p2':'2E-19.2-P2', 'ex2_19_2_p3':'2E-19.2-P3', 'ex2_19_2_p4':'2E-19.2-P4', 'pc1_19_1_p1':'PC1-19.1-P1', 'pc1_19_1_p2':'PC1-19.1-P2', 'pc1_19_1_p3':'PC1-19.1-P3', 'pc1_19_1_p4':'PC1-19.1-P4', 'pc2_19_1_p1':'PC2-19.1-P1', 'pc2_19_1_p2':'PC2-19.1-P2', 'pc2_19_1_p3':'PC2-19.1-P3', 'pc2_19_1_p4':'PC2-19.1-P4', 'pc3_19_1_p1':'PC3-19.1-P1', 'pc3_19_1_p2':'PC3-19.1-P2', 'pc3_19_1_p3':'PC3-19.1-P3', 'pc4_19_1_p1':'PC4-19.1-P1', 'pc4_19_1_p2':'PC4-19.1-P2', 'pc4_19_1_p3':'PC4-19.1-P3', 'pc5_19_1_p1':'PC5-19.1-P1', 'pc5_19_1_p2':'PC5-19.1-P2', 'pc5_19_1_p3':'PC5-19.1-P3', 'pc5_19_1_p4':'PC5-19.1-P4', 'pc6_19_1_p1':'PC6-19.1-P1', 'pc6_19_1_p2':'PC6-19.1-P2', 'pc6_19_1_p3':'PC6-19.1-P3', 'pc6_19_1_p4':'PC6-19.1-P4', 'pc7_19_1_p1':'PC7-19.1-P1', 'pc7_19_1_p2':'PC7-19.1-P2', 'pc7_19_1_p3':'PC7-19.1-P3', 'pc7_19_1_p4':'PC7-19.1-P4', 'pc8_19_1_p1':'PC8-19.1-P1', 'pc8_19_1_p2':'PC8-19.1-P2', 'pc8_19_1_p3':'PC8-19.1-P3', 'ex1_19_1_c1':'1E-19.1-C1', 'ex1_19_1_c2':'1E-19.1-C2', 'ex1_19_1_c3':'1E-19.1-C3', 'ex1_19_1_p1':'1E-19.1-P1', 'ex1_19_1_p2':'1E-19.1-P2', 'ex1_19_1_p3':'1E-19.1-P3', 'ex1_19_1_p4':'1E-19.1-P4', 'ex2_19_1_c1':'2E-19.1-C1', 'ex2_19_1_c2':'2E-19.1-C2', 'ex2_19_1_c3':'2E-19.1-C3', 'ex2_19_1_p1':'2E-19.1-P1', 'ex2_19_1_p2':'2E-19.1-P2', 'ex2_19_1_p3':'2E-19.1-P3', 'ex2_19_1_p4':'2E-19.1-P4', 'pc1_20_1_e1':'PC1-20.1-Ej1', 'pc1_20_1_e2':'PC1-20.1-Ej2', 'pc1_20_1_e3':'PC1-20.1-Ej3', 'pc1_20_1_e4':'PC1-20.1-Ej4', 'pc2_20_1_e1':'PC2-20.1-Ej1', 'pc2_20_1_e2':'PC2-20.1-Ej2', 'pc2_20_1_e3':'PC2-20.1-Ej3', 'pc3_20_1_e1':'PC3-20.1-Ej1', 'pc3_20_1_e2':'PC3-20.1-Ej2', 'pc3_20_1_e3':'PC3-20.1-Ej3', 'pc4_20_1_e1':'PC4-20.1-Ej1', 'pc4_20_1_e2':'PC4-20.1-Ej2', 'pc4_20_1_e3':'PC4-20.1-Ej3', 'ex1_20_1_p1':'1E-20.1-P1', 'ex1_20_1_p2':'1E-20.1-P2', 'ex1_20_1_p3':'1E-20.1-P3', 'ex1_20_1_p4':'1E-20.1-P4', 'ex2_20_1_p1':'2E-20.1-P1', 'ex2_20_1_p2':'2E-20.1-P2', 'ex2_20_1_p3':'2E-20.1-P3', 'ex2_20_1_p4':'2E-20.1-P4', 'pc1_20_2_p1':'PC1-20.2-P1', 'pc1_20_2_p2':'PC1-20.2-P2', 'pc1_20_2_p3':'PC1-20.2-P3', 'pc1_20_2_p4':'PC1-20.2-P4', 'pc2_20_2_p1':'PC2-20.2-P1', 'pc2_20_2_p2':'PC2-20.2-P2', 'pc2_20_2_p3':'PC2-20.2-P3', 'pc3_20_2_p1':'PC3-20.2-P1', 'pc3_20_2_p2':'PC3-20.2-P2', 'pc3_20_2_p3':'PC3-20.2-P3', 'ex1_20_2_p1':'1E-20.2-P1', 'ex1_20_2_p2':'1E-20.2-P2', 'ex1_20_2_p3':'1E-20.2-P3', 'ex1_20_2_p4':'1E-20.2-P4', 'ex2_20_2_p1':'2E-20.2-P1', 'ex2_20_2_p2':'2E-20.2-P2', 'ex2_20_2_p3':'2E-20.2-P3', 'ex2_20_2_p4':'2E-20.2-P4', 'pc6_23_1_e1':'PC6-23.1-Ej1', 'pc6_23_1_e2':'PC6-23.1-Ej2', 'pc6_23_1_e3':'PC6-23.1-Ej3', 'pc6_23_2_p1':'PC6-23.2-P1', 'ex1_23_2_c1':'1E-23.2-C1', 'ex1_23_2_c2':'1E-23.2-C2', 'ex1_23_2_c3':'1E-23.2-C3', 'ex1_23_2_c4':'1E-23.2-C4', 'ex2_23_1_p1':'2E-23.1-P1', 'ex2_23_1_p2':'2E-23.1-P2', 'ex2_23_1_p4':'2E-23.1-P4', 'pc3_23_2_p2':'PC3-23.2-P2', 'pc3_23_2_p3':'PC3-23.2-P3', 'pc4_23_2_p1':'PC4-23.2-P1', 'pc5_23_2_p1':'PC5-23.2-P1', 'pc5_23_2_p2':'PC5-23.2-P2', 'pc5_23_2_p3':'PC5-23.2-P3', 'ex1_23_2_p1':'1E-23.2-P1', 'ex1_23_2_p2':'1E-23.2-P2', 'ex1_23_2_p4':'1E-23.2-P4', 'pc3_24_1_p1':'PC3-24.1-P1', 'pc3_24_1_p2':'PC3-24.1-P2', 'ex1_24_1_p1':'1E-24.1-P1', 'ex1_24_1_p2':'1E-24.1-P2', 'ex1_24_1_p3':'1E-24.1-P3', 'ex1_24_1_p4':'1E-24.1-P4', 'ex1_24_2_c1':'1E-24.2-C1', 'ex1_24_2_c2':'1E-24.2-C2', 'ex1_24_2_c3':'1E-24.2-C3', 'ex1_24_2_c4':'1E-24.2-C4', 'ex1_24_2_c5':'1E-24.2-C5', 'ex1_24_2_p1':'1E-24.2-P1', 'ex1_24_2_p2':'1E-24.2-P2', 'ex1_24_2_p3':'1E-24.2-P3', 'ex2_24_2_t1':'2E-24.2-T1', 'ex2_24_2_t2':'2E-24.2-T2', 'ex2_24_2_t3':'2E-24.2-T3', 'ex2_24_2_t4':'2E-24.2-T4', 'ex2_24_2_p1':'2E-24.2-P1', 'ex2_24_2_p4':'2E-24.2-P4', 'pc1_16_1_p1':'PC1-16.1-P1', 'pc1_16_1_p2':'PC1-16.1-P2', 'pc1_16_1_p3':'PC1-16.1-P3', 'pc1_16_1_p4':'PC1-16.1-P4', 'pc1_16_1_p5':'PC1-16.1-P5', 'pc2_16_1_p1':'PC2-16.1-P1', 'pc2_16_1_p2':'PC2-16.1-P2', 'pc2_16_1_p3':'PC2-16.1-P3', 'pc2_16_1_p4':'PC2-16.1-P4', 'pc3_16_1_p1':'PC3-16.1-P1', 'pc3_16_1_p2':'PC3-16.1-P2', 'pc3_16_1_p3':'PC3-16.1-P3', 'pc4_16_1_p1':'PC4-16.1-P1', 'pc4_16_1_p2':'PC4-16.1-P2', 'pc4_16_1_p3':'PC4-16.1-P3', 'pc5_16_1_p1':'PC5-16.1-P1', 'pc5_16_1_p2':'PC5-16.1-P2', 'pc5_16_1_p3':'PC5-16.1-P3', 'pc6_16_1_p1':'PC6-16.1-P1', 'pc6_16_1_p2':'PC6-16.1-P2', 'pc6_16_1_p3':'PC6-16.1-P3', 'pc7_16_1_p1':'PC7-16.1-P1', 'pc7_16_1_p2':'PC7-16.1-P2', 'pc8_16_1_p1':'PC8-16.1-P1', 'pc8_16_1_p2':'PC8-16.1-P2', 'pc8_16_1_p3':'PC8-16.1-P3', 'ex1_16_1_p1':'1E-16.1-P1', 'ex1_16_1_p2':'1E-16.1-P2', 'ex1_16_1_p3':'1E-16.1-P3', 'ex1_16_1_p4':'1E-16.1-P4', 'ex1_16_1_p5':'1E-16.1-P5', 'ex2_16_1_p1':'2E-16.1-P1', 'ex2_16_1_p2':'2E-16.1-P2', 'ex2_16_1_p3':'2E-16.1-P3', 'ex2_16_1_p4':'2E-16.1-P4', 'pc1_17_1_p1':'PC1-17.1-P1', 'pc1_17_1_p2':'PC1-17.1-P2', 'pc1_17_1_p3':'PC1-17.1-P3', 'pc1_17_1_p4':'PC1-17.1-P4', 'pc1_17_1_p5':'PC1-17.1-P5', 'pc2_17_1_p1':'PC2-17.1-P1', 'pc2_17_1_p2':'PC2-17.1-P2', 'pc2_17_1_p3':'PC2-17.1-P3', 'pc3_17_1_p1':'PC3-17.1-P1', 'pc3_17_1_p2':'PC3-17.1-P2', 'pc3_17_1_p3':'PC3-17.1-P3', 'pc3_17_1_p4':'PC3-17.1-P4', 'pc4_17_1_p1':'PC4-17.1-P1', 'pc4_17_1_p2':'PC4-17.1-P2', 'pc4_17_1_p3':'PC4-17.1-P3', 'pc6_17_1_p1':'PC6-17.1-P1', 'pc6_17_1_p2':'PC6-17.1-P2', 'pc6_17_1_p3':'PC6-17.1-P3', 'pc7_17_1_p1':'PC7-17.1-P1', 'pc7_17_1_p3':'PC7-17.1-P3', 'pc8_17_1_p1':'PC8-17.1-P1', 'pc8_17_1_p2':'PC8-17.1-P2', 'pc8_17_1_p3':'PC8-17.1-P3', 'ex2_17_1_p1':'2E-17.1-P1', 'ex2_17_1_p3':'2E-17.1-P3', 'ex2_17_1_p4':'2E-17.1-P4', 'pc1_18_2_p1':'PC1-18.2-P1', 'pc1_18_2_p2':'PC1-18.2-P2', 'pc1_18_2_p3':'PC1-18.2-P3', 'pc1_18_2_p4':'PC1-18.2-P4', 'pc2_18_2_p1':'PC2-18.2-P1', 'pc2_18_2_p2':'PC2-18.2-P2', 'pc2_18_2_p3':'PC2-18.2-P3', 'pc4_18_2_p1':'PC4-18.2-P1', 'pc4_18_2_p2':'PC4-18.2-P2', 'pc4_18_2_p3':'PC4-18.2-P3', 'pc5_18_2_p1':'PC5-18.2-P1', 'pc5_18_2_p2':'PC5-18.2-P2', 'pc5_18_2_p3':'PC5-18.2-P3', 'pc6_18_2_p1':'PC6-18.2-P1', 'pc6_18_2_p2':'PC6-18.2-P2', 'pc6_18_2_p3':'PC6-18.2-P3', 'pc6_18_2_p4':'PC6-18.2-P4', 'pc7_18_2_p1':'PC7-18.2-P1', 'pc7_18_2_p2':'PC7-18.2-P2', 'pc7_18_2_p3':'PC7-18.2-P3', 'pc8_18_2_p1':'PC8-18.2-P1', 'pc8_18_2_p2':'PC8-18.2-P2', 'pc8_18_2_p3':'PC8-18.2-P3', 'ex2_18_2_c1':'2E-18.2-C1', 'ex2_18_2_c2':'2E-18.2-C2', 'ex2_18_2_c3':'2E-18.2-C3', 'ex2_18_2_p4':'2E-18.2-P4', 'ex2_18_2_p5':'2E-18.2-P5', 'ex2_18_2_p6':'2E-18.2-P6', 'ex2_18_2_p7':'2E-18.2-P7', 'ex1_15_1_c1':'1E-15.1-C1', 'ex1_15_1_c2':'1E-15.1-C2', 'ex1_15_1_c3':'1E-15.1-C3', 'pc1_15_1_p1':'PC1-15.1-P1', 'pc1_15_1_p2':'PC1-15.1-P2', 'pc1_15_1_p3':'PC1-15.1-P3', 'pc1_15_1_p4':'PC1-15.1-P4', 'pc1_15_1_p5':'PC1-15.1-P5', 'pc1_15_1_p6':'PC1-15.1-P6', 'pc2_15_1_p1':'PC2-15.1-P1', 'pc2_15_1_p2':'PC2-15.1-P2', 'pc2_15_1_p3':'PC2-15.1-P3', 'pc3_15_1_p1':'PC3-15.1-P1', 'pc3_15_1_p2':'PC3-15.1-P2', 'pc3_15_1_p3':'PC3-15.1-P3', 'pc3_15_1_p4':'PC3-15.1-P4', 'pc3_15_1_p5':'PC3-15.1-P5', 'pc4_15_1_e1':'PC4-15.1-Ej1', 'pc4_15_1_e2':'PC4-15.1-Ej2', 'pc4_15_1_e3':'PC4-15.1-Ej3', 'pc7_15_1_e1':'PC7-15.1-Ej1', 'pc7_15_1_e2':'PC7-15.1-Ej2', 'pc7_15_1_e3':'PC7-15.1-Ej3', 'pc8_15_1_e1':'PC8-15.1-Ej1', 'pc1_11_2_e1':'PC1-11.2-Ej1', 'pc1_11_2_e2':'PC1-11.2-Ej2', 'pc1_11_2_e3':'PC1-11.2-Ej3', 'pc1_11_2_e4':'PC1-11.2-Ej4', 'pc2_11_2_e1':'PC2-11.2-Ej1', 'pc2_11_2_e2':'PC2-11.2-Ej2', 'pc2_11_2_e3':'PC2-11.2-Ej3', 'pc4_11_2_e1':'PC4-11.2-Ej1', 'pc4_11_2_e2':'PC4-11.2-Ej2', 'pc4_11_2_e3':'PC4-11.2-Ej3', 'pc8_11_2_p1':'PC8-11.2-P1', 'pc8_11_2_p3':'PC8-11.2-P3', 'ex1_11_2_p1':'1E-11.2-P1', 'ex1_11_2_p2':'1E-11.2-P2', 'ex1_11_2_p3':'1E-11.2-P3', 'ex1_11_2_p4':'1E-11.2-P4', 'ex1_11_2_p5':'1E-11.2-P5', 'ex2_11_2_p1':'2E-11.2-P1', 'ex2_11_2_p2':'2E-11.2-P2', 'ex2_11_2_p4':'2E-11.2-P4', 'pc7_10_2_p1':'PC7-10.2-P1', 'pc7_10_2_p2':'PC7-10.2-P2', 'pc8_10_2_p1':'PC8-10.2-P1', 'pc8_10_2_p2':'PC8-10.2-P2', 'ex1_10_2_p1':'1E-10.2-P1', 'ex1_10_2_p2':'1E-10.2-P2', 'ex1_10_2_p3':'1E-10.2-P3', 'ex1_10_2_p4':'1E-10.2-P4', 'ex2_10_2_p1':'2E-10.2-P1', 'pc1_12_1_p1':'PC1-12.1-P1', 'pc1_12_1_p2':'PC1-12.1-P2', 'pc1_12_1_p3':'PC1-12.1-P3', 'pc2_12_1_p1':'PC2-12.1-P1', 'pc2_12_1_p3':'PC2-12.1-P3', 'ex1_12_1_p1':'1E-12.1-P1', 'ex1_12_1_p2':'1E-12.1-P2', 'ex1_12_1_p3':'1E-12.1-P3', 'ex1_12_1_p4':'1E-12.1-P4', 'pc4_08_2_p1':'PC4-08.2-P1', 'pc4_08_2_p2':'PC4-08.2-P2', 'pc4_08_2_p3':'PC4-08.2-P3', 'pc4_08_2_p4':'PC4-08.2-P4', 'pc1_08_2_p1':'PC1-08.2-P1', 'pc1_08_2_p2':'PC1-08.2-P2', 'pc1_08_2_p3':'PC1-08.2-P3', 'pc1_08_2_p4':'PC1-08.2-P4', 'pc2_08_2_p1v2':'PC2-08.2-P1', 'pc2_08_2_p2v2':'PC2-08.2-P2', 'pc2_08_2_p3v2':'PC2-08.2-P3', 'pc2_08_2_p4v2':'PC2-08.2-P4', 'ex2_12_2_p1':'2E-12.2-P1', 'ex2_12_2_p2':'2E-12.2-P2', 'ex2_12_2_p3':'2E-12.2-P3', 'ex1_14_1_ej2':'1E-14.1-Ej2', 'ex1_14_1_ej3':'1E-14.1-Ej3', 'ex1_14_2_p1':'1E-14.2-P1', 'ex1_14_2_p2':'1E-14.2-P2', 'ex1_14_2_p3':'1E-14.2-P3', 'ex1_14_2_p4':'1E-14.2-P4', 'ex1_14_2_p5':'1E-14.2-P5', 'ex1_13_1_ej1':'1E-13.1-Ej1', 'ex1_13_1_ej4':'1E-13.1-Ej4', 'ex1_13_1_p1':'1E-13.1-P1', 'ex1_13_1_p2':'1E-13.1-P2', 'ex1_13_1_p3':'1E-13.1-P3', 'pc1_14_1_p2':'PC1-14.1-P2', 'ex1_07_1_p1':'1E-07.1-P1', 'ex1_07_1_p2':'1E-07.1-P2', 'ex1_07_1_p3':'1E-07.1-P3', 'ex1_07_1_p4':'1E-07.1-P4', 'ex2_07_1_p1':'2E-07.1-P1', 'ex2_07_1_p2':'2E-07.1-P2', 'ex2_07_1_p3':'2E-07.1-P3', 'ex2_07_1_p4':'2E-07.1-P4', 'ex2_07_2_p1':'2E-07.2-P1', 'ex2_07_2_p2':'2E-07.2-P2', 'ex2_07_2_p3':'2E-07.2-P3', 'ex2_07_2_p4':'2E-07.2-P4', 'pc5_14_1_p1':'PC5-14.1-P1', 'pc5_14_1_p2':'PC5-14.1-P2', 'pc5_14_1_p3':'PC5-14.1-P3', 'ex1_08_1_p1':'1E-08.1-P1', 'ex2_25_2_c1':'2E-25.2-C1', 'ex2_25_2_c2':'2E-25.2-C2', 'ex2_25_2_c3':'2E-25.2-C3', 'ex2_25_2_c4':'2E-25.2-C4', 'ex2_25_2_c5':'2E-25.2-C5', 'ex2_15_2_p1':'2E-15.2-P1', 'ex2_15_2_p2':'2E-15.2-P2', 'ex2_15_2_p3':'2E-15.2-P3', 'ex2_15_2_p4':'2E-15.2-P4', 'ex2_15_2_p5':'2E-15.2-P5', 'ex2_15_2_p6':'2E-15.2-P6', 'pc1_22_2_p1':'PC1-22.2-P1', 'pc1_22_2_p4':'PC1-22.2-P4', 'pc4_18_1_p2':'PC4-18.1-P2', 'ex1_18_1_p5':'1E-18.1-P5', 'ex1_18_1_p6':'1E-18.1-P6', 'ex2_18_1_p1':'2E-18.1-P1', 'ex2_18_1_p2':'2E-18.1-P2', 'ex2_18_1_p3':'2E-18.1-P3', 'ex2_18_1_p5':'2E-18.1-P5', 'ex2_23_1_p3':'2E-23.1-P3', 'pc7_15_2_p1':'PC7-15.2-P1', 'pc7_15_2_p2':'PC7-15.2-P2', 'pc7_15_2_p3':'PC7-15.2-P3', 'pc2_15_2_p1':'PC2-15.2-P1', 'pc2_15_2_p2':'PC2-15.2-P2', 'pc2_15_2_p3':'PC2-15.2-P3', 'pc2_15_2_p4':'PC2-15.2-P4', 'pc5_15_2_p1':'PC5-15.2-P1', 'pc5_15_2_p2':'PC5-15.2-P2', 'pc5_15_2_p3':'PC5-15.2-P3', 'pc5_15_2_p4':'PC5-15.2-P4', 'pc6_22_1_p1':'PC6-22.1-P1', 'pc6_22_1_p2':'PC6-22.1-P2', 'pc6_22_1_p3':'PC6-22.1-P3', 'pc5_22_1_p1':'PC5-22.1-P1', 'pc5_22_1_p2':'PC5-22.1-P2', 'pc5_22_1_p3':'PC5-22.1-P3', 'pc5_17_1_p1':'PC5-17.1-P1', 'pc5_17_1_p2':'PC5-17.1-P2', 'ex1_17_1_p1':'1E-17.1-P1', 'ex1_17_1_p3':'1E-17.1-P3', 'ex1_17_1_p2':'1E-17.1-P2', 'ex1_17_1_p4':'1E-17.1-P4', 'ex1_17_1_p5':'1E-17.1-P5', 'ex1_10_1_p1':'1E-10.1-P1', 'ex1_10_1_p2':'1E-10.1-P2', 'ex1_10_1_p3':'1E-10.1-P3', 'ex1_10_1_p4':'1E-10.1-P4', 'ex1_10_1_p5':'1E-10.1-P5', 'ex2_23_2_p3':'2E-23.2-P3', 'pc2_23_1_p1':'PC2-23.1-P1', 'pc2_23_1_p2':'PC2-23.1-P2', 'pc2_23_1_p3':'PC2-23.1-P3', 'pc2_23_1_p4':'PC2-23.1-P4', 'pc3_23_1_p1':'PC3-23.1-P1', 'pc3_23_1_p2':'PC3-23.1-P2', 'pc3_23_1_p3':'PC3-23.1-P3', 'pc4_23_1_p1':'PC4-23.1-P1', 'ex2_23_2_c5v2':'2E-23.2-C5', 'ex2t_17_1_p1':'2ET-17.1-P1', 'ex2t_17_1_p2':'2ET-17.1-P2', 'e1_2020_1_p1':'1E-20.1-P1', 'e1_2020_1_p2':'1E-20.1-P2', 'e1_2020_1_p3':'1E-20.1-P3', 'e1_2020_1_p4':'1E-20.1-P4', 'e1_2020_1_p5':'1E-20.1-P5', 'e1_2020_1_p6':'1E-20.1-P6', 'e2_2020_1_p1':'2E-20.1-P1', 'e2_2020_1_p2':'2E-20.1-P2', 'e2_2020_1_p3':'2E-20.1-P3', 'e2_2020_1_p4':'2E-20.1-P4', 'pc1_2020_1_g1_p1':'PC1-20.1-G1-P1', 'pc1_2020_1_g1_p2':'PC1-20.1-G1-P2', 'pc1_2020_1_g2_p1':'PC1-20.1-G2-P1', 'pc1_2020_1_g2_p2':'PC1-20.1-G2-P2', 'pc1_2020_1_g3_p1':'PC1-20.1-G3-P1', 'pc1_2020_1_g3_p2':'PC1-20.1-G3-P2', 'pc1_2020_1_g4_p1':'PC1-20.1-G4-P1', 'pc1_2020_1_g4_p2':'PC1-20.1-G4-P2', 'pc2_2020_1_p1':'PC2-20.1-P1', 'pc2_2020_1_p2':'PC2-20.1-P2', 'pc3_2020_1_pu':'PC3-20.1-PU', 'pc4_2020_1_p1':'PC4-20.1-P1', 'pc4_2020_1_p2':'PC4-20.1-P2', 'pc5_2020_1_p1':'PC5-20.1-P1', 'pc5_2020_1_p2':'PC5-20.1-P2', 'pc6_2020_1_pu':'PC6-20.1-PU', 'pc1_2012_1_p1':'PC1-12.1-P1', 'pc1_2012_1_p2':'PC1-12.1-P2', 'pc1_2012_1_p3':'PC1-12.1-P3', 'pc2_2012_1_p1':'PC2-12.1-P1', 'pc2_2012_1_p2':'PC2-12.1-P2', 'pc2_2012_1_p3':'PC2-12.1-P3', 'pc2_2012_1_p4':'PC2-12.1-P4', 'pc4_2012_1_q1':'PC4-12.1-P1', 'pc4_2012_1_q2':'PC4-12.1-P2', 'pc4_2012_1_q3':'PC4-12.1-P3', 'pc8_2012_1_p1':'PC8-12.1-P1', 'pc8_2012_1_p2':'PC8-12.1-P2', 'pc8_2012_1_p3':'PC8-12.1-P3', 'ex1_2012_1_p1':'EX1-12.1-P1', 'ex1_2012_1_p2':'EX1-12.1-P2', 'ex1_2012_1_p3':'EX1-12.1-P3', 'ex1_2012_1_p4':'EX1-12.1-P4', 'ex2_2012_1_p1':'EX2-12.1-P1', 'ex2_2012_1_p2':'EX2-12.1-P2', 'ex2_2012_1_p3':'EX2-12.1-P3', 'ex2_2012_1_p4':'EX2-12.1-P4', 'pc1_2013_1_p1':'PC1-13.1-P1', 'pc1_2013_1_p2':'PC1-13.1-P2', 'pc1_2013_1_p3':'PC1-13.1-P3', 'pc2_2013_1_p1':'PC2-13.1-P1', 'pc2_2013_1_p2':'PC2-13.1-P2', 'pc2_2013_1_p3':'PC2-13.1-P3', 'pc3_2013_1_p1':'PC3-13.1-P1', 'pc3_2013_1_p2':'PC3-13.1-P2', 'pc3_2013_1_p3':'PC3-13.1-P3', 'pc4_2013_1_p1':'PC4-13.1-P1', 'pc4_2013_1_p2':'PC4-13.1-P2', 'pc4_2013_1_p3':'PC4-13.1-P3', 'pc5_2013_1_p1':'PC5-13.1-P1', 'pc5_2013_1_p2':'PC5-13.1-P2', 'pc6_2013_1_p1':'PC6-13.1-P1', 'pc6_2013_1_p2':'PC6-13.1-P2', 'pc6_2013_1_p3':'PC6-13.1-P3', 'pc7_2013_1_p1':'PC7-13.1-P1', 'pc7_2013_1_p2':'PC7-13.1-P2', 'pc8_2013_1_p1':'PC8-13.1-PU', 'ex1_2013_1_p1':'EX1-13.1-P1', 'ex1_2013_1_p2':'EX1-13.1-P2', 'ex1_2013_1_p3':'EX1-13.1-P3', 'ex1_2013_1_p4':'EX1-13.1-P4', 'ex2_2013_1_p1':'EX2-13.1-P1', 'ex2_2013_1_p2':'EX2-13.1-P2', 'ex2_2013_1_p3':'EX2-13.1-P3', 'ex2_2013_1_p4':'EX2-13.1-P4', 'pc1_2015_1_p1':'PC1-15.1-P1', 'pc1_2015_1_p2':'PC1-15.1-P2', 'pc1_2015_1_p3':'PC1-15.1-P3', 'pc1_2015_1_p4':'PC1-15.1-P4', 'pc3_2015_1_p1':'PC3-15.1-P1', 'pc3_2015_1_p2':'PC3-15.1-P2', 'pc4_2015_1_p1':'PC4-15.1-P1', 'pc4_2015_1_p2':'PC4-15.1-P2', 'pc4_2015_1_p3':'PC4-15.1-P3', 'pc4_2015_1_p4':'PC4-15.1-P4', 'pc4_2015_1_p5':'PC4-15.1-P5', 'pc5_2015_1_p1':'PC5-15.1-P1', 'pc5_2015_1_p2':'PC5-15.1-P2', 'pc5_2015_1_p3':'PC5-15.1-P3', 'pc7_2015_1_p1':'PC7-15.1-P1', 'pc7_2015_1_p2':'PC7-15.1-P2', 'pc7_2015_1_p3':'PC7-15.1-P3', 'pc8_2015_1_p1':'PC8-15.1-P1', 'pc8_2015_1_p2':'PC8-15.1-P2', 'ex2_2015_1_p1':'EX2-15.1-P1', 'ex2_2015_1_p2':'2E-15.1-P2', 'ex2_2015_1_p3':'EX2-15.1-P3', 'ex2_2015_1_p4':'EX2-15.1-P4', 'pc1_2015_2_p1':'PC1-15.2-P1', 'pc1_2015_2_p2':'PC1-15.2-P2', 'pc1_2015_2_p3':'PC1-15.2-P3', 'pc1_2015_2_p4':'PC1-15.2-P4', 'pc2_2015_2_p1':'PC2-15.2-P1', 'pc2_2015_2_p2':'PC2-15.2-P2', 'pc3_2015_2_p1':'PC3-15.2-P1', 'pc3_2015_2_p2':'PC3-15.2-P2', 'pc4_2015_2_p1':'PC4-15.2-P1', 'pc4_2015_2_p2':'PC4-15.2-P2', 'pc4_2015_2_p3':'PC4-15.2-P3', 'pc4_2015_2_p4':'PC4-15.2-P4', 'pc5_2015_2_p1':'PC5-15.2-P1', 'pc5_2015_2_p2':'PC5-15.2-P2', 'pc5_2015_2_p3':'PC5-15.2-P3', 'pc5_2015_2_p4':'PC5-15.2-P4', 'pc6_2015_2_p1':'PC6-15.2-P1', 'pc6_2015_2_p2':'PC6-15.2-P2', 'pc7_2015_2_p1':'PC7-15.2-P1', 'pc7_2015_2_p2':'PC7-15.2-P2', 'pc8_2015_2_pu':'PC8-15.2-PU', 'ex1_2015_2_p1':'EX1-15.2-P1', 'ex1_2015_2_p2':'EX1-15.2-P2', 'ex1_2015_2_p3':'EX1-15.2-P3', 'ex2_2015_2_p1':'EX2-15.2-P1', 'ex2_2015_2_p2':'2E-15.2-P2', 'ex2_2015_2_p3':'EX2-15.2-P3', 'ex2_2015_2_p4':'2E-15.2-P4', 'pc1_2016_2_p1':'PC1-16.2-P1', 'pc1_2016_2_p2':'PC1-16.2-P2', 'pc1_2016_2_p3':'PC1-16.2-P3', 'pc1_2016_2_p4':'PC1-16.2-P4', 'pc2_2016_2_p1':'PC2-16.2-P1', 'pc2_2016_2_p2':'PC2-16.2-P2', 'pc2_2016_2_p3':'PC2-16.2-P3', 'pc3_2016_2_p1':'PC3-16.2-P1', 'pc3_2016_2_p2':'PC3-16.2-P2', 'pc4_2016_2_p1':'PC4-16.2-P1', 'pc4_2016_2_p2':'PC4-16.2-P2', 'pc5_2016_2_p1':'PC5-16.2-P1', 'pc5_2016_2_p2':'PC5-16.2-P2', 'pc5_2016_2_p3':'PC5-16.2-P3', 'pc5_2016_2_p4':'PC5-16.2-P4', 'pc6_2016_2_p1':'PC6-16.2-P1', 'pc6_2016_2_p2':'PC6-16.2-P2', 'pc6_2016_2_p3':'PC6-16.2-P3', 'pc7_2016_2_p1':'PC7-16.2-P1', 'pc7_2016_2_p2':'PC7-16.2-P2', 'pc7_2016_2_p3':'PC7-16.2-P3', 'pc8_2016_2_p1':'PC8-16.2-P1', 'pc8_2016_2_p2':'PC8-16.2-P2', 'ex1_2016_2_p1':'1E-16.2-P1', 'ex1_2016_2_p2':'1E-16.2-P2', 'ex1_2016_2_p3':'1E-16.2-P3', 'ex2_2016_2_p1':'2E-16.2-P1', 'ex2_2016_2_p2':'2E-16.2-P2', 'ex2_2016_2_p3':'2E-16.2-P3', 'ex2_2016_2_p4':'2E-16.2-P4', 'pc1_2017_2_p1':'PC1-17.2-P1', 'pc1_2017_2_p2':'PC1-17.2-P2', 'pc1_2017_2_p3':'PC1-17.2-P3', 'pc1_2017_2_p4':'PC1-17.2-P4', 'pc2_2017_2_p1':'PC2-17.2-P1', 'pc2_2017_2_p2':'PC2-17.2-P2', 'pc2_2017_2_p3':'PC2-17.2-P3', 'pc2_2017_2_p4':'PC2-17.2-P4', 'pc3_2017_2_p1':'PC3-17.2-P1', 'pc3_2017_2_p2':'PC3-17.2-P2', 'pc4_2017_2_p1':'PC4-17.2-P1', 'pc4_2017_2_p2':'PC4-17.2-P2', 'pc4_2017_2_p3':'PC4-17.2-P3', 'pc5_2017_2_p1':'PC5-17.2-P1', 'pc5_2017_2_p2':'PC5-17.2-P2', 'pc5_2017_2_p3':'PC5-17.2-P3', 'pc5_2017_2_p4':'PC5-17.2-P4', 'pc6_2017_2_p1':'PC6-17.2-P1', 'pc6_2017_2_p2':'PC6-17.2-P2', 'pc7_2017_2_p1':'PC7-17.2-P1', 'pc7_2017_2_p2':'PC7-17.2-P2', 'pc8_2017_2_p1':'PC8-17.2-P1', 'pc8_2017_2_p2':'PC8-17.2-P2', 'ex1_2017_2_p1':'EX1-17.2-P1', 'ex1_2017_2_p2':'EX1-17.2-P2', 'ex1_2017_2_p3':'EX1-17.2-P3', 'ex1_2017_2_p4':'EX1-17.2-P4', 'ex2_2017_2_p1':'EX2-17.2-P1', 'ex2_2017_2_p2':'EX2-17.2-P2', 'ex2_2017_2_p3':'EX2-17.2-P3', 'ex2_2017_2_p4':'EX2-17.2-P4', 'ex2_2017_2_p5':'2E-17.2-P5', 'pc1_2019_2_p1':'PC1-19.2-P1', 'pc1_2019_2_p2':'PC1-19.2-P2', 'pc1_2019_2_p3':'PC1-19.2-P3', 'pc2_2019_2_p1':'PC2-19.2-P1', 'pc2_2019_2_p2':'PC2-19.2-P2', 'pc3_2019_2_pu':'PC3-19.2-PU', 'pc5_2019_2_p1':'PC5-19.2-P1', 'pc5_2019_2_p2':'PC5-19.2-P2', 'pc5_2019_2_p3':'PC5-19.2-P3', 'pc5_2019_2_p4':'PC5-19.2-P4', 'pc6_2019_2_p1':'PC6-19.2-P1', 'pc6_2019_2_p2':'PC6-19.2-P2', 'pc7_2019_2_p1':'PC7-19.2-P1', 'pc7_2019_2_p2':'PC7-19.2-P2', 'ex1_2019_2_p1':'EX1-19.2-P1', 'ex1_2019_2_p2':'EX1-19.2-P2', 'ex1_2019_2_p3':'EX1-19.2-P3', 'ex2_2019_2_p1':'EX2-19.2-P1', 'ex2_2019_2_p2':'EX2-19.2-P2', 'ex2_2019_2_p3':'EX2-19.2-P3', 'ex2_2019_2_p4':'EX2-19.2-P4', 'pc1_2021_1_p1':'PC1-21.1-P1', 'pc1_2021_1_p2':'PC1-21.1-P2', 'pc1_2021_1_p3':'PC1-21.1-P3', 'pc1_2021_1_p4':'PC1-21.1-P4', 'pc2_2021_1_p1':'PC2-21.1-P1', 'pc2_2021_1_p2':'PC2-21.1-P2', 'pc2_2021_1_p3':'PC2-21.1-P3', 'pc2_2021_1_p4':'PC2-21.1-P4', 'pc3_2021_1_pu':'PC3-21.1-PU', 'pc4_2021_1_p1':'PC4-21.1-P1', 'pc4_2021_1_p2':'PC4-21.1-P2', 'pc5_2021_1_p1':'PC5-21.1-P1', 'pc5_2021_1_p2':'PC5-21.1-P2', 'pc6_2021_1_p1':'PC6-21.1-P1', 'pc6_2021_1_p2':'PC6-21.1-P2', 'pc8_2021_1_p1':'PC8-21.1-P1', 'pc8_2021_1_p2':'PC8-21.1-P2', 'ex1_2021_1_p1':'1E-21.1-P1', 'ex1_2021_1_p2':'1E-21.1-P2', 'ex1_2021_1_p3':'1E-21.1-P3', 'ex1_2021_1_p4':'1E-21.1-P4', 'pc1_2022_1_p1':'PC1-22.1-P1', 'pc1_2022_1_p2':'PC1-22.1-P2', 'pc1_2022_1_p3':'PC1-22.1-P3', 'pc1_2022_1_p4':'PC1-22.1-P4', 'pc2_2022_1_p1':'PC2-22.1-P1', 'pc2_2022_1_p2':'PC2-22.1-P2', 'pc2_2022_1_p3':'PC2-22.1-P3', 'pc2_2022_1_p4':'PC2-22.1-P4', 'pc3_2022_1_pu':'PC3-22.1-PU', 'pc4_2022_1_p1':'PC4-22.1-P1', 'pc4_2022_1_p2':'PC4-22.1-P2', 'pc5_2022_1_p1':'PC5-22.1-P1', 'pc5_2022_1_p2':'PC5-22.1-P2', 'pc5_2022_1_p3':'PC5-22.1-P3', 'pc6_2022_1_pu':'PC6-22.1-PU', 'pc7_2022_1_pu':'PC7-22.1-PU', 'pc8_2022_1_p1':'PC8-22.1-P1', 'pc8_2022_1_p2':'PC8-22.1-P2', 'pc5_2021_2_p1':'PC5-21.2-P1', 'pc5_2021_2_p2':'PC5-21.2-P2', 'pc6_2021_2_pu':'PC6-21.2-PU', 'pc7_2021_2_p1':'PC7-21.2-P1', 'pc7_2021_2_p2':'PC7-21.2-P2', 'pc8_2021_2_p1':'PC8-21.2-P1', 'pc8_2021_2_p2':'PC8-21.2-P2', 'ex1_2021_2_p1':'EX1-21.2-P1', 'ex1_2021_2_p2':'EX1-21.2-P2', 'ex1_2021_2_p3':'EX1-21.2-P3', 'ex2_2021_2_p1':'EX2-21.2-P1', 'ex2_2021_2_p2':'EX2-21.2-P2', 'ex2_2021_2_p3':'EX2-21.2-P3', 'pc3_2023_1_pu':'PC3-23.1-PU', 'pc4_2023_1_pu':'PC4-23.1-PU', 'pc5_2023_1_p1':'PC5-23.1-P1', 'pc5_2023_1_p2':'PC5-23.1-P2', 'pc5_2023_1_p3':'PC5-23.1-P3', 'pc5_2023_1_p4':'PC5-23.1-P4', 'pc6_2023_1_p1':'PC6-23.1-P1', 'pc6_2023_1_p2':'PC6-23.1-P2', 'pc6_2023_1_p3':'PC6-23.1-P3', 'pc6_2023_1_p4':'PC6-23.1-P4', 'pc7_2023_1_p1':'PC7-23.1-P1', 'pc7_2023_1_p2':'PC7-23.1-P2', 'pc7_2023_1_p3':'PC7-23.1-P3', 'pc8_2023_1_pu':'PC8-23.1-PU', 'pc1_2023_2_p1':'PC1-23.2-P1', 'pc1_2023_2_p2':'PC1-23.2-P2', 'pc1_2023_2_p3':'PC1-23.2-P3', 'pc1_2023_2_p4':'PC1-23.2-P4', 'pc2_2023_2_p1':'PC2-23.2-P1', 'pc2_2023_2_p2':'PC2-23.2-P2', 'pc5_2023_2_p1':'PC5-23.2-P1', 'pc5_2023_2_p2':'PC5-23.2-P2', 'pc6_2023_2_p1':'PC6-23.2-P1', 'pc6_2023_2_p2':'PC6-23.2-P2', 'pc8_2023_2_p1':'PC8-23.2-P1', 'pc8_2023_2_p2':'PC8-23.2-P2', 'ex1_2023_2_p1':'1E-23.2-P1', 'ex1_2023_2_p2':'1E-23.2-P2', 'ex1_2023_2_p3':'EX1-23.2-P3', 'ex1_2023_2_p4':'EX1-23.2-P4', 'pc1_2024_2_p1':'PC1-24.2-P1', 'pc1_2024_2_p2':'PC1-24.2-P2', 'pc1_2024_2_p3':'PC1-24.2-P3', 'pc1_2024_2_p4':'PC1-24.2-P4', 'pc2_2024_2_p1':'PC2-24.2-P1', 'pc2_2024_2_p2':'PC2-24.2-P2', 'pc2_2024_2_p3':'PC2-24.2-P3', 'pc3_2024_2_pu':'PC3-24.2-PU', 'pc4_2024_2_p1':'PC4-24.2-P1', 'pc4_2024_2_p2':'PC4-24.2-P2', 'pc5_2024_2_p1':'PC5-24.2-P1', 'pc5_2024_2_p2':'PC5-24.2-P2', 'pc5_2024_2_p3':'PC5-24.2-P3', 'pc6_2024_2_p1':'PC6-24.2-P1', 'pc6_2024_2_p2':'PC6-24.2-P2', 'pc6_2024_2_p3':'PC6-24.2-P3', 'pc7_2024_2_p1':'PC7-24.2-P1', 'pc7_2024_2_p2':'PC7-24.2-P2', 'pc8_2024_2_p1':'PC8-24.2-P1', 'pc8_2024_2_p2':'PC8-24.2-P2', 'pc8_2024_2_p3':'PC8-24.2-P3', 'ex1_2024_2_p1':'1E-24.2-P1', 'ex1_2024_2_p2':'1E-24.2-P2', 'ex1_2024_2_p3':'EX1-24.2-P3', 'ex2_2024_2_p1':'2E-24.2-P1', 'ex2_2024_2_p2':'2E-24.2-P2', 'ex2_2024_2_p3':'2E-24.2-P3', 'ex2_2024_2_p4':'EX2-24.2-P4', 'ex2_2024_2_p5':'2E-24.2-P5', 'pc1_2025_2_p1':'PC1-25.2-P1', 'pc1_2025_2_p2':'PC1-25.2-P2', 'pc1_2025_2_p3':'PC1-25.2-P3', 'pc1_2025_2_p4':'PC1-25.2-P4', 'pc1_2025_2_p5':'PC1-25.2-P5', 'pc2_2025_2_p1':'PC2-25.2-P1', 'pc2_2025_2_p2':'PC2-25.2-P2', 'pc2_2025_2_p3':'PC2-25.2-P3', 'pc3_2025_2_p1':'PC3-25.2-P1', 'pc3_2025_2_p2':'PC3-25.2-P2', 'pc4_2025_2_p1':'PC4-25.2-P1', 'pc4_2025_2_p2':'PC4-25.2-P2', 'pc6_2025_2_p1':'PC6-25.2-P1', 'ex1_2025_2_p1':'1E-25.2-P1', 'ex1_2025_2_p2':'1E-25.2-P2', 'ex1_2025_2_p3':'1E-25.2-P3', 'ex2_2025_2_p1':'EX2-25.2-P1', 'ex2_2025_2_p2':'2E-25.2-P2', 'ex2_2025_2_p3':'2E-25.2-P3', 'ex2_2025_2_p4':'2E-25.2-P4', 'pc1_2025_1_p1':'PC1-25.1-P1', 'pc1_2025_1_p2':'PC1-25.1-P2', 'pc1_2025_1_p3':'PC1-25.1-P3', 'pc1_2025_1_p4':'PC1-25.1-P4', 'pc1_2025_1_p5':'PC1-25.1-P5', 'pc3_2025_1_p1':'PC3-25.1-P1', 'pc3_2025_1_p2':'PC3-25.1-P2', 'pc4_2025_1_p1':'PC4-25.1-P1', 'pc4_2025_1_p2':'PC4-25.1-P2', 'pc7_2025_1_pu':'PC7-25.1-PU', 'pc8_2025_1_p1':'PC8-25.1-P1', 'pc8_2025_1_p2':'PC8-25.1-P2', 'ex1_2025_1_p1':'EX1-25.1-P1', 'ex1_2025_1_p2':'EX1-25.1-P2', 'ex1_2025_1_p3':'EX1-25.1-P3', 'ex1_2025_1_p4':'EX1-25.1-P4', 'pc3_2019_1_pu':'PC3-19.1-PU', 'pc4_2019_1_p1':'PC4-19.1-P1', 'pc4_2019_1_p2':'PC4-19.1-P2', 'pc5_2019_1_p1':'PC5-19.1-P1', 'pc5_2019_1_p2':'PC5-19.1-P2', 'pc6_2019_1_p1':'PC6-19.1-P1', 'pc6_2019_1_p2':'PC6-19.1-P2', 'pc7_2019_1_pu':'PC7-19.1-PU', 'ex2_2019_1_p1':'2E-19.1-P1', 'ex2_2019_1_p2':'2E-19.1-P2', 'ex2_2019_1_p3':'2E-19.1-P3', 'ex2_2019_1_p4':'2E-19.1-P4', 'ex2_2019_1_p5':'2E-19.1-P5', 'ex2_2019_1_p6':'2E-19.1-P6', 'pc6_2017_1_p1':'PC6-17.1-P1', 'pc6_2017_1_p2':'PC6-17.1-P2', 'pc7_2017_1_p1':'PC7-17.1-P1', 'pc7_2017_1_p2':'PC7-17.1-P2', 'pc8_2017_1_p1':'PC8-17.1-P1', 'pc8_2017_1_p2':'PC8-17.1-P2', 'ex1_2017_1_p1':'EX1-17.1-P1', 'ex1_2017_1_p2':'EX1-17.1-P2', 'ex1_2017_1_p3':'EX1-17.1-P3', 'ex1_2017_1_p4':'EX1-17.1-P4', 'ex2_2017_1_p1':'EX2-17.1-P1', 'ex2_2017_1_p2':'2E-17.1-P2', 'ex2_2017_1_p3':'EX2-17.1-P3', 'ex2_2017_1_p4':'EX2-17.1-P4', 'pc1_2016_1_p1':'PC1-16.1-P1', 'pc1_2016_1_p2':'PC1-16.1-P2', 'pc1_2016_1_p3':'PC1-16.1-P3', 'pc1_2016_1_p4':'PC1-16.1-P4', 'pc1_2016_1_p5':'PC1-16.1-P5', 'pc2_2016_1_p1':'PC2-16.1-P1', 'pc2_2016_1_p2':'PC2-16.1-P2', 'pc2_2016_1_p3':'PC2-16.1-P3', 'ex2_2018_2_p1':'EX2-18.2-P1', 'ex2_2018_2_p2':'EX2-18.2-P2', 'ex2_2018_2_p3':'2E-18.2-P3', 'ex2_2018_2_p4':'EX2-18.2-P4', 'ex2_2018_2_p5':'2E-18.2-P5', 'pc1_2020_2_p1':'PC1-20.2-P1', 'pc1_2020_2_p2':'PC1-20.2-P2', 'pc1_2020_2_p3':'PC1-20.2-P3', 'pc1_2020_2_p4':'PC1-20.2-P4', 'pc1_2020_2_p5':'PC1-20.2-P5', 'pc1_2020_2_p6':'PC1-20.2-P6', 'pc2_2020_2_p1':'PC2-20.2-P1', 'pc2_2020_2_p2':'PC2-20.2-P2', 'pc3_2020_2_p1':'PC3-20.2-P1', 'pc3_2020_2_p2':'PC3-20.2-P2', 'pc3_2020_2_p3':'PC3-20.2-P3', 'pc4_2020_2_p1':'PC4-20.2-P1', 'pc4_2020_2_p2':'PC4-20.2-P2', 'pc4_2020_2_p3':'PC4-20.2-P3', 'pc4_2020_2_p4':'PC4-20.2-P4', 'pc5_2020_2_p1':'PC5-20.2-P1', 'pc5_2020_2_p2':'PC5-20.2-P2', 'pc6_2020_2_pu':'PC6-20.2-PU', 'pc7_2020_2_pu':'PC7-20.2-PU', 'pc8_2020_2_p1':'PC8-20.2-P1', 'pc8_2020_2_p2':'PC8-20.2-P2', 'e1_2020_2_p1':'1E-20.2-P1', 'e1_2020_2_p2':'1E-20.2-P2', 'e1_2020_2_p3':'1E-20.2-P3', 'pc1_2024_1_p1':'PC1-24.1-P1', 'pc1_2024_1_p2':'PC1-24.1-P2', 'pc1_2024_1_p3':'PC1-24.1-P3', 'pc1_2024_1_p4':'PC1-24.1-P4', 'pc1_2024_1_p5':'PC1-24.1-P5', 'pc3_2024_1_p1':'PC3-24.1-P1', 'pc3_2024_1_p2':'PC3-24.1-P2', 'pc4_2024_1_pu':'PC4-24.1-PU', 'ex2_2024_1_p1':'2E-24.1-P1', 'ex2_2024_1_p2':'2E-24.1-P2', 'ex2_2024_1_p3':'2E-24.1-P3', 'ex2_2024_1_p4':'2E-24.1-P4', 'pc5_2012_1_p1':'PC5-12.1-P1', 'pc5_2012_1_p2':'PC5-12.1-P2', 'pc5_2012_1_p3':'PC5-12.1-P3', 'pc7_2021_1_p1':'PC7-21.1-P1', 'pc7_2021_1_p2':'PC7-21.1-P2', 'ex2_2021_1_p1':'2E-21.1-P1', 'ex2_2021_1_p2':'2E-21.1-P2', 'ex2_2021_1_p4':'2E-21.1-P4', 'ex2_2021_1_p5':'2E-21.1-P5', 'pc4_2019_2_p1':'PC4-19.2-P1', 'pc4_2019_2_p2':'PC4-19.2-P2', 'pc3_2012_1_p1':'PC3-12.1-P1', 'pc3_2012_1_p2':'PC3-12.1-P2', 'pc3_2012_1_p3':'PC3-12.1-P3', 'pc3_2012_1_p4':'PC3-12.1-P4', 'pc7_2012_1_p1':'PC7-12.1-P1', 'pc7_2012_1_p2':'PC7-12.1-P2', 'pc6_2012_1_p1':'PC6-12.1-P1', 'pc6_2012_1_p2':'PC6-12.1-P2', 'pc6_2012_1_p3':'PC6-12.1-P3', 'pc8_2019_2_p1':'PC8-19.2-P1', 'pc8_2019_2_p2':'PC8-19.2-P2', 'ex2_2012_1_p5':'EX2-12.1-P5', 'ex3_2012_1_p1':'EX3-12.1-P1', 'ex3_2012_1_p2a':'EX3-12.1-P2a', 'ex3_2012_1_p2b':'EX3-12.1-P2b', 'ex3_2012_1_p2c':'EX3-12.1-P2c', 'ex3_2012_1_p3':'EX3-12.1-P3', 'ex4_2012_1_p1':'EX4-12.1-P1', 'ex4_2012_1_p2':'EX4-12.1-P2', 'ex4_2012_1_p3':'EX4-12.1-P3', 'ex3_2012_2_p1':'EX3-12.2-P1', 'ex3_2012_2_p2a':'EX3-12.2-P2a', 'ex3_2012_2_p2b':'EX3-12.2-P2b', 'ex3_2012_2_p3':'EX3-12.2-P3', 'ex3_2013_1_p1':'EX3-13.1-P1', 'ex3_2013_1_p2':'EX3-13.1-P2', 'ex3_2013_1_p3a':'EX3-13.1-P3a', 'ex3_2013_1_p3b':'EX3-13.1-P3b', 'ex3_2013_1_p3c':'EX3-13.1-P3c', 'ex3_2013_1_p4':'EX3-13.1-P4', 'ex4_2013_1_p1':'EX4-13.1-P1', 'ex4_2013_1_p2':'EX4-13.1-P2', 'ex4_2013_1_p3':'EX4-13.1-P3', 'ex1_2013_2_p1':'EX1-13.2-P1', 'ex1_2013_2_p2':'EX1-13.2-P2', 'ex1_2013_2_p3':'EX1-13.2-P3', 'ex1_2013_2_p4':'EX1-13.2-P4', 'ex2_2013_2_p1':'EX2-13.2-P1', 'ex2_2013_2_p2a':'EX2-13.2-P2a', 'ex2_2013_2_p2b':'EX2-13.2-P2b', 'ex2_2013_2_p3':'EX2-13.2-P3', 'ex2_2013_2_p4':'EX2-13.2-P4', 'ex2_2013_2_p5':'EX2-13.2-P5', 'ex1_2014_1_p1':'EX1-14.1-P1', 'ex1_2014_1_p2':'EX1-14.1-P2', 'ex1_2014_1_p3':'EX1-14.1-P3', 'ex1_2014_1_p4':'EX1-14.1-P4', 'ex1_2014_1_p5':'EX1-14.1-P5', 'ex2_2014_1_p1':'EX2-14.1-P1', 'ex2_2014_1_p2a':'EX2-14.1-P2a', 'ex2_2014_1_p2b':'EX2-14.1-P2b', 'ex2_2014_1_p3':'EX2-14.1-P3', 'ex2_2014_1_p4':'EX2-14.1-P4', 'ex3_2014_1_p1':'EX3-14.1-P1', 'ex3_2014_1_p2a':'EX3-14.1-P2a', 'ex3_2014_1_p2b':'EX3-14.1-P2b', 'ex4_2014_1_p1':'EX4-14.1-P1', 'ex4_2014_1_p2':'EX4-14.1-P2', 'ex4_2014_1_p3':'EX4-14.1-P3', 'ex1_2014_2_p1a':'EX1-14.2-P1a', 'ex1_2014_2_p1b':'EX1-14.2-P1b', 'ex1_2014_2_p1c':'EX1-14.2-P1c', 'ex1_2014_2_p2':'EX1-14.2-P2', 'ex1_2014_2_p3':'EX1-14.2-P3', 'ex1_2014_2_p4':'EX1-14.2-P4', 'ex2_2014_2_p1':'EX2-14.2-P1', 'ex2_2014_2_p2':'EX2-14.2-P2', 'ex2_2014_2_p3':'EX2-14.2-P3', 'ex3_2014_2_p1':'EX3-14.2-P1', 'ex3_2014_2_p2':'EX3-14.2-P2', 'ex3_2014_2_p3a':'EX3-14.2-P3a', 'ex3_2014_2_p3b':'EX3-14.2-P3b', 'ex3_2014_2_p3c':'EX3-14.2-P3c', 'ex3_2014_2_p4':'EX3-14.2-P4', 'ex4_2014_2_p1':'EX4-14.2-P1', 'ex4_2014_2_p2':'EX4-14.2-P2', 'ex4_2014_2_p3':'EX4-14.2-P3', 'ex1_2015_1_p1':'EX1-15.1-P1', 'ex1_2015_1_p2':'EX1-15.1-P2', 'ex1_2015_1_p3':'EX1-15.1-P3', 'ex2_2015_1_p2a':'EX2-15.1-P2a', 'ex2_2015_1_p2b':'EX2-15.1-P2b', 'ex2_2015_1_p2c':'EX2-15.1-P2c', 'ex3_2015_1_p1':'EX3-15.1-P1', 'ex4_2015_1_p1':'EX4-15.1-P1', 'ex4_2015_1_p2':'EX4-15.1-P2', 'ex4_2015_1_p3':'EX4-15.1-P3', 'ex4_2015_1_p4':'EX4-15.1-P4', 'ex3_2015_1_p2a':'EX3-15.1-P2a', 'ex3_2015_1_p2b':'EX3-15.1-P2b', 'ex3_2015_1_p3a':'EX3-15.1-P3a', 'ex3_2015_1_p3b':'EX3-15.1-P3b', 'ex3_2015_1_p3c':'EX3-15.1-P3c', 'ex3_2015_1_p4':'EX3-15.1-P4', 'ex1_2015_2_p4':'EX1-15.2-P4', 'ex2_2015_2_p2a':'EX2-15.2-P2a', 'ex2_2015_2_p2b':'EX2-15.2-P2b', 'ex3_2015_2_p1':'EX3-15.2-P1', 'ex3_2015_2_p2a':'EX3-15.2-P2a', 'ex3_2015_2_p2b':'EX3-15.2-P2b', 'ex3_2015_2_p3a':'EX3-15.2-P3a', 'ex3_2015_2_p3b':'EX3-15.2-P3b', 'ex3_2015_2_p3c':'EX3-15.2-P3c', 'ex3_2015_2_p4':'EX3-15.2-P4', 'ex4_2015_2_p1':'EX4-15.2-P1', 'ex4_2015_2_p2':'EX4-15.2-P2', 'ex4_2015_2_p3':'EX4-15.2-P3', 'ex4_2015_2_p4':'EX4-15.2-P4', 'ex1_2016_1_p1':'EX1-16.1-P1', 'ex1_2016_1_p2':'EX1-16.1-P2', 'ex1_2016_1_p3':'EX1-16.1-P3', 'ex1_2016_1_p4':'EX1-16.1-P4', 'ex2_2016_1_p1':'EX2-16.1-P1', 'ex2_2016_1_p2':'EX2-16.1-P2', 'ex2_2016_1_p3':'EX2-16.1-P3', 'ex2_2016_1_p4':'EX2-16.1-P4', 'ex3_2016_1_p1':'EX3-16.1-P1', 'ex3_2016_1_p2':'EX3-16.1-P2', 'ex3_2016_1_p4a':'EX3-16.1-P4a', 'ex3_2016_1_p4b':'EX3-16.1-P4b', 'ex3_2016_1_p4c':'EX3-16.1-P4c', 'ex4_2016_1_p1':'EX4-16.1-P1', 'ex4_2016_1_p2':'EX4-16.1-P2', 'ex4_2016_1_p3':'EX4-16.1-P3', 'ex2_2017_1_p2a':'EX2-17.1-P2a', 'ex2_2017_1_p2b':'EX2-17.1-P2b', 'ex3_2017_1_p1':'EX3-17.1-P1', 'ex3_2017_1_p2a':'EX3-17.1-P2a', 'ex3_2017_1_p2b':'EX3-17.1-P2b', 'ex3_2017_1_p3':'EX3-17.1-P3', 'ex4_2017_1_p1':'EX4-17.1-P1', 'ex4_2017_1_p2':'EX4-17.1-P2', 'ex4_2017_1_p3':'EX4-17.1-P3', 'ex4_2017_1_p4':'EX4-17.1-P4', 'ex3_2017_2_p2a':'EX3-17.2-P2a', 'ex3_2017_2_p2b':'EX3-17.2-P2b', 'ex3_2017_2_p3':'EX3-17.2-P3', 'ex4_2017_2_p1':'EX4-17.2-P1', 'ex4_2017_2_p2':'EX4-17.2-P2', 'ex4_2017_2_p3':'EX4-17.2-P3', 'ex4_2017_2_p4':'EX4-17.2-P4', 'ex3_2018_1_p1':'EX3-18.1-P1', 'ex3_2018_1_p2a':'EX3-18.1-P2a', 'ex3_2018_1_p2b':'EX3-18.1-P2b', 'ex3_2018_1_p3a':'EX3-18.1-P3a', 'ex3_2018_1_p3b':'EX3-18.1-P3b', 'ex3_2018_1_p4':'EX3-18.1-P4', 'ex1_2018_2_p1':'EX1-18.2-P1', 'ex1_2018_2_p2':'EX1-18.2-P2', 'ex1_2018_2_p3':'EX1-18.2-P3', 'ex1_2018_2_p4':'EX1-18.2-P4', 'ex2_2018_2_p3a':'EX2-18.2-P3a', 'ex2_2018_2_p3b':'EX2-18.2-P3b', 'ex3_2018_2_p1':'EX3-18.2-P1', 'ex3_2018_2_p2a':'EX3-18.2-P2a', 'ex3_2018_2_p2b':'EX3-18.2-P2b', 'ex3_2018_2_p3':'EX3-18.2-P3', 'ex4_2018_2_p2':'EX4-18.2-P2', 'ex4_2018_2_p3':'EX4-18.2-P3', 'ex4_2018_2_p4':'EX4-18.2-P4', 'ex1_2019_2_p4':'EX1-19.2-P4', 'ex3_2019_2_p1':'EX3-19.2-P1', 'ex3_2019_2_p2a':'EX3-19.2-P2a', 'ex3_2019_2_p2b':'EX3-19.2-P2b', 'ex3_2019_2_p3':'EX3-19.2-P3', 'ex4_2019_2_p1':'EX4-19.2-P1', 'ex4_2019_2_p2':'EX4-19.2-P2', 'ex4_2019_2_p3':'EX4-19.2-P3', 'ex4_2019_2_p4':'EX4-19.2-P4', 'ex1_2020_2_p3':'EX1-20.2-P3', 'ex1_2020_2_p4':'EX1-20.2-P4', 'ex1_2024_2_p4':'EX1-24.2-P4', 'ex1_2025_1_p5':'EX1-25.1-P5', 'ex1_2021_2_p4':'EX1-21.2-P4', 'ex2_2020_1_p1':'EX2-20.1-P1', 'ex2_2021_2_p4':'EX2-21.2-P4', 'ex2_2023_2_p4':'EX2-23.2-P4', 'ex2_2025_1_p3':'EX2-25.1-P3', 'ex3_2020_1_p1':'EX3-20.1-P1', 'ex3_2020_1_p4':'EX3-20.1-P4', 'ex3_2020_1_p3':'EX3-20.1-P3', 'ex3_2021_2_p1':'EX3-21.2-P1', 'ex3_2021_2_p4':'EX3-21.2-P4', 'ex3_2023_2_p1':'EX3-23.2-P1', 'ex3_2024_2_p1':'EX3-24.2-P1', 'ex3_2024_2_p4':'EX3-24.2-P4', 'ex3_2025_1_p1':'EX3-25.1-P1', 'ex3_2025_1_p4':'EX3-25.1-P4', 'ex3_2021_2_p2':'EX3-21.2-P2', 'ex3_2023_2_p4':'EX3-23.2-P4', 'ex3_2025_1_p2':'EX3-25.1-P2', 'ex4_2023_1_p2':'EX4-23.1-P2', 'ex4_2023_1_p3':'EX4-23.1-P3', 'ex4_2020_1_p1':'EX4-20.1-P1', 'ex4_2021_2_p1':'EX4-21.2-P1', 'ex4_2025_1_p1':'EX4-25.1-P1', 'ex4_2025_1_p2':'EX4-25.1-P2', 'ex4_2025_1_p3':'EX4-25.1-P3', 'ex4_2025_2_p1':'EX4-25.2-P1', 'ex4_2025_2_p2':'EX4-25.2-P2', 'ex4_2025_2_p3':'EX4-25.2-P3', 'ex4_2021_2_p2':'EX4-21.2-P2', 'ex4_2021_2_p3':'EX4-21.2-P3', 's1a-1':'Base inclinada', 's1b-1':'Soporte para eje', 's1b-2':'Soporte conector', 's1b-3':'Carcasa soporte', 's1b-4':'Carcasa', 's1c-1':'Conector articulado', 's1d-1':'Torre soporte', 's1d-2':'Carcasa 0', 's1d-3':'Bloque de amartillado', 's1d-4':'Soporte superior', 's1d-5':'Conector', 's1d-6':'Base múltiple', 's1d-7':'Base de bomba', 's1d-8':'Base guía', 's2-1':'Eje 1', 's2-2':'Eje 2', 's2-3':'Eje 05.01', 's2-4':'Placa 1', 's2-5':'Placa 2', 's2-6':'Placa 05.01-3', 's3-1':'Útil de fijación', 's3-2':'Rueda loca', 's3-3':'Contrapunta de torno', 's3-4':'Válvula de alivio', 's3-5':'Freno', 's3-6':'Portaherramienta de limadora', 's3-7':'Carro portaherramienta', 's3-8':'Cilindro de doble efecto', 's5-1':'Soporte inclinado', 's5-2':'Soporte inclinado (repetida), Soporte deslizante', 's5-3':'Soporte fundido / Guía / Placa extremo', 's5-4':'Soporte fundido (reusa sem. 3)', 's5-5':'Base fundida', 's5-6':'Base circular', 's5-7':'Base fundida (reusa sem. 5)', 's5-8':'Base de bomba', 's5-9':'Cuerpo de Válvula', 's5-10':'Bomba de combustible (15 piezas)', 's5-11':'Unión de leva', 's5-12':'Inyector ("EX3-2026-1")', 's5-13':'Tornillo de prensa (PD9, de 2024-2)', 's6-1':'PC1', 's6-2':'PC1', 's6-3':'PC2', 's6-4':'PC2', 's6-5':'PC3', 's6-6':'PC3', 's6-7':'PC4', 's7-1':'PC2', 's7-2':'PC3', 's7-3':'PC4', 's7-4':'PC5'};
+const TIEMPO_PONDERADO = { ING225: 29, MAT241: 28, MEC257: 39 };
+
+function genQids(curso, n) {
+  const out = [];
+  for (let i = 1; i <= n; i++) out.push(curso.toLowerCase().replace('1mec02','1mec02') + '-s1-' + i);
+  return out;
+}
+const QIDS = {};
+Object.keys(QID_TARGET).forEach(function(c) { QIDS[c] = genQids(c, QID_TARGET[c]); });
+// ING225 ya usa IDs reales confirmados del banco BAPEC_ING225.html (Semana 1: Clase 1 "esfuerzo normal/cortante
+// promedio" tiene 39 preguntas reales disponibles, Clase 2 "uniones empernadas/remachadas" tiene 40 — se tomaron
+// las 8 de mayor dificultad de cada una para martes/miércoles (mismo criterio "más difícil primero" que usa el
+// propio banco), y se continuó cada lista en orden de dificultad descendente para completar las 9 restantes.
+// MAT241 ya usa IDs reales confirmados del banco BAPEC_MAT241.html (Semana 1: única fila "Clase" Cap.1
+// "Introducción, preliminares, algoritmos y convergencia" tiene 80 preguntas reales disponibles — se tomaron
+// las 18 de mayor dificultad, mismo criterio usado en ING225.
+// MEC257 ya usa IDs reales confirmados del banco BAPEC_MEC257.html (Semana 1: Clase 1 "Introducción" no tiene
+// preguntas propias todavía —confirmado, no es un error—; toda la Semana 1 sale de Clase 2 "Ensayo de materiales",
+// 25 candidatas reales disponibles — se tomaron las 12 de mayor dificultad.
+QIDS['ING225'] = ['ex1_16_1_p2','ex2_12_2_p1','ex1p_25_2_e2','pc5_19_2_p2','pc5_19_1_p1','ex1_23_2_p4','pc3_17_1_p2','pc5_18_2_p1','pc5_18_2_p3','ex2_18_2_c2','ex2_15_2_p5','ex2_18_1_p1','pc5_15_2_p3','pc5_22_1_p1','ex1p_25_1_ej4a','pc5_21_1_e1','ex2_21_1_c2','pc5_21_2_p2','ex1_19_2_p4','ex2_19_1_c1','ex2_23_1_p1','ex2_25_2_c2','ex1_17_1_p5','ex2t_25_2_p2','ex1t_25_1_p5']; // idx0-22: con bloque fijo esta semana; idx22-25 (las últimas 3, menor dificultad): sin hueco, pendientes
+QIDS['MAT241'] = ['pc6_2015_2_p1','pc5_2015_1_p2','pc6_2016_2_p3','ex1_2016_2_p3','pc6_2017_2_p2','pc5_2019_2_p3','ex1_2019_2_p2','pc5_2022_1_p3','ex1_2021_2_p1','pc5_2023_1_p2','pc6_2023_1_p3','pc5_2023_2_p1','pc5_2023_2_p2','pc5_2024_2_p2','pc6_2024_2_p1','ex1_2025_1_p3','pc6_2017_1_p1','pc6_2017_1_p2','ex1_2017_1_p2','ex2_2017_1_p2','e1_2020_2_p3','pc1_2012_1_p3','ex1_2012_1_p1','pc2_2013_1_p2','pc3_2015_1_p1','pc3_2015_1_p2','pc3_2015_2_p2']; // idx0-21: Cap.3 nuevo (determinante/inversa/factorización); idx21-27: Cap.2 repaso (Newton sistemas, para PC4) — las 27 sí tienen bloque fijo
+QIDS['MEC257'] = ['ex3_2012_2_p2a','ex3_2014_1_p2a','ex3_2018_2_p2a','ex3_2025_1_p2','ex3_2016_1_p1','ex3_2017_1_p2a','ex3_2017_2_p2a','ex3_2012_1_p1','ex3_2012_1_p2a','ex3_2013_1_p3a','ex2_2014_1_p2b','ex3_2014_2_p3a','ex3_2015_1_p2a','ex3_2015_1_p3a','ex3_2015_2_p2a','ex3_2015_2_p3a']; // idx0-4: seguras tras la Clase 1 (lunes), con bloque fijo; idx4-16 (las 12 restantes): necesitan también la Clase 2 (jueves) y no encontraron hueco esta semana — pendientes
+QIDS['1MEC02'] = ['s1b-1','s1b-2','s1b-3','s1b-4','s2-1','s2-4'];// idx0-3: repaso de las 4 piezas de Nivel B (ya vistas en sem.6), antes del Pb2.1; idx4-5: referencias genéricas 'Eje 1'/'Placa 1' para el Pb2.2 (dimensionamiento genérico, no una pieza catalogada única)
+
+// ---------- Días y bloques ----------
+const DAYS = [
+  {n:'Domingo', d:'27/09', tag:'1MEC02: repaso de Pb2 (contenido ya visto en sem.6) — nada nuevo enseñado todavía'},
+  {n:'Lunes', d:'28/09', tag:'MEC257: Clase 1 + Laboratorio 2 — MAT241 sin sesión hoy esta semana'},
+  {n:'Martes', d:'29/09', tag:'MAT241 se mueve a martes esta semana (cronograma oficial, hora estimada) — ING225 sin BAPEC hoy'},
+  {n:'Miércoles', d:'30/09', tag:'ING225 cierra Cap.4 completo — MAT241 libre hoy, se lleva casi todo el día'},
+  {n:'Jueves', d:'01/10', tag:'1MEC02 Pb2.1 + MEC257 Clase 2 + MAT241 PC4 17-19 (confirmado) — huecos libres para ING225'},
+  {n:'Viernes', d:'02/10', tag:'PC07 de ING225 esta noche (18-20, confirmado) — sin BAPEC hoy'},
+  {n:'Sábado', d:'03/10', tag:'1MEC02: Pb2.2 + Laboratorio dirigido 7 (Base fundida, Inventor) — cierre del banco de ING225'}
+];
+const HSTART=6, HEND=23;
+const COURSE = {
+  ING225:{bg:'var(--navy-soft)',fg:'var(--navy-deep)',c:'var(--navy-mid)'},
+  MAT241:{bg:'var(--gold-soft)',fg:'#5c4712',c:'var(--gold)'},
+  MEC257:{bg:'var(--teal-soft)',fg:'#0d4a3e',c:'var(--teal)'},
+  '1MEC02':{bg:'var(--plum-soft)',fg:'#42264c',c:'var(--plum)'},
+  PERSONAL:{bg:'var(--slate-soft)',fg:'var(--slate)',c:'var(--slate)'},
+  COMIDA:{bg:'var(--gold-soft)',fg:'#5c4712',c:'var(--gold)'},
+  LIBRE:{bg:'#FFFFFF',fg:'var(--slate)',c:'var(--line)'},
+  COMMUTE:{bg:'var(--commute-soft)',fg:'#4a463d',c:'var(--commute)'}
+};
+
+let uid=0;
+const B=(o)=>({id:'b'+(uid++), ...o});
+const T=(day,s,e,label)=>B({day,s,e,type:'COMMUTE',title:label,detail:'45 min de viaje + 15 min en cambiarme'});
+// Bloque de estudio BAPEC: recibe curso, rango de qids [ini,fin) sobre QIDS[curso], y detalle/meta
+const BQ=(day,s,e,curso,titulo,qidStart,qidEnd,detail,meta,esAutoestudio=true)=>B({
+  day,s,e,type:curso,title:titulo,detail,meta,
+  bapec:{curso:curso, qids:QIDS[curso].slice(qidStart,qidEnd)},
+  autoestudioReal:esAutoestudio
+});
+
+const BLOCKS = [
+// DOMINGO 0 — nada nuevo enseñado todavía esta semana; repaso de 1MEC02 para el Pb2 del jueves (contenido ya visto en semana 6)
+B({day:0,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
+B({day:0,s:8,e:8.5,type:'PERSONAL',title:'Lectura Ayn Rand'}),
+B({day:0,s:8.5,e:9.25,type:'PERSONAL',title:'Self-Authoring Suite'}),
+BQ(0,9.25,10.5,'1MEC02','BAPEC DM1 — Repaso',0,2,'Autoestudio: repaso de "Soporte para eje" y "Soporte conector" (Nivel B, Sección 1) — piezas ya vistas la semana pasada, ahora repasadas antes del Pb2 del jueves',
+  {tipo:'Repaso Pb2.1',nivel:'Antes de la evaluación',ventana:'Pb2.1 jueves',tiempo:'~37 min/pieza',razon:'Domingo libre, repaso de lo ya introducido en sem.6'}),
+B({day:0,s:10.5,e:11,type:'COMIDA',title:'Snack AM'}),
+B({day:0,s:11,e:13,type:'PERSONAL',title:'Ocio'}),
+B({day:0,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
+BQ(0,14,15.5,'1MEC02','BAPEC DM1 — Repaso',2,4,'Autoestudio: repaso de "Carcasa soporte" y "Carcasa" (Nivel B, Sección 1) — cierra el repaso de las 4 piezas de sem.6, todas antes del Pb2',
+  {tipo:'Repaso Pb2.1',nivel:'Antes de la evaluación',ventana:'Pb2.1 jueves',tiempo:'45 min/pieza',razon:'Segundo bloque del domingo, cierra las 4 piezas'}),
+B({day:0,s:15.5,e:16.5,type:'PERSONAL',title:'Batch cooking'}),
+B({day:0,s:16.5,e:18.5,type:'PERSONAL',title:'Rutina personal',detail:'2h, interdiario'}),
+B({day:0,s:18.5,e:19,type:'COMIDA',title:'Snack PM'}),
+B({day:0,s:20,e:21,type:'COMIDA',title:'Cena'}),
+B({day:0,s:21,e:22,type:'PERSONAL',title:'Ocio'}),
+// LUNES 1 — MEC257 Clase 1 + Laboratorio 2 (mismo día) — MAT241 no tiene sesión hoy esta semana (se movió a martes)
+B({day:1,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
+T(1,9,10,'Traslado a PUCP'),
+B({day:1,s:10,e:12,type:'MEC257',title:'MEC257 — Clase 1',detail:'Resistencia de los metales a la deformación plástica. Esfuerzo cortante crítico resuelto (ECCR) — Cap.4 (continúa)',fixed:true}),
+B({day:1,s:12,e:13,type:'COMIDA',title:'Almuerzo (en campus)'}),
+B({day:1,s:13,e:15,type:'MEC257',title:'MEC257 — Laboratorio 2',detail:'Ensayo de Impacto. Ensayos no destructivos — evaluación con nota (Nota Única). El cronograma no fija hora de reloj para este laboratorio; lo ubico aquí por continuidad con la Clase 1 — confírmalo en Paideia/aula virtual',fixed:true}),
+BQ(1,15,17.75,'MEC257','BAPEC MEC257',0,4,'4 preguntas de contenido general de Cap.4 (curvas esfuerzo-deformación, conceptos de dislocaciones) — seguras de resolver ya con la Clase 1 de hoy. Las otras 12 candidatas de esta semana mezclan contenido de la Clase 2 del jueves (resistencia teórica) y no alcanzaron hueco esta semana (ver Métricas) — sin examen de por medio, no hay apuro',
+  {tipo:'Nuevo Cap.4',nivel:'Alto',ventana:'Sin examen esta semana',tiempo:'39 min/preg',razon:'Mismo día de la Clase 1 y del Laboratorio 2'}),
+T(1,17.75,18.75,'Traslado a casa'),
+B({day:1,s:18.75,e:19.25,type:'COMIDA',title:'Snack PM'}),
+B({day:1,s:22,e:23,type:'COMIDA',title:'Cena (tardía)'}),
+// MARTES 2 — ING225 Clase 1 + MAT241 Clase (cambio real de día esta semana: martes en vez de jueves, según cronograma oficial) — hora de MAT241 no confirmada, ver nota. Sin BAPEC de ING225 hoy: MAT241 necesita toda la tarde/noche, ING225 se recupera jueves y sábado
+B({day:2,s:6.5,e:7,type:'COMIDA',title:'Desayuno (breve)'}),
+T(2,7,8,'Traslado a la universidad (Fac. Minas / Hochschild) — mismo campus que la clase, un solo viaje'),
+B({day:2,s:8,e:10,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Profesor de RM1 no explica teoría en clase — anotar teoría antes de ir',fixed:true}),
+B({day:2,s:10,e:12,type:'ING225',title:'ING225 — Clase 1',detail:'Deflexión elástica de una viga: ecuación diferencial de la elástica, superposición de deformaciones',fixed:true}),
+B({day:2,s:12,e:13,type:'COMIDA',title:'Almuerzo (en campus)'}),
+B({day:2,s:13,e:15,type:'MAT241',title:'MAT241 — Clase',detail:'Continuación de revisión de conceptos de matrices. Determinante: propiedades. Adjunta. Inversa. Propiedades. Método de Factorización Triangular. HORA ESTIMADA — el cronograma oficial solo confirma "martes" sin hora de reloj; confírmala en Paideia',fixed:true}),
+T(2,15,16,'Traslado a casa'),
+BQ(2,16,21,'MAT241','BAPEC MAT241',0,10,'10 preguntas nuevas de Cap.3 (determinante/inversa/factorización triangular) — mismo día de la Clase, bloque grande porque el martes y miércoles son las únicas ventanas reales de MAT241 esta semana',
+  {tipo:'Nuevo Cap.3',nivel:'Alto primero',ventana:'Antes de la PC4 del jueves',tiempo:'28 min/preg',razon:'Tarde/noche del martes, después de la Clase'}),
+B({day:2,s:21,e:21.5,type:'COMIDA',title:'Snack PM'}),
+B({day:2,s:21.5,e:22.5,type:'COMIDA',title:'Cena'}),
+B({day:2,s:22.5,e:23,type:'PERSONAL',title:'Inglés autoestudio'}),
+// MIERCOLES 3 — ING225 Clase 2 (cierra Cap.4 completo) — MAT241 sin clase ni práctica hoy: única otra ventana real de la semana, se lleva casi todo el día. Sin BAPEC de ING225 hoy tampoco (se recupera jueves y sábado) — sin Inglés hoy, excepcionalmente, por la densidad del día
+B({day:3,s:6.5,e:7,type:'COMIDA',title:'Desayuno (breve)'}),
+T(3,7,8,'Traslado a la universidad (Fac. Minas / Hochschild) — mismo campus que la clase, un solo viaje'),
+B({day:3,s:8,e:10,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Misma dinámica que martes',fixed:true}),
+B({day:3,s:10,e:12,type:'ING225',title:'ING225 — Clase 2',detail:'Influencia del esfuerzo cortante en la deflexión. Cap. 4 completo (9h totales)',fixed:true}),
+T(3,12,13,'Traslado a casa'),
+B({day:3,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
+BQ(3,14,18.25,'MAT241','BAPEC MAT241',10,19,'9 preguntas más de Cap.3 — miércoles libre de MAT241 (sin clase ni práctica hoy), la mejor ventana real de la semana para el bloque grande',
+  {tipo:'Nuevo Cap.3',nivel:'Alto primero',ventana:'Antes de la PC4 de mañana',tiempo:'28 min/preg',razon:'Tarde completa disponible, sin obligaciones de MAT241 hoy'}),
+B({day:3,s:18.25,e:18.5,type:'COMIDA',title:'Snack PM'}),
+BQ(3,18.5,22.25,'MAT241','Repaso PC4 — Newton para sistemas (2 variables) + cierre Cap.3',19,27,'2 preguntas más de Cap.3 (cierra las 21 de contenido nuevo) + 6 de repaso de Newton para sistemas de 2 variables (ya enseñado hace varias semanas) — cierra el banco completo de MAT241 antes de la PC4 de mañana a las 17:00',
+  {tipo:'PC4 repaso + cierre',nivel:'Alto',ventana:'PC4 mañana a las 17:00',tiempo:'28 min/preg',razon:'Noche del miércoles, dos días antes de la PC4 en vez de uno — mejor ventana disponible'}),
+B({day:3,s:22.25,e:23,type:'COMIDA',title:'Cena'}),
+// JUEVES 4 — MAT241 ya no tiene clase aquí esta semana (se movió a martes) y su banco completo ya cerró anoche, así que todos los huecos del jueves quedan libres para ING225 — MEC257 Clase 2 y PC4/Pb2.1 son las únicas fijas
+B({day:4,s:6.5,e:7,type:'COMIDA',title:'Desayuno (adelantado)'}),
+T(4,7,8,'Traslado a PUCP'),
+BQ(4,8,10,'ING225','BAPEC RM1 — Clase 1/2',0,4,'4 preguntas, aprovechando el hueco matutino que MAT241 ya no ocupa esta semana (se movió a martes)',
+  {tipo:'PC07',nivel:'Alto primero',ventana:'2 días hasta PC07',tiempo:'29 min/preg',razon:'Hueco matutino liberado por el cambio de día de MAT241'}),
+B({day:4,s:10,e:12,type:'MEC257',title:'MEC257 — Clase 2',detail:'Resistencia teórica — Cap.4 completo (junto con la Clase 1 del lunes)',fixed:true}),
+B({day:4,s:12,e:13,type:'COMIDA',title:'Almuerzo (en campus)'}),
+BQ(4,13,15,'ING225','BAPEC RM1 — Clase 1/2',4,8,'4 preguntas más — MAT241 ya cerró su banco anoche, este hueco (antes ocupado por su repaso) también es de ING225 esta semana',
+  {tipo:'PC07',nivel:'Alto',ventana:'2 días hasta PC07',tiempo:'29 min/preg',razon:'Único hueco entre almuerzo y Pb2.1'}),
+B({day:4,s:15,e:16.5,type:'1MEC02',title:'1MEC02 — Clase',detail:'Sin teoría nueva — hoy es Pb2.1 (17 pts, 90 min): dibujo y dimensionamiento completo de una pieza en AutoCAD (depurar vistas/secciones redundantes, luego acotar en su totalidad)',fixed:true}),
+B({day:4,s:17,e:19,type:'MAT241',title:'MAT241 — PC4 (CONFIRMADO calendario académico: jueves 17:00–19:00)',detail:'Newton para sistemas de ecuaciones no lineales (2 variables) — evaluación integradora (semanas anteriores)',fixed:true}),
+T(4,19,20,'Traslado a casa'),
+B({day:4,s:20,e:21,type:'COMIDA',title:'Cena (tardía)'}),
+BQ(4,21,23,'ING225','BAPEC RM1 — Clase 1/2',8,12,'4 preguntas más, noche del jueves después de la PC4 de MAT241',
+  {tipo:'PC07',nivel:'Alto',ventana:'1 día hasta PC07',tiempo:'29 min/preg',razon:'Noche del jueves, sin nada más que hacer de MAT241'}),
+// VIERNES 5 — mañana libre de campus, PC07 de ING225 esta noche (18-20, confirmado) — sin BAPEC hoy, mismo patrón que semanas anteriores
+B({day:5,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
+B({day:5,s:8,e:13,type:'ING225',title:'Problemas del profesor (RM1)',detail:'Problemas subidos por el profesor + análogos de esos mismos libros (Hibbeler, Gere, Miroliubov) — más relevante que nunca, PC07 es hoy',fixed:true}),
+B({day:5,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
+B({day:5,s:14,e:16,type:'ING225',title:'Problemas del profesor (RM1) — continuación',detail:'Sigue con los problemas subidos y análogos',fixed:true}),
+B({day:5,s:16,e:16.5,type:'COMIDA',title:'Snack PM'}),
+T(5,17,18,'Traslado a PUCP'),
+B({day:5,s:18,e:20,type:'ING225',title:'ING225 — Práctica calificada 07',detail:'Flexión de vigas: deflexión elástica, superposición de deformaciones',fixed:true}),
+T(5,20,21,'Traslado a casa'),
+B({day:5,s:21,e:22,type:'COMIDA',title:'Cena'}),
+B({day:5,s:22,e:22.5,type:'PERSONAL',title:'Rutina personal',detail:'Interdiario'}),
+// SABADO 6 — 1MEC02 Pb2.2 + Laboratorio dirigido 7 (Base fundida, Inventor) — resto del día para terminar las últimas preguntas de ING225 (ya sin PC07 de por medio, pero conviene no dejarlas pendientes)
+B({day:6,s:6.5,e:7,type:'COMIDA',title:'Desayuno (adelantado)'}),
+T(6,7,8,'Traslado a PUCP'),
+BQ(6,8,10,'ING225','BAPEC RM1 — Clase 1/2',12,16,'4 preguntas más, aprovechando la mañana del sábado en PUCP antes del laboratorio de 1MEC02',
+  {tipo:'Banco semanal',nivel:'Medio',ventana:'Ya pasó PC07 — terminar el banco de la semana',tiempo:'29 min/preg',razon:'Mañana del sábado, antes de Pb2.2'}),
+BQ(6,10,10.83,'1MEC02','Pb 2.2 — CONFIRMADO cronograma oficial',4,6,'3 pts, 50 min: dimensionamiento de un eje (25 min, referencia de banco: "Eje 1") y de una placa (25 min, referencia de banco: "Placa 1"), ambos en AutoCAD. Evalúa Cap.6 (semana 6, Dimensionamiento) — el eje/placa del examen son genéricos, no una pieza catalogada única, así que uso las 2 referencias más generales del banco como ancla',
+  {tipo:'Pb2.2 (sábado)',nivel:'Evaluación real',ventana:'HOY — Pb2.2',tiempo:'50 min real, 3 pts',razon:'Cierra Pb2 completo (17+3=20 pts), evalúa dimensionamiento genérico'},false),
+B({day:6,s:10.83,e:12,type:'1MEC02',title:'Laboratorio dirigido 7 — PD7',detail:'Continúa Inventor — modelar en 3D la pieza "Base fundida" (la misma de la semana 5, ya dibujada en 2D)',fixed:true}),
+B({day:6,s:12,e:12.5,type:'1MEC02',title:'Terminar y subir Pb2.2 y PD7 a Paideia',detail:'Cierre del laboratorio',fixed:true}),
+B({day:6,s:13,e:14,type:'PERSONAL',title:'Compras semanales',detail:'Supermercado cerca de la universidad',fixed:true}),
+T(6,14,14.5,'Traslado a casa'),
+B({day:6,s:14.5,e:15.5,type:'COMIDA',title:'Almuerzo (tarde)'}),
+BQ(6,15.5,16.5,'ING225','BAPEC RM1 — Clase 1/2',16,18,'2 preguntas más, en el hueco de la tarde del sábado',
+  {tipo:'Banco semanal',nivel:'Medio',ventana:'Cierre de la semana',tiempo:'29 min/preg',razon:'Hueco de la tarde del sábado'}),
+B({day:6,s:16.5,e:18.5,type:'PERSONAL',title:'Rutina personal',detail:'2h, interdiario'}),
+B({day:6,s:18.5,e:19.5,type:'PERSONAL',title:'Cuidado personal (semanal)',detail:'+1h, bloque semanal adicional'}),
+B({day:6,s:19.5,e:20,type:'COMIDA',title:'Snack PM'}),
+BQ(6,20,22,'ING225','BAPEC RM1 — Clase 1/2',18,22,'4 preguntas más, cierra 22 de las 25 de ING225 esta semana — quedan 3 sin bloque fijo (ver Métricas), por la fuerte competencia de horarios que generó el cambio de día de MAT241',
+  {tipo:'Banco semanal',nivel:'Medio',ventana:'Cierre de la semana',tiempo:'29 min/preg',razon:'Hueco del sábado noche, antes de la cena'}),
+B({day:6,s:22,e:23,type:'COMIDA',title:'Cena'})
+];
+
+// ---------- Huecos sin asignar: se muestran como bloque "Libre" en vez de espacio en blanco ----------
+// No cuentan para horas/preguntas de ningún curso (BLOCKS original queda intacto para esas cuentas).
+function computeFreeBlocks(){
+  const LIBRE_DETAIL = 'Todavía sin asignar — puedes usarlo para repasar videos de clases pasadas, retomar una pregunta pendiente, avanzar un informe, o simplemente descansar. Dime qué quieres poner aquí y lo actualizo.';
+  const free=[];
+  for(let day=0; day<7; day++){
+    const dayBlocks = BLOCKS.filter(function(b){return b.day===day;}).sort(function(a,b){return a.s-b.s;});
+    let cursor = HSTART;
+    dayBlocks.forEach(function(b){
+      if(b.s-cursor>=0.25) free.push(B({day:day,s:cursor,e:b.s,type:'LIBRE',title:'Libre',detail:LIBRE_DETAIL}));
+      cursor = Math.max(cursor,b.e);
+    });
+    if(HEND-cursor>=0.25) free.push(B({day:day,s:cursor,e:HEND,type:'LIBRE',title:'Libre',detail:LIBRE_DETAIL}));
+  }
+  return free;
+}
+const CAL_BLOCKS = BLOCKS.concat(computeFreeBlocks()); // solo para pintar Calendario/Lista — Métricas sigue usando BLOCKS
+
+// ---------- Progreso: una tabla qid->bool por curso, guardada en un JSON compartido en tu Drive ----------
+let progreso = { ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} };
+let driveConnected = false;
+let gTokenClient = null;
+let gAccessToken = null;
+let gProgressFileId = null;
+let syncBusy = false;
+let syncQueuedCurso = null;
+
+function setSyncStatus(state, text) {
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncText');
+  const btn = document.getElementById('syncBtn');
+  if (!dot) return;
+  dot.className = 'sync-dot' + (state === 'ok' ? ' ok' : state === 'err' ? ' err' : '');
+  txt.innerHTML = text;
+  btn.textContent = state === 'ok' ? 'Reconectar' : 'Conectar con Google Drive';
+  btn.disabled = false;
+}
+
+async function driveApiFetch(url, opts) {
+  opts = opts || {};
+  opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + gAccessToken });
+  const r = await fetch(url, opts);
+  if (!r.ok) { const t = await r.text(); throw new Error('Drive API ' + r.status + ': ' + t); }
+  return r;
+}
+
+async function getOrCreateProgressFile() {
+  const cached = localStorage.getItem('driveProgressFileId');
+  if (cached) { gProgressFileId = cached; return cached; }
+  const q = encodeURIComponent("name='" + PROGRESS_FILE_NAME + "' and '" + PROGRESS_PARENT_FOLDER_ID + "' in parents and trashed=false");
+  const listRes = await driveApiFetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=files(id,name)');
+  const listJson = await listRes.json();
+  if (listJson.files && listJson.files.length) {
+    gProgressFileId = listJson.files[0].id;
+  } else {
+    const metadata = { name: PROGRESS_FILE_NAME, parents: [PROGRESS_PARENT_FOLDER_ID], mimeType: 'application/json' };
+    const initial = JSON.stringify({ ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} });
+    const boundary = 'bapecsyncboundary';
+    const body = '--' + boundary + '\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) + '\r\n' +
+      '--' + boundary + '\r\nContent-Type: application/json\r\n\r\n' + initial + '\r\n--' + boundary + '--';
+    const createRes = await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
+      method: 'POST', headers: { 'Content-Type': 'multipart/related; boundary=' + boundary }, body: body
+    });
+    const createJson = await createRes.json();
+    gProgressFileId = createJson.id;
+  }
+  localStorage.setItem('driveProgressFileId', gProgressFileId);
+  return gProgressFileId;
+}
+
+async function readProgressFromDrive() {
+  const id = await getOrCreateProgressFile();
+  const r = await driveApiFetch('https://www.googleapis.com/drive/v3/files/' + id + '?alt=media');
+  const text = await r.text();
+  try { const parsed = JSON.parse(text); return Object.assign({ ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} }, parsed); }
+  catch (e) { return { ING225:{}, MAT241:{}, MEC257:{}, '1MEC02':{} }; }
+}
+
+async function writeProgressToDrive(data) {
+  const id = await getOrCreateProgressFile();
+  await driveApiFetch('https://www.googleapis.com/upload/drive/v3/files/' + id + '?uploadType=media', {
+    method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
+  });
+}
+
+function connectGoogleDrive() {
+  if (GOOGLE_CLIENT_ID.indexOf('PASTE_TU') === 0) {
+    setSyncStatus('err', 'Falta pegar tu <code>GOOGLE_CLIENT_ID</code> en el código (ver nota de configuración arriba).');
+    return;
+  }
+  setSyncStatus('', 'Abriendo ventana de Google…');
+  gTokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: GOOGLE_CLIENT_ID,
+    scope: DRIVE_SCOPE,
+    callback: async function(resp) {
+      if (resp.error) { setSyncStatus('err', 'No se pudo conectar: ' + resp.error); return; }
+      gAccessToken = resp.access_token;
+      driveConnected = true;
+      setSyncStatus('', 'Cargando tu progreso real desde Drive…');
+      try {
+        progreso = await readProgressFromDrive();
+        setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
+        renderAll();
+      } catch (e) { setSyncStatus('err', 'Conectado, pero falló la lectura: ' + e.message); }
+    }
+  });
+  gTokenClient.requestAccessToken({ prompt: '' });
+}
+
+function isSolved(curso, qid) { return !!(progreso[curso] && progreso[curso][qid]); }
+async function toggleQid(curso, qid) {
+  if (!driveConnected) { setSyncStatus('err', 'Conéctate a Google Drive primero (botón de arriba) — si no, esta marca no se guarda.'); return; }
+  if (!progreso[curso]) progreso[curso] = {};
+  progreso[curso][qid] = !progreso[curso][qid];
+  renderAll();
+  syncCurso(curso);
+}
+async function syncCurso(curso) {
+  if (syncBusy) { syncQueuedCurso = curso; return; }
+  syncBusy = true;
+  setSyncStatus('', 'Guardando…');
+  try {
+    const latest = await readProgressFromDrive();
+    latest[curso] = progreso[curso];
+    progreso = latest;
+    await writeProgressToDrive(progreso);
+    setSyncStatus('ok', 'Conectado — leyendo y guardando en <strong>bapec_progreso.json</strong> de tu Drive.');
+  } catch (e) {
+    setSyncStatus('err', 'Se marcó localmente pero no se pudo guardar en Drive: ' + e.message);
+  }
+  syncBusy = false;
+  renderAll();
+  if (syncQueuedCurso) { const c = syncQueuedCurso; syncQueuedCurso = null; syncCurso(c); }
+}
+function courseSolvedCount(curso) {
+  const all = QIDS[curso];
+  return all.filter(function(q){ return isSolved(curso,q); }).length;
+}
+function blockSolvedCount(block) {
+  if (!block.bapec) return null;
+  const qids = block.bapec.qids;
+  const done = qids.filter(function(q){ return isSolved(block.bapec.curso,q); }).length;
+  return { done: done, total: qids.length };
+}
+
+function fmtH(dec){ const h=Math.floor(dec), m=Math.round((dec-h)*60); return h+':'+(m<10?'0':'')+m; }
+function hoursByCourse(){
+  const out={ING225:{total:0,bapec:0,clase:0},MAT241:{total:0,bapec:0,clase:0},MEC257:{total:0,bapec:0,clase:0},'1MEC02':{total:0,bapec:0,clase:0}};
+  BLOCKS.forEach(function(b){
+    if(out[b.type]===undefined) return;
+    const dur=b.e-b.s;
+    out[b.type].total+=dur;
+    if(b.bapec && b.autoestudioReal!==false) out[b.type].bapec+=dur; else out[b.type].clase+=dur;
+  });
+  return out;
+}
+
+function renderIphsBar(){
+  const hrs=hoursByCourse();
+  const el=document.getElementById('iphsBar');
+  el.innerHTML = ['ING225','MAT241','MEC257'].map(function(k){
+    const solved = courseSolvedCount(k), total = QID_TARGET[k];
+    const h = hrs[k];
+    const pct = COURSE_HOURS[k] ? Math.round(h.bapec/COURSE_HOURS[k]*100) : 0;
+    return '<div class="iphs-card" style="--c:'+COURSE[k].c+'"><div class="n">'+h.bapec.toFixed(1)+'h</div><div class="l">'+k+' — autoestudio BAPEC (obj. '+COURSE_HOURS[k].toFixed(1)+'h)</div>'+
+      '<div class="pct">IPHS '+IPHS_PCT[k]+'% · '+solved+'/'+total+' resueltas</div>'+
+      '<div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab/PC = '+h.total.toFixed(1)+'h total esta semana</div>'+
+      '<div class="bar"><i style="width:'+pct+'%"></i></div></div>';
+  }).join('') +
+  (function(){ const s=courseSolvedCount('1MEC02'); const h=hrs['1MEC02']; const tot=QID_TARGET['1MEC02']||1; const MIN_1MEC02=3; const pct=Math.min(100,Math.round(h.bapec/MIN_1MEC02*100)); return '<div class="iphs-card" style="--c:'+COURSE['1MEC02'].c+'"><div class="n">'+h.bapec.toFixed(2)+'h</div><div class="l">1MEC02 — ritmo fijo (autoestudio, obj. '+MIN_1MEC02.toFixed(1)+'h)</div><div class="pct">'+s+'/'+tot+' resuelta'+(tot===1?'':'s')+' · fuera del reparto IPHS</div><div class="pct2">+ '+h.clase.toFixed(1)+'h clase/lab = '+h.total.toFixed(2)+'h total esta semana</div><div class="bar"><i style="width:'+pct+'%"></i></div></div>'; })();
+}
+
+function renderQidPills(curso, qids) {
+  const linked = BAPEC_LINKED[curso];
+  const done = qids.filter(function(q){return isSolved(curso,q);}).length;
+  let html = '<div class="qid-box"><div class="qh"><span class="qcount">'+done+'/'+qids.length+' resueltas</span>'+
+    (linked ? '<span class="badge-linked">vinculado a tu BAPEC_'+curso+'.html real</span>' : '<span class="badge-local">en Drive, pendiente del otro lado</span>')+
+    '</div><div class="qid-pills">';
+  qids.forEach(function(q, i){
+    const label = QID_CODIGO[q] || ('Preg. ' + (i+1));
+    const bloqueada = !driveConnected;
+    html += '<button type="button" class="qid-pill'+(isSolved(curso,q)?' solved':'')+(bloqueada?' locked':'')+'" data-curso="'+curso+'" data-qid="'+q+'" title="'+(bloqueada?'Conéctate a Google Drive para poder marcar':'')+'">'+
+      (bloqueada ? '🔒 ' : (isSolved(curso,q) ? '✓ ' : '')) + label +
+      '</button>';
+  });
+  html += '</div>' + (linked ?
+    '<div class="link-note">Estas pastillas leen y escriben <code>bapec_progreso.json</code> en tu Drive con los IDs reales de tu BAPEC_'+curso+'.html — márcalas aquí o allá, es el mismo dato, con una recarga de por medio.</div>' :
+    '<div class="link-note">Ya se guarda en <code>bapec_progreso.json</code> de tu Drive (persiste de verdad), pero tu BAPEC_'+curso+'.html real (500+ KB) todavía no fue actualizado para leer de ahí — pídemelo cuando confirmes que la conexión funciona.</div>'
+  ) + '</div>';
+  return html;
+}
+
+function renderCalendar(){
+  const grid=document.getElementById('calGrid');
+  const rows=Math.round((HEND-HSTART)*4);
+  grid.style.gridTemplateRows = '46px repeat('+rows+',19px)';
+  let html='<div class="cal-corner"></div>';
+  DAYS.forEach(function(d){ html+='<div class="cal-daylabel"><div class="dn">'+d.n+'</div><div class="dd">'+d.d+'</div></div>'; });
+  for(let h=Math.ceil(HSTART);h<HEND;h++){
+    html+='<div class="cal-hour" style="grid-row:'+(Math.round((h-HSTART)*4)+2)+' / span 4">'+h+':00</div>';
+    for(let day=0;day<7;day++){ html+='<div class="cal-cell" style="grid-row:'+(Math.round((h-HSTART)*4)+2)+' / span 4;grid-column:'+(day+2)+'"></div>'; }
+  }
+  grid.innerHTML=html;
+  CAL_BLOCKS.forEach(function(b){
+    const rowStart=Math.round((b.s-HSTART)*4)+2;
+    const rowEnd=Math.round((b.e-HSTART)*4)+2;
+    const div=document.createElement('div');
+    const sc = blockSolvedCount(b);
+    const complete = sc && sc.total>0 && sc.done===sc.total;
+    div.className='cal-block'+(complete?' complete':'')+(b.type==='COMMUTE'?' commute':'')+(b.type==='LIBRE'?' libre':'');
+    div.style.gridColumn=b.day+2;
+    div.style.gridRow=rowStart+' / '+rowEnd;
+    div.style.setProperty('--c',COURSE[b.type].c);
+    div.style.background=COURSE[b.type].bg;
+    div.style.color=COURSE[b.type].fg;
+    div.innerHTML='<div class="t">'+b.title+'</div><div class="h">'+fmtH(b.s)+'–'+fmtH(b.e)+'</div>'+(sc?'<div class="cnt">'+sc.done+'/'+sc.total+' resueltas</div>':'');
+    div.onclick=function(){ showDetail(b); };
+    grid.appendChild(div);
+  });
+}
+
+let currentDetailBlock = null; // bloque actualmente abierto en el panel — para poder refrescarlo tras marcar una pregunta
+
+function renderDetailContent(b){
+  const p=document.getElementById('detailPanel');
+  let metaHtml='';
+  if(b.meta){
+    metaHtml='<div class="meta-grid">'+Object.entries({'Tipo':b.meta.tipo,'Nivel':b.meta.nivel,'Ventana':b.meta.ventana,'Tiempo/preg':b.meta.tiempo}).map(function(e){return '<div><div class="ml">'+e[0]+'</div><div class="mv">'+e[1]+'</div></div>';}).join('')+'</div><p style="color:var(--slate);font-style:italic">'+b.meta.razon+'</p>';
+  }
+  p.innerHTML='<div class="dh"><div><h4>'+b.title+'</h4><div class="dtime">'+DAYS[b.day].n+' '+DAYS[b.day].d+' · '+fmtH(b.s)+'–'+fmtH(b.e)+'</div></div><button class="close-x" id="closeDetail" style="background:none;border:none;color:var(--slate);cursor:pointer;font-size:18px;padding:2px">&times;</button></div>'+
+    (b.detail?'<p>'+b.detail+'</p>':'')+metaHtml+
+    (b.bapec ? renderQidPills(b.bapec.curso, b.bapec.qids) : '');
+  document.getElementById('closeDetail').onclick=function(){ p.classList.remove('show'); currentDetailBlock=null; };
+  wirePillClicks(p);
+}
+
+function showDetail(b){
+  currentDetailBlock = b;
+  const p=document.getElementById('detailPanel');
+  renderDetailContent(b);
+  p.classList.add('show');
+}
+
+function wirePillClicks(container){
+  container.querySelectorAll('.qid-pill').forEach(function(btn){
+    btn.onclick=function(){ toggleQid(btn.getAttribute('data-curso'), btn.getAttribute('data-qid')); };
+  });
+}
+
+function renderList(){
+  const el=document.getElementById('view-list');
+  el.innerHTML = DAYS.map(function(d,day){
+    const blocks=CAL_BLOCKS.filter(function(b){return b.day===day;}).sort(function(a,b){return a.s-b.s;});
+    return '<div class="day-block"><div class="day-block-head"><span class="dn">'+d.n+'</span><span class="dd">'+d.d+(d.tag?' · '+d.tag:'')+'</span></div>'+
+      blocks.map(function(b){
+        const sc = blockSolvedCount(b);
+        const complete = sc && sc.total>0 && sc.done===sc.total;
+        return '<div class="list-row'+(complete?' complete':'')+'">'+
+          '<div class="list-row-top" data-id="'+b.id+'">'+
+          '<div class="lc" style="background:'+COURSE[b.type].c+'"></div>'+
+          '<div class="lt">'+fmtH(b.s)+'–'+fmtH(b.e)+'</div>'+
+          '<div class="lbody"><div class="ltitle">'+b.title+(sc?' — '+sc.done+'/'+sc.total:'')+'</div>'+(b.detail?'<div class="ldetail">'+b.detail+'</div>':'')+'</div>'+
+          '</div>'+
+          (b.bapec ? renderQidPills(b.bapec.curso, b.bapec.qids) : '') +
+          '</div>';
+      }).join('')+'</div>';
+  }).join('');
+  el.querySelectorAll('.list-row-top').forEach(function(row){
+    row.onclick=function(){ const id=row.getAttribute('data-id'); const b=CAL_BLOCKS.find(function(x){return x.id===id;}); setView('cal'); showDetail(b); };
+  });
+  wirePillClicks(el);
+}
+
+function renderMetrics(){
+  const hrs=hoursByCourse();
+  const el=document.getElementById('view-metrics');
+  let html = '<div class="metric-section"><h3>Preguntas BAPEC — objetivo vs. resueltas</h3><div class="msub">Objetivo = reparto IPHS v5 convertido a preguntas con el tiempo ponderado de cada curso.</div>';
+  ['ING225','MAT241','MEC257','1MEC02'].forEach(function(k){
+    const total = QID_TARGET[k];
+    const solved = courseSolvedCount(k);
+    const pct = total ? Math.round(solved/total*100) : 0;
+    html += '<div class="hbar-row"><div class="hbar-label">'+k+'</div><div class="hbar-track"><div class="hbar-fill" style="width:'+pct+'%;background:'+COURSE[k].c+'">'+solved+' / '+total+' ('+pct+'%)</div></div></div>';
+  });
+  html += '</div>';
+
+  html += '<div class="metric-section"><h3>Autoestudio BAPEC vs. meta IPHS</h3><div class="msub">Meta = % de IPHS v5 aplicado a 35h de presupuesto semanal (3 cursos competidores). Solo cuenta autoestudio, no clases/lab/PC. 1MEC02 no compite, va aparte.</div>';
+  ['ING225','MAT241','MEC257'].forEach(function(k){
+    const pct=Math.round(hrs[k].bapec/COURSE_HOURS[k]*100);
+    html += '<div class="hbar-row"><div class="hbar-label">'+k+'</div><div class="hbar-track"><div class="hbar-fill" style="width:'+Math.min(pct,100)+'%;background:'+COURSE[k].c+'">'+hrs[k].bapec.toFixed(1)+'h / '+COURSE_HOURS[k]+'h ('+pct+'%)</div></div></div>';
+  });
+  html += '</div>';
+
+  html += '<div class="metric-section"><h3>Preguntas sin bloque fijo esta semana</h3><div class="msub">Cuentan para el objetivo del curso, pero el horario recuperado no les asignó un hueco concreto todavía (ver nota de auditoría arriba). Puedes marcarlas igual si las resuelves en un rato libre.</div>';
+  ['ING225','MAT241','MEC257'].forEach(function(curso){
+    const placed = {}; BLOCKS.forEach(function(b){ if(b.bapec && b.bapec.curso===curso) b.bapec.qids.forEach(function(q){placed[q]=true;}); });
+    const pending = QIDS[curso].filter(function(q){ return !placed[q]; });
+    if (!pending.length) return;
+    html += '<div class="pending-block"><div class="pt">'+curso+' — '+pending.length+' pendientes de ubicar</div>' + renderQidPills(curso, pending) + '</div>';
+  });
+  html += '</div>';
+
+  el.innerHTML = html;
+  wirePillClicks(el);
+}
+
+function renderAll(){ renderIphsBar(); renderCalendar(); renderList(); renderMetrics(); if (currentDetailBlock) renderDetailContent(currentDetailBlock); }
+function setView(v){
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.toggle('active',t.dataset.view===v); });
+  document.querySelectorAll('.view').forEach(function(el){ el.classList.remove('active'); });
+  document.getElementById('view-'+v).classList.add('active');
+}
+document.querySelectorAll('.tab').forEach(function(t){ t.onclick=function(){ setView(t.dataset.view); }; });
+
+document.getElementById('syncBtn').onclick = connectGoogleDrive;
+renderAll(); // primer pintado con progreso vacío; se repinta solo al conectar
+</script>
+</body>
+</html>
