@@ -72,10 +72,10 @@ h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:29px;color:var(-
 .cal-daylabel .dd{font-size:10px;opacity:.75;margin-top:1px}
 .cal-hour{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--slate);text-align:right;padding:0 6px 0 0;border-top:1px solid var(--line)}
 .cal-cell{border-top:1px solid var(--line);border-left:1px solid var(--line)}
-.cal-block{position:relative;margin:1px 2px 0;border-radius:4px;padding:4px 7px;font-size:12px;overflow:hidden;cursor:pointer;border-left:3px solid var(--c);background:var(--bg);color:var(--fg)}
+.cal-block{position:relative;margin:1px 2px 0;border-radius:4px;padding:3px 7px;font-size:12px;overflow:hidden;cursor:pointer;border-left:3px solid var(--c);background:var(--bg);color:var(--fg)}
 .cal-block:hover{filter:brightness(0.96)}
-.cal-block .t{font-weight:600;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cal-block .h{font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.8}
+.cal-block .t{font-weight:600;font-size:11.5px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-block .h{font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.8;line-height:1.15}
 .cal-block .cnt{font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.85;margin-top:1px}
 .cal-block.complete{opacity:.55}
 .cal-block.complete .t{text-decoration:line-through}
@@ -164,7 +164,7 @@ h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:29px;color:var(-
 
 <div class="note link">
   <h4>Cómo funciona el contador vinculado — ahora vía tu Google Drive</h4>
-  Cada pastilla guarda su estado en un archivo <code>bapec_progreso.json</code> dentro de la carpeta raíz de tu proyecto en Drive, usando tu propia cuenta de Google. Los <strong>4 cursos</strong> (ING225, MAT241, MEC257, 1MEC02) ya están <span class="badge-linked">vinculados de verdad</span> a sus respectivos archivos BAPEC reales. Esta semana trae preguntas nuevas de verdad: ING225 Cap.5 Torsión (esfuerzo cortante y ángulo de giro, transmisión de potencia, sistemas estáticamente indeterminados — para la PC08 del viernes) y MAT241 Cap.3 (polinomio característico, valores y vectores propios, Jacobi) — más repaso de lo ya enseñado para las evaluaciones que vienen: el <strong>Examen 2 de MEC257</strong> (martes 06/10, Cap.3 + ensayos no destructivos), el Parcial de MAT241 (miércoles 14/10) y el Parcial de ING225 (viernes 16/10, Cap.1–4); y para 1MEC02, piezas de Nivel C/D de la Sección 1 más la Previa y la Actividad 8.1 "Base de bomba". El <strong>jueves 08/10 es feriado</strong> (sin clases de MEC257, MAT241 ni 1MEC02) y el domingo ya había pasado al armar el horario: es una semana con bastante menos tiempo útil que de costumbre — el detalle de lo que sí y no alcanzó hueco está en Métricas y en la nota de abajo.
+  Cada pastilla guarda su estado en un archivo <code>bapec_progreso.json</code> dentro de la carpeta raíz de tu proyecto en Drive, usando tu propia cuenta de Google. Los <strong>4 cursos</strong> (ING225, MAT241, MEC257, 1MEC02) ya están <span class="badge-linked">vinculados de verdad</span> a sus respectivos archivos BAPEC reales. Esta semana trae preguntas nuevas de verdad: ING225 Cap.5 Torsión (esfuerzo cortante y ángulo de giro, transmisión de potencia, sistemas estáticamente indeterminados — para la PC08 del viernes) y MAT241 Cap.3 (polinomio característico, valores y vectores propios, Jacobi) — más repaso de lo ya enseñado para las evaluaciones que vienen: el <strong>Examen 2 de MEC257</strong> (martes 06/10, Cap.3 + ensayos no destructivos), el Parcial de MAT241 (miércoles 14/10) y el Parcial de ING225 (viernes 16/10, Cap.1–4); y para 1MEC02, piezas de Nivel C/D de la Sección 1 más la Previa y la Actividad 8.1 "Base de bomba". El <strong>jueves 08/10 es feriado</strong> (sin clases de MEC257, MAT241 ni 1MEC02): es una semana con bastante menos tiempo útil que de costumbre — el detalle de lo que sí y no alcanzó hueco está en Métricas y en la nota de abajo.
 </div>
 
 <div class="note warn" id="setupNote">
@@ -174,8 +174,8 @@ h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:29px;color:var(-
 
 <div class="note warn" id="gapNote">
   <h4>Hallazgos de esta semana — pendientes y horas sin confirmar</h4>
-  <strong>Reparto y capacidad.</strong> El IPHS v2 da <strong>ING225 41.8% · MAT241 32.7% · MEC257 25.5%</strong> → <strong>30 / 24 / 14 preguntas</strong> objetivo (14.5h / 11.2h / 9.1h con el tiempo ponderado; ningún curso quedó bajo su mínimo ni topado por banco) y 4 piezas de 1MEC02 (3h). El calendario no alcanza para todo: el <strong>domingo ya había pasado</strong> cuando se armó este horario (22:24), el <strong>jueves es feriado</strong>, el viernes es de "Problemas del profesor" (sin BAPEC) y el <strong>Examen 2 de MEC257</strong> del martes (18:30–21:30) corta la ventana de repaso. Con eso caben <strong>24 de 30 (ING225), 20 de 24 (MAT241) y 11 de 14 (MEC257)</strong> — ~28.5h de huecos para los tres cursos frente a 34.8h objetivo; 1MEC02 sí completa sus 4. Las <strong>6 + 4 + 3</strong> restantes quedan como pendientes en la pestaña Métricas (no se redujo el objetivo de ningún curso) y siguen siendo válidas después de esta semana: ING225 es repaso de Cap.4 (hasta el Parcial del vie 16/10), MAT241 es contenido nuevo (hasta el Parcial del mié 14/10) y MEC257 es Cap.4 (para el Examen 3 del 10/11). Decidir qué hacer con ellas —adelantarlas en un rato libre, aceptarlas, o pedirme que rehaga el reparto— es tuyo.
-  <p style="margin:8px 0 0"><strong>Horas y contenidos sin confirmar.</strong> MEC257: fecha y hora del Examen 2 CONFIRMADAS (martes 06/10, 18:30–21:30), pero su contenido es INTERPOLADO del patrón histórico (ensayos no destructivos + Estructura de los materiales completo); por eso las 11 preguntas ubicadas son "Repaso EX2" —las más difíciles de Cap.3 y de ensayos no destructivos, con un máximo de 3 variantes de transformación alotrópica— y <strong>9 de las 11 ya figuraban en las semanas 3–5</strong> (5 con bloque asignado y 4 que quedaron como pendientes sin ubicar; las que ya hayas marcado en tu Drive aparecerán con ✓). MAT241: la <strong>hora</strong> de la clase del martes <strong>no figura</strong> en el cronograma (solo el día) — la dejé 13:00–15:00 como "HORA ESTIMADA", igual que en la semana 7 — y tampoco la hora del Parcial del miércoles 14/10; confírmalas en Paideia. 1MEC02: el cronograma solo dice que la Previa empieza "desde el jueves" — la ubiqué jueves 15:30–17:30 (duración ESTIMADA 2h) y continúa el sábado 8:00–10:00; "Base de bomba" (s1d-7) se excluyó del autoestudio porque es la Actividad 8.1, y las otras 4 piezas de Nivel D (Soporte superior, Conector, Base múltiple, Base guía) quedan para las próximas semanas, antes de la Pb3 del 22/10.</p>
+  <strong>Reparto y capacidad.</strong> El IPHS v2 da <strong>ING225 41.8% · MAT241 32.7% · MEC257 25.5%</strong> → <strong>30 / 24 / 14 preguntas</strong> objetivo (14.5h / 11.2h / 9.1h con el tiempo ponderado; ningún curso quedó bajo su mínimo ni topado por banco) y 4 piezas de 1MEC02 (3h). El calendario no alcanza para todo: el <strong>jueves es feriado</strong>, el viernes es de "Problemas del profesor" (sin BAPEC) y el <strong>Examen 2 de MEC257</strong> del martes (18:30–21:30) corta la ventana de repaso. Con eso caben <strong>24 de 30 (ING225), 20 de 24 (MAT241) y 11 de 14 (MEC257)</strong> — ~28.5h de huecos para los tres cursos frente a 34.8h objetivo; 1MEC02 sí completa sus 4. Las <strong>6 + 4 + 3</strong> restantes quedan como pendientes en la pestaña Métricas (no se redujo el objetivo de ningún curso) y siguen siendo válidas después de esta semana: ING225 es repaso de Cap.4 (hasta el Parcial del vie 16/10), MAT241 es contenido nuevo (hasta el Parcial del mié 14/10) y MEC257 es Cap.4 (para el Examen 3 del 10/11). Decidir qué hacer con ellas —adelantarlas en un rato libre, aceptarlas, o pedirme que rehaga el reparto— es tuyo.
+  <p style="margin:8px 0 0"><strong>Horas y contenidos sin confirmar.</strong> MEC257: fecha y hora del Examen 2 CONFIRMADAS (martes 06/10, 18:30–21:30), pero su contenido es INTERPOLADO del patrón histórico (ensayos no destructivos + Estructura de los materiales completo); por eso las 11 preguntas ubicadas son "Repaso EX2" —las más difíciles de Cap.3 y de ensayos no destructivos, con un máximo de 3 variantes de transformación alotrópica— y <strong>9 de las 11 ya figuraban en las semanas 3–5</strong> (5 con bloque asignado y 4 que quedaron como pendientes sin ubicar; las que ya hayas marcado en tu Drive aparecerán con ✓). MAT241: la Clase de esta semana se reprogramó al <strong>miércoles 07/10, 8:00–10:00</strong> (el jueves 08/10 es feriado) — día y hora ya CONFIRMADOS por ti y por el Cronograma oficial de la profesora; el video de Hochschild que iba ahí para la Clase 2 de ING225 se adelantó al martes 13:00–15:00. Sigue sin figurar la hora del Parcial del miércoles 14/10; confírmala en Paideia. 1MEC02: el cronograma solo dice que la Previa empieza "desde el jueves" — la ubiqué jueves 15:30–17:30 (duración ESTIMADA 2h) y continúa el sábado 8:00–10:00; "Base de bomba" (s1d-7) se excluyó del autoestudio porque es la Actividad 8.1, y las otras 4 piezas de Nivel D (Soporte superior, Conector, Base múltiple, Base guía) quedan para las próximas semanas, antes de la Pb3 del 22/10.</p>
   <p style="margin:8px 0 0"><strong>Cómo se calculó (aproximaciones).</strong> El tiempo ponderado sigue plano (29/28/39 min/preg) mientras recalculas el tiempo ponderado por tipo de evaluación. Las señales estáticas que no tengo (CRAEst de requisitos, créditos de requisitos, dificultad personal; los requisitos de MAT241 no están disponibles) van en T neutro = 50. La N semanal es el n del Ppee de la semana (56/40/21): la semana 7 parece haberse calculado con las filas del banco, con hasta 0.8 pp de diferencia en el reparto. El nivel promedio es el simple; con el nivel ponderado el reparto cambia hasta 0.5 pp (41.6 / 33.2 / 25.3 %) y MAT241 quedaría en 25 preguntas en vez de 24.</p>
   <p style="margin:8px 0 0"><strong>Pendientes de la semana 7 que no se arrastraron:</strong> ING225 3 (ex1_17_1_p5, ex2t_25_2_p2, ex1t_25_1_p5 — de 1–2 pts, las más fáciles, siguen en el banco) y MEC257 12 de Cap.4 (solo se incluyeron las 3 más difíciles, las del final de la lista).</p>
 </div>
@@ -220,8 +220,8 @@ const QID_TARGET = { ING225: 30, MAT241: 24, MEC257: 14, '1MEC02': 4 };
 // (+ 4 piezas de 1MEC02 a ritmo fijo de 3h) -> COURSE_HOURS = preguntas x tiempo ponderado / 60 (14.50+11.20+9.10 = 34.8h).
 // Entradas: N semanal = n del Ppee de la semana (56 / 40 / 21), puntaje 302 / 314 / 56.3, nivel promedio simple
 // 3.89 / 3.70 / 3.38; estáticos desconocidos (CRAEst de requisitos, créditos de requisitos, dificultad personal) en T neutro = 50.
-// El calendario real de esta semana (domingo ya transcurrido, jueves feriado, viernes sin BAPEC, Examen 2 de MEC257 el
-// martes) solo ofrece ~28.5h de huecos para autoestudio de los 3 cursos: lo que no cabe queda como "pendiente" explícito
+// El calendario real de esta semana (jueves feriado, viernes sin BAPEC, Examen 2 de MEC257 el martes) solo ofrece
+// ~28.5h de huecos para autoestudio de los 3 cursos: lo que no cabe queda como "pendiente" explícito
 // (ING225 6, MAT241 4, MEC257 3 preguntas) y NO reduce el objetivo del curso — ver la nota de hallazgos arriba.
 const COURSE_HOURS = { ING225: 14.50, MAT241: 11.20, MEC257: 9.10 };
 const IPHS_PCT = { ING225: 41.8, MAT241: 32.7, MEC257: 25.5 };
@@ -261,11 +261,11 @@ QIDS['1MEC02'] = ['s1c-1','s1d-1','s1d-2','s1d-3'];
 
 // ---------- Días y bloques ----------
 const DAYS = [
-  {n:'Domingo', d:'04/10', tag:'Ya transcurrido al generar este horario (22:24) — sin BAPEC, nada nuevo enseñado todavía'},
+  {n:'Domingo', d:'04/10', tag:'1MEC02: autoestudio de Sección 1 (2 piezas nuevas — Nivel C "Conector articulado" y Nivel D "Torre soporte") — sin BAPEC de ING225, MAT241 ni MEC257 los domingos'},
   {n:'Lunes', d:'05/10', tag:'MEC257: Clase 1 (Cap.4), sin laboratorio — repaso del Examen 2 de mañana + repaso de ING225 y MAT241'},
-  {n:'Martes', d:'06/10', tag:'ING225 Clase 1 (Torsión) + MAT241 Clase (hora estimada) + MEC257 Examen 2 18:30–21:30 (confirmado)'},
-  {n:'Miércoles', d:'07/10', tag:'ING225 Clase 2 (cierra Torsión) — tarde y noche para ING225 y MAT241'},
-  {n:'Jueves', d:'08/10', tag:'FERIADO: sin clases — BAPEC de ING225 y MAT241, 1MEC02 autoestudio + Previa 8.1 (hora estimada)'},
+  {n:'Martes', d:'06/10', tag:'ING225 Clase 1 (Torsión) + MEC257 Examen 2 18:30–21:30 (confirmado) — MAT241 no tiene clase hoy, se reprogramó al miércoles'},
+  {n:'Miércoles', d:'07/10', tag:'MAT241 Clase 8:00–10:00 (reprogramada del jueves feriado) + ING225 Clase 2 (cierra Torsión) — tarde y noche para BAPEC de ING225 y MAT241'},
+  {n:'Jueves', d:'08/10', tag:'FERIADO: sin clases — BAPEC de ING225 y MAT241, 1MEC02 Previa 8.1 (hora estimada; el autoestudio de 1MEC02 ya fue el domingo)'},
   {n:'Viernes', d:'09/10', tag:'PC08 de ING225 esta noche (18–20, confirmado) — sin BAPEC hoy'},
   {n:'Sábado', d:'10/10', tag:'1MEC02: Actividad 8.1 + Laboratorio dirigido 8 (Base de bomba) — MAT241 y 1MEC02 por la tarde'}
 ];
@@ -292,8 +292,22 @@ const BQ=(day,s,e,curso,titulo,qidStart,qidEnd,detail,meta,esAutoestudio=true)=>
 });
 
 const BLOCKS = [
-// DOMINGO 0 — el horario se pidió el domingo 04/10 a las 22:24 (hora de Lima): el día ya había transcurrido, no se programa BAPEC (y los domingos no llevan contenido nuevo)
-B({day:0,s:6,e:23,type:'PERSONAL',title:'Día ya transcurrido',detail:'Este horario se armó a última hora del domingo 04/10 (22:24, hora de Lima): el día ya pasó, así que no se programa BAPEC ni contenido nuevo aquí (los domingos tampoco llevan contenido nuevo, y todavía no se enseñó nada de esta semana). Si resolviste preguntas hoy, márcalas en las pastillas — se guardan en tu Drive.',fixed:true}),
+// DOMINGO 0 — rutina habitual del domingo (igual que semanas anteriores); 1MEC02 arranca la Sección 1 Nivel C/D (dos piezas nuevas), como en la semana 7
+B({day:0,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
+B({day:0,s:8,e:8.5,type:'PERSONAL',title:'Lectura Ayn Rand'}),
+B({day:0,s:8.5,e:9.25,type:'PERSONAL',title:'Self-Authoring Suite'}),
+BQ(0,9.25,10.5,'1MEC02','BAPEC DM1',0,1,'Autoestudio: "Conector articulado" (Nivel C, Sección 1) — vistas, secciones, dimensionamiento y tolerancias (todavía sin rugosidad); pieza de transición entre el Pb2 ya rendido y el Pb3 del 22/10',
+  {tipo:'Nuevo Nivel C',nivel:'Progresión hacia la Pb3',ventana:'Pb3 jueves 22/10',tiempo:'45 min/pieza (ESTIMADO)',razon:'Domingo por la mañana, mismo patrón que semanas anteriores'}),
+B({day:0,s:10.5,e:11,type:'COMIDA',title:'Snack AM'}),
+B({day:0,s:11,e:13,type:'PERSONAL',title:'Ocio'}),
+B({day:0,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
+BQ(0,14,15.5,'1MEC02','BAPEC DM1',1,2,'Autoestudio: "Torre soporte" (Nivel D, Sección 1) — vistas y secciones, dimensionamiento, tolerancias y rugosidad (4 videos) — primera pieza de Nivel D de la semana',
+  {tipo:'Nuevo Nivel D',nivel:'Progresión hacia la Pb3',ventana:'Pb3 jueves 22/10',tiempo:'45 min/pieza (ESTIMADO)',razon:'Segundo bloque del domingo, cierra las 2 piezas'}),
+B({day:0,s:15.5,e:16.5,type:'PERSONAL',title:'Batch cooking'}),
+B({day:0,s:16.5,e:18.5,type:'PERSONAL',title:'Rutina personal',detail:'2h, interdiario'}),
+B({day:0,s:18.5,e:19,type:'COMIDA',title:'Snack PM'}),
+B({day:0,s:20,e:21,type:'COMIDA',title:'Cena'}),
+B({day:0,s:21,e:22,type:'PERSONAL',title:'Ocio'}),
 // LUNES 1 — MEC257 Clase 1 (Cap.4, sin laboratorio esta semana). Todo el repaso de MEC257 va antes del Examen 2 del martes 18:30; ING225 y MAT241 toman el resto del día (repaso de contenido ya enseñado, para sus parciales)
 B({day:1,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
 BQ(1,8,9,'MEC257','Repaso EX2 — Estructura de los materiales',0,1,'1 pregunta de repaso del Examen 2 (martes 18:30): la más difícil del banco de Cap.3 (metal hipotético "Jaas", transformación alotrópica). Es contenido ya enseñado, así que puede hacerse antes de la Clase 1 de hoy (Cap.4)',
@@ -310,33 +324,33 @@ B({day:1,s:19,e:19.5,type:'COMIDA',title:'Snack PM'}),
 BQ(1,19.5,22,'MAT241','Repaso Parcial — Cap.2-3 (Newton y sistemas lineales)',0,5,'5 preguntas de repaso de contenido ya enseñado, todas sin usar todavía: Newton para sistemas no lineales (2) y sistemas lineales — eliminación gaussiana con pivoteo, rango y singularidad (3). Sirven al Parcial del mié 14/10 y no dependen de la Clase de mañana',
   {tipo:'Repaso Parcial',nivel:'Alto',ventana:'Parcial mié 14/10',tiempo:'28 min/preg',razon:'Noche del lunes: contenido ya enseñado, independiente de la Clase de mañana'}),
 B({day:1,s:22,e:23,type:'COMIDA',title:'Cena (tardía)'}),
-// MARTES 2 — ING225 Clase 1 + MAT241 Clase (hora no confirmada) + MEC257 Examen 2 (18:30–21:30, confirmado). Sin traslado antes del examen: ya estás en campus desde la mañana (Hochschild)
+// MARTES 2 — ING225 Clase 1 + MEC257 Examen 2 (18:30–21:30, confirmado). La Clase de MAT241 se reprogramó al miércoles 8:00–10:00 (el jueves 08/10 es feriado); el hueco que deja aquí (13–15) se usa para adelantar el video de Hochschild de la Clase 2 de ING225 de mañana, porque el miércoles 8–10 ya lo ocupa MAT241. Sin traslado antes del examen: ya estás en campus desde la mañana
 B({day:2,s:6.5,e:7,type:'COMIDA',title:'Desayuno (breve)'}),
 T(2,7,8,'Traslado a la universidad (Fac. Minas / Hochschild) — mismo campus que la clase, un solo viaje'),
 B({day:2,s:8,e:10,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Profesor de RM1 no explica teoría en clase — anotar teoría antes de ir',fixed:true}),
 B({day:2,s:10,e:12,type:'ING225',title:'ING225 — Clase 1',detail:'Torsión (Cap.5 · 6h): torsión en ejes de sección circular — esfuerzo cortante y ángulo de giro',fixed:true}),
 B({day:2,s:12,e:13,type:'COMIDA',title:'Almuerzo (en campus)'}),
-B({day:2,s:13,e:15,type:'MAT241',title:'MAT241 — Clase',detail:'Polinomio característico. Valores y vectores propios. Métodos iterativos: Jacobi (Cap.3 completo). El cronograma oficial pone la clase el martes (el jueves es feriado) pero NO indica hora de reloj — HORA ESTIMADA 13:00–15:00, igual que en la semana 7; confírmala en Paideia',fixed:true}),
+B({day:2,s:13,e:15,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Para la Clase 2 de ING225 de mañana miércoles — se adelanta a hoy porque el miércoles 8:00–10:00 ya lo ocupa la Clase de MAT241 (reprogramada del jueves feriado)',fixed:true}),
 BQ(2,15,17.5,'MEC257','Repaso EX2 — Estructura de los materiales y ensayos no destructivos (en campus)',7,11,'4 preguntas más de repaso: baterías de verdadero/falso de enlaces y estructura cristalina (Cap.3, 3 preguntas) y de ensayos no destructivos (cierre de Cap.2, 1 pregunta) — en campus, entre la clase de MAT241 y el Examen 2 de las 18:30',
   {tipo:'Repaso EX2',nivel:'Alto',ventana:'EX2 HOY 18:30',tiempo:'39 min/preg',razon:'Última ventana antes del examen: tarde del martes en campus'}),
 B({day:2,s:17.5,e:18,type:'COMIDA',title:'Snack PM'}),
 B({day:2,s:18.5,e:21.5,type:'MEC257',title:'MEC257 — Examen 2 (CONFIRMADO: martes 18:30–21:30)',detail:'Ensayos no destructivos (cierre de Cap.2) + Estructura de los materiales completo: enlaces, tipos de materiales, estructuras cristalinas. Fecha y hora CONFIRMADAS en la programación oficial; el contenido es INTERPOLADO del patrón histórico — verifícalo con el profesor/Paideia',fixed:true}),
 T(2,21.5,22.5,'Traslado a casa'),
 B({day:2,s:22.5,e:23,type:'COMIDA',title:'Cena'}),
-// MIÉRCOLES 3 — ING225 Clase 2 (cierra la Torsión). Tarde y noche para BAPEC de ING225 (PC08 del viernes) y MAT241 (sin clase ni práctica hoy)
+// MIÉRCOLES 3 — MAT241 Clase 8:00–10:00 (reprogramada del jueves feriado 08/10) + ING225 Clase 2 (cierra la Torsión), de corrido. Tarde y noche para BAPEC de ING225 (PC08 del viernes) y MAT241 (mismo día de su Clase, la mejor ventana de la semana)
 B({day:3,s:6.5,e:7,type:'COMIDA',title:'Desayuno (breve)'}),
 T(3,7,8,'Traslado a la universidad (Fac. Minas / Hochschild) — mismo campus que la clase, un solo viaje'),
-B({day:3,s:8,e:10,type:'PERSONAL',title:'Videos clases grabadas RM1 (Hochschild)',detail:'Misma dinámica que martes',fixed:true}),
+B({day:3,s:8,e:10,type:'MAT241',title:'MAT241 — Clase',detail:'Polinomio característico. Valores y vectores propios. Métodos iterativos: Jacobi (Cap.3 completo). Reprogramada del jueves 08/10 (feriado) a hoy miércoles 8:00–10:00 — fecha y motivo del cambio CONFIRMADOS en el Cronograma oficial de la profesora, hora confirmada por ti',fixed:true}),
 B({day:3,s:10,e:12,type:'ING225',title:'ING225 — Clase 2',detail:'Torsión en ejes de sección circular: transmisión de potencia, sistemas estáticamente indeterminados',fixed:true}),
 T(3,12,13,'Traslado a casa'),
 B({day:3,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
 BQ(3,14,18.25,'ING225','BAPEC RM1 — Torsión (Clase 1/2)',3,12,'9 preguntas de Torsión de nivel 5 (las más difíciles del banco de la semana) — ya con las dos clases hechas (Clase 1 de ayer, Clase 2 de hoy), dos días antes de la PC08 del viernes',
   {tipo:'PC08',nivel:'Nivel 5 primero',ventana:'PC08 viernes 18:00',tiempo:'29 min/preg',razon:'Tarde completa tras la Clase 2'}),
 B({day:3,s:18.25,e:18.5,type:'COMIDA',title:'Snack PM'}),
-BQ(3,18.5,22.25,'MAT241','BAPEC MAT241 — Cap.3 (Jacobi / valores propios)',5,13,'8 preguntas del contenido nuevo de la semana — sobre todo Jacobi (matriz de iteración, convergencia) y valores propios / polinomio característico, de mayor nivel primero. Mejor ventana de MAT241 esta semana: sin clase ni práctica hoy, el día siguiente a la Clase',
-  {tipo:'Nuevo Cap.3',nivel:'Alto primero',ventana:'Parcial mié 14/10',tiempo:'28 min/preg',razon:'Noche del miércoles, el día después de la Clase'}),
+BQ(3,18.5,22.25,'MAT241','BAPEC MAT241 — Cap.3 (Jacobi / valores propios)',5,13,'8 preguntas del contenido nuevo de la semana — sobre todo Jacobi (matriz de iteración, convergencia) y valores propios / polinomio característico, de mayor nivel primero. Mejor ventana de MAT241 esta semana: la noche del mismo día de la Clase (8:00–10:00) — sin práctica dirigida ni calificada esta semana, por el feriado',
+  {tipo:'Nuevo Cap.3',nivel:'Alto primero',ventana:'Parcial mié 14/10',tiempo:'28 min/preg',razon:'Noche del miércoles, el mismo día de la Clase'}),
 B({day:3,s:22.25,e:23,type:'COMIDA',title:'Cena'}),
-// JUEVES 4 — FERIADO (08/10): sin clase de MEC257, MAT241 ni 1MEC02. Día completo en casa: ING225 (PC08 mañana 18:00), MAT241, autoestudio de 1MEC02 y la Previa de la Actividad 8.1
+// JUEVES 4 — FERIADO (08/10): sin clase de MEC257, MAT241 ni 1MEC02. Día completo en casa: ING225 (PC08 mañana 18:00), MAT241, y la Previa de la Actividad 8.1 de 1MEC02 (el autoestudio de 1MEC02 ya fue el domingo)
 B({day:4,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
 BQ(4,8,10,'MAT241','BAPEC MAT241 — Cap.3 (Jacobi / valores propios)',13,17,'4 preguntas más del contenido nuevo (Jacobi / valores propios) — mañana de feriado, sin clase ni práctica de MAT241',
   {tipo:'Nuevo Cap.3',nivel:'Alto',ventana:'Parcial mié 14/10',tiempo:'28 min/preg',razon:'Mañana libre del feriado'}),
@@ -344,8 +358,6 @@ B({day:4,s:10,e:10.5,type:'COMIDA',title:'Snack AM'}),
 BQ(4,10.5,13,'ING225','BAPEC RM1 — Torsión (Clase 1/2)',12,17,'5 preguntas más de Torsión (nivel 4) — la mañana del feriado, un día antes de la PC08',
   {tipo:'PC08',nivel:'Nivel 4',ventana:'PC08 mañana 18:00',tiempo:'29 min/preg',razon:'Mañana del feriado, sin otra obligación'}),
 B({day:4,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
-BQ(4,14,15.5,'1MEC02','BAPEC DM1',0,2,'Autoestudio: "Conector articulado" (Nivel C: vistas, secciones, dimensionamiento y tolerancias) y "Torre soporte" (Nivel D: vistas y secciones, dimensionamiento, tolerancias y rugosidad — 4 videos). Piezas nuevas de la progresión de la profesora hacia la Pb3 del 22/10. Hoy no hay clase de 1MEC02 por el feriado: Cap.7.1 Tolerancias y Cap.8 Rugosidad "avanzan dentro de la programación normal"',
-  {tipo:'Nuevo Nivel C/D',nivel:'Progresión hacia la Pb3',ventana:'Pb3 jueves 22/10',tiempo:'45 min/pieza (ESTIMADO)',razon:'Tarde del feriado, antes de la Previa de la Actividad 8.1'}),
 B({day:4,s:15.5,e:17.5,type:'1MEC02',title:'Previa 8.1 — inicio de "Base de bomba"',detail:'Programación semanal: "Previa (desde el jueves, fuera del horario de laboratorio): inicio de la pieza Base de bomba" — dado un dwg con vistas, dimensionar completo (BAPEC Sección 5, 8.1 previa). La hora y la duración (2h) son ESTIMADAS: el cronograma solo dice "desde el jueves" y hoy no hay clase por el feriado. Se continúa el sábado 8:00–10:00, antes del laboratorio. Contenido INTERPOLADO (actividad real 2026-1, "PD07")',fixed:true}),
 B({day:4,s:17.5,e:18,type:'COMIDA',title:'Snack PM'}),
 BQ(4,18,20,'ING225','BAPEC RM1 — Torsión (Clase 1/2)',17,21,'4 preguntas más de Torsión (nivel 4) — tarde del feriado, a menos de 24 horas de la PC08 (viernes 18:00)',
@@ -579,7 +591,7 @@ function renderQidPills(curso, qids) {
 function renderCalendar(){
   const grid=document.getElementById('calGrid');
   const rows=Math.round((HEND-HSTART)*4);
-  grid.style.gridTemplateRows = '46px repeat('+rows+',19px)';
+  grid.style.gridTemplateRows = '46px repeat('+rows+',21px)';
   let html='<div class="cal-corner"></div>';
   DAYS.forEach(function(d){ html+='<div class="cal-daylabel"><div class="dn">'+d.n+'</div><div class="dd">'+d.d+'</div></div>'; });
   for(let h=Math.ceil(HSTART);h<HEND;h++){
@@ -599,7 +611,9 @@ function renderCalendar(){
     div.style.setProperty('--c',COURSE[b.type].c);
     div.style.background=COURSE[b.type].bg;
     div.style.color=COURSE[b.type].fg;
-    div.innerHTML='<div class="t">'+b.title+'</div><div class="h">'+fmtH(b.s)+'–'+fmtH(b.e)+'</div>'+(sc?'<div class="cnt">'+sc.done+'/'+sc.total+' resueltas</div>':'');
+    const _dur=b.e-b.s, _tStr=fmtH(b.s)+'–'+fmtH(b.e);
+    div.title=b.title+' · '+_tStr;
+    div.innerHTML='<div class="t">'+b.title+'</div>'+(_dur>=0.5?'<div class="h">'+_tStr+'</div>':'')+(sc?'<div class="cnt">'+sc.done+'/'+sc.total+' resueltas</div>':'');
     div.onclick=function(){ showDetail(b); };
     grid.appendChild(div);
   });
