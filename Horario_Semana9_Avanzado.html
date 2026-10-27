@@ -177,7 +177,7 @@ h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:29px;color:var(-
   <strong>Por qué el IPHS se calculó distinto esta semana.</strong> Los 3 documentos Ppee (ING225, MAT241, MEC257) excluyen expresamente la semana 9 de su tabla de demanda semanal — no es una aproximación mía, es que esos documentos no tienen fila para esta semana. Eso deja indefinidas las señales 1 Demanda, 2 Puntaje ajustado, 3 Nivel promedio y 6 Ppee semana (65 de 117 de peso). MEC257 además está confirmado, en su propia Programación Semanal, <strong>sin clase, examen ni laboratorio esta semana</strong> ("este curso no tiene evaluación oficial esta semana"; su próximo examen es el 10/11, a más de 3 semanas) — dos motivos independientes para que quede en 0%. Con MEC257 fuera, quedan ING225 y MAT241: de las 6 señales que no dependen de la semana que sí les aplican, 3 (CRAEst de requisitos, créditos de requisitos, dificultad personal) ya estaban en T neutro = 50 por defecto (política estándar, no es nuevo de esta semana) y no distinguen ningún curso, así que se excluyeron de la renormalización por no aportar señal. Quedan solo 3 con dato real propio — Profundidad de banco (581 vs 455×8/12), CRAEst (55.0 vs 30.9) y Créditos (5 vs 3) — y ING225 supera a MAT241 en las tres, sin excepción. Con solo 2 cursos, el T-score de cualquier señal con diferencia es exactamente 60/40 (así funciona la desviación estándar poblacional de 2 valores), así que el compuesto de las 3 señales da <strong>60/40 limpio</strong>, sin necesidad de ponderar nada distinto.
   <p style="margin:8px 0 0"><strong>De ahí a las horas.</strong> 35h × 60%/40% = <strong>21.0h / 14.0h</strong> nominales. El mínimo garantizado (3h × días con teoría nueva) es <strong>0h para ambos</strong> esta semana — ningún curso tiene clase, solo examen — así que no hubo que financiar ningún déficit. Tampoco hubo tope de banco: los pools de repaso tenían 392 (ING225) y 300 (MAT241) preguntas candidatas, muy por encima de lo necesario. Preguntas objetivo: <strong>43 (ING225) y 30 (MAT241)</strong>, elegidas con el mismo round-robin por capítulo de siempre (no por semana del banco, que mezclaría prácticas calificadas repetidas) — ING225 salió 11/11/10/10 entre sus 4 capítulos (+1 variante de repaso de Cap.1, la única pregunta nueva de las 43) y MAT241 exactamente 10/10/10 entre sus 3. 42 de 43 (ING225) y 30 de 30 (MAT241) ya habían sido practicadas en semanas anteriores — son repaso real, no contenido nuevo disfrazado.</p>
   <p style="margin:8px 0 0"><strong>Resultado: 0 pendientes.</strong> Con el calendario casi vacío de obligaciones fijas (solo los 2 exámenes), las 43 + 30 + 4 preguntas/piezas encontraron hueco completo — por primera vez en el proyecto, ningún curso quedó con preguntas sin ubicar en la pestaña Métricas.</p>
-  <p style="margin:8px 0 0"><strong>Lo que falta confirmar.</strong> La <strong>hora</strong> del Examen Parcial de MAT241 (miércoles 14/10) no aparece en ningún documento fuente — ni en el Cronograma, ni en el Calendario de la profesora, ni en tu agenda — solo el día está CONFIRMADO. La ubiqué 8:00–10:00, ESTIMADA por continuidad con tu horario de matrícula para este curso (Cla 0511, aula A708), pero podría ser otra franja — confírmala en Paideia o con la profesora antes del miércoles. El Parcial de ING225 (viernes 16/10, 15:00–18:00) sí está 100% CONFIRMADO por tu agenda personal.</p>
+  <p style="margin:8px 0 0"><strong>Corrección post-entrega.</strong> El Examen Parcial de MAT241 (miércoles 14/10) se había ubicado 8:00–10:00 como ESTIMADO, por continuidad con el horario de matrícula, ya que ningún documento fuente traía la hora. Jorge confirmó por el calendario académico de Drive que el examen fue <strong>8:00–11:00 (3h), CONFIRMADO</strong>. Se corrigió el bloque y se recorrió 1h todo lo que seguía ese día (traslado, snack, ocio, almuerzo y el BAPEC de ING225 de la tarde) sin tocar su contenido ni duración. El Parcial de ING225 (viernes 16/10, 15:00–18:00) ya estaba 100% CONFIRMADO por la agenda personal de Jorge y no cambia.</p>
 </div>
 
 <div class="view active" id="view-cal">
@@ -278,7 +278,7 @@ const DAYS = [
   {n:'Domingo', d:'11/10', tag:'1MEC02: autoestudio de Sección 1 (4 piezas nuevas de Nivel D) — sin BAPEC de ING225, MAT241 ni MEC257 los domingos. Última rutina normal antes de la semana de parciales'},
   {n:'Lunes', d:'12/10', tag:'Sin clases esta semana para ningún curso (semana de parciales) — día completo para repaso de MAT241 (Parcial miércoles) e ING225 (Parcial viernes)'},
   {n:'Martes', d:'13/10', tag:'Último día de repaso de MAT241 antes de su Parcial de mañana — cierra su banco de 30 esta noche; ING225 continúa'},
-  {n:'Miércoles', d:'14/10', tag:'MAT241 — Examen Parcial (CONFIRMADO el día; hora ESTIMADA 8:00–10:00, ver nota) — resto del día para ING225'},
+  {n:'Miércoles', d:'14/10', tag:'MAT241 — Examen Parcial (CONFIRMADO 8:00–11:00) — resto del día para ING225'},
   {n:'Jueves', d:'15/10', tag:'Sin clases ni exámenes — día completo de repaso de ING225 para el Parcial de mañana'},
   {n:'Viernes', d:'16/10', tag:'ING225 — Examen Parcial CONFIRMADO 15:00–18:00 (Cap.1-4) — cierra su banco de 43 por la mañana'},
   {n:'Sábado', d:'17/10', tag:'Sin obligaciones fijas (sin laboratorio de 1MEC02 esta semana, confirmado) — semana de parciales terminada, día de descanso'}
@@ -351,19 +351,19 @@ BQ(2,18,21,'ING225','BAPEC RM1 — Repaso Parcial (Cap.1-4)',8,14,'6 preguntas m
   {tipo:'Repaso Parcial',nivel:'Alto',ventana:'Parcial viernes 16/10 15:00-18:00',tiempo:'29 min/preg',razon:'Noche del martes, después de cerrar MAT241'}),
 B({day:2,s:21,e:22,type:'COMIDA',title:'Cena'}),
 B({day:2,s:22,e:23,type:'PERSONAL',title:'Ocio',detail:'Noche tranquila antes del Parcial de MAT241 de mañana'}),
-// MIÉRCOLES 3 — MAT241 Examen Parcial (CONFIRMADO el día en el Calendario oficial de la profesora; la hora no aparece en ningún documento fuente — ESTIMADA 8:00–10:00 por continuidad con su horario de matrícula, ver nota de hallazgos). Resto del día: descanso corto post-examen y luego ING225, con la tarde/noche completa libre (sin MAT241 que repasar: su banco ya cerró anoche)
+// MIÉRCOLES 3 — MAT241 Examen Parcial (CONFIRMADO 8:00-11:00 por el calendario académico de Drive — corregido tras la entrega inicial, que lo tenía ESTIMADO 8:00-10:00; todo el resto del día se recorrió 1h). Resto del día: descanso corto post-examen y luego ING225, con la tarde/noche completa libre (sin MAT241 que repasar: su banco ya cerró anoche)
 B({day:3,s:6.5,e:7,type:'COMIDA',title:'Desayuno (breve)'}),
 T(3,7,8,'Traslado a PUCP'),
-B({day:3,s:8,e:10,type:'MAT241',title:'MAT241 — Examen Parcial (HORA ESTIMADA)',detail:'Ecuaciones no lineales (Bisección, Newton, sistemas) + sistemas de ecuaciones lineales (Gauss, Doolittle, matrices). Fecha CONFIRMADA (miércoles 14/10) por el Calendario oficial de la profesora; la HORA no figura en ningún documento fuente (Cronograma, Calendario, ni agenda) — se ubica 8:00–10:00 por continuidad con el horario de matrícula de Jorge para este curso (Cla 0511, aula A708). Confírmala en Paideia/aula virtual',fixed:true}),
-T(3,10,11,'Traslado a casa'),
-B({day:3,s:11,e:11.5,type:'COMIDA',title:'Snack AM'}),
-B({day:3,s:11.5,e:13,type:'PERSONAL',title:'Ocio',detail:'Descanso corto post-examen'}),
-B({day:3,s:13,e:14,type:'COMIDA',title:'Almuerzo'}),
-BQ(3,14,19,'ING225','BAPEC RM1 — Repaso Parcial (Cap.1-4)',14,24,'10 preguntas balanceadas entre los 4 capítulos (3 Propiedades mecánicas, 3 Carga axial, 2 Flexión de vigas, 2 Estado de esfuerzos), mitad nivel 4 y mitad nivel 5 — con esto van 24 de 43. Tarde y noche completas libres: sin MAT241 que repasar, su banco ya cerró anoche',
+B({day:3,s:8,e:11,type:'MAT241',title:'MAT241 — Examen Parcial (CONFIRMADO)',detail:'Ecuaciones no lineales (Bisección, Newton, sistemas) + sistemas de ecuaciones lineales (Gauss, Doolittle, matrices). Fecha y hora CONFIRMADAS (miércoles 14/10, 8:00–11:00) por el calendario académico de Drive.',fixed:true}),
+T(3,11,12,'Traslado a casa'),
+B({day:3,s:12,e:12.5,type:'COMIDA',title:'Snack AM'}),
+B({day:3,s:12.5,e:14,type:'PERSONAL',title:'Ocio',detail:'Descanso corto post-examen'}),
+B({day:3,s:14,e:15,type:'COMIDA',title:'Almuerzo'}),
+BQ(3,15,20,'ING225','BAPEC RM1 — Repaso Parcial (Cap.1-4)',14,24,'10 preguntas balanceadas entre los 4 capítulos (3 Propiedades mecánicas, 3 Carga axial, 2 Flexión de vigas, 2 Estado de esfuerzos), mitad nivel 4 y mitad nivel 5 — con esto van 24 de 43. Tarde y noche completas libres: sin MAT241 que repasar, su banco ya cerró anoche',
   {tipo:'Repaso Parcial',nivel:'Nivel 4-5 parejo',ventana:'Parcial viernes 16/10 15:00-18:00',tiempo:'29 min/preg',razon:'Tarde del miércoles, ventana larga tras el examen de MAT241'}),
-B({day:3,s:19,e:19.5,type:'COMIDA',title:'Snack PM'}),
-B({day:3,s:19.5,e:20.5,type:'COMIDA',title:'Cena'}),
-B({day:3,s:20.5,e:22,type:'PERSONAL',title:'Ocio'}),
+B({day:3,s:20,e:20.5,type:'COMIDA',title:'Snack PM'}),
+B({day:3,s:20.5,e:21.5,type:'COMIDA',title:'Cena'}),
+B({day:3,s:21.5,e:23,type:'PERSONAL',title:'Ocio'}),
 // JUEVES 4 — sin clases ni exámenes: día completo de repaso de ING225 para el Parcial de mañana viernes. Es el día más largo de ING225 (14 preguntas), pero también el único curso activo, sin MAT241 que compita por las horas
 B({day:4,s:7,e:8,type:'COMIDA',title:'Desayuno'}),
 BQ(4,8,12,'ING225','BAPEC RM1 — Repaso Parcial (Cap.1-4)',24,31,'7 preguntas balanceadas (2 Flexión de vigas, 2 Estado de esfuerzos, 2 Propiedades mecánicas, 1 Carga axial) — nivel 4-5',
